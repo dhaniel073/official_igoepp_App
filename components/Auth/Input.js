@@ -35,7 +35,7 @@ function Input({
     <View style={styles.inputContainer}>
      {/* <Text style={[styles.label, isInvalid && styles.labelInvalid]}>
         {label}
-  </Text>*/}
+      </Text>*/}
       <TextInput
         style={[styles.input, isInvalid && styles.inputInvalid, style]}
         // autoCapitalize={false}
