@@ -36,6 +36,7 @@ import ViewHelper from './screens/ViewHelpers';
 import MakePayment from './screens/MakePayment';
 import RequestHelpQuestionaries from './screens/RequestHelpQuestionaries';
 import Payments from './screens/Payments';
+import Profile from './screens/Profile';
 
 const Stack = createNativeStackNavigator();
 
@@ -97,7 +98,8 @@ function DrawerNavigation(){
     <Drawer.Navigator screenOptions={{  
         headerTintColor: 'black',
         sceneContainerStyle: {backgroundColor: '#fff'},
-        drawerContentStyle: { height: "50%", marginTop: "60%", },
+        // drawerContentStyle: { height: "50%", marginTop: "60%", },
+        drawerContentStyle: { marginTop: "10%", },
         drawerInactiveTintColor: Color.darkolivegreen_100,
         drawerActiveBackgroundColor: Color.limegreen,
         drawerActiveTintColor: 'white'
@@ -176,6 +178,18 @@ function DrawerNavigation(){
         // headerShown: false,
         drawerIcon: ({color, size}) => <Ionicons name="book" color={color} size={size}/>
        }}
+      />
+
+      <Drawer.Screen
+       name='Profile'
+       component={Profile}
+       options={{ 
+        headerTintColor: Color.lightgreen,
+        title: "Profile Update",
+        // headerShown: false,
+        drawerIcon: ({color, size}) => <Ionicons name="image" color={color} size={size}/>
+
+        }}
       />
 
 

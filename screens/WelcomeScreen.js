@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
   },
   walletContainer:{
     width: '100%',  
-    marginTop: 30,
+    marginTop: 15,
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: Color.limegreen,

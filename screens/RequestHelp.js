@@ -15,6 +15,7 @@ const RequestHelp = () => {
   const navigation = useNavigation();
   const authCtx = useContext(AuthContext)
   const [fetchedcategory, setFetchedCategory] = useState('')
+  const [fetchedName, setFetchedName] = useState('')
   const [isFetching, setIsFetching] = useState(true)
 
   
@@ -46,7 +47,9 @@ useEffect(() => {
   async function fetchUserdata(){
   try{
     const response = await customerInfocheck(authCtx.customerId, authCtx.token)
-    console.log(response.data)
+    console.log(response.data.data.first_name)
+    const name = response.data.data
+    setFetchedName(name)
   }catch(error){
     Alert.alert("Error Occured", "An error Occured check your internet conection and try again")
   }
@@ -87,7 +90,7 @@ if(!fontloaded){
    
   </Pressable>
       <View>
-        <Text style={styles.name}>Hi Chinedu</Text>
+        <Text style={styles.name}>Hi {fetchedName.first_name}</Text>
       </View>
     </View>
 
@@ -107,8 +110,8 @@ if(!fontloaded){
               })}>
               <Image
               style={styles.image2}
-              // source={{ uri:`https://phixotech.com/igoepp/public/category/${item.image}`  }}
-              source={require("../assets/vectors/g101.png")}
+              source={{ uri:`https://phixotech.com/igoepp/public/category/${item.image}`  }}
+              // source={require("../assets/vectors/g101.png")}
               />
 
                 <Text style={styles.item}>
