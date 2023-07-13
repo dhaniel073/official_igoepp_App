@@ -1,15 +1,20 @@
-import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
-import { Color } from "../components/ui/GlobalStyles";
+import { StyleSheet, View, Text, Image, ScrollView, Alert, Pressable } from "react-native";
+import { Color, FontSize } from "../components/ui/GlobalStyles";
 import Input from "../components/Auth/Input";
 import Button from "../components/ui/Button";
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { launchImageLibraryAsync } from "expo-image-picker";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useFonts } from "expo-font";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
+import { upLoadPicture, updateUserinfo } from "../util/auth";
+import { AuthContext } from "../store/auth-context";
+import { useNavigation } from "@react-navigation/native";
+import Button3 from "../components/ui/Button3";
+import axios from "axios";
 
 const data = [
     { label: 'Male ', value: 'M' },
@@ -17,9 +22,22 @@ const data = [
   
   ];
 
+const option = {
+  title: 'Select image',
+  type: 'library',
+  options:{
+    maxLength: 200,
+    maxWidth: 200,
+    selectionLimit: 1,
+    mediaType: 'photo',
+    includeBase64: true,
+  }
+}
 
 function Profile(){
+  const navigation = useNavigation()
     // const [value, setValue] = useState(null);
+    const authCtx = useContext(AuthContext)
     const [isFocus, setIsFocus] = useState(false);
     const [image, setImage] = useState(null);
     const [first_name, setFirstName] = useState('')
@@ -30,21 +48,25 @@ function Profile(){
 
 
     const pickImage = async () => {
+        const image = await launchImageLibraryAsync(option)
+        console.log(image.assets[0]);
 
-        // No permissions request is necessary for launching the image library
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
-        });
-    
-        console.log(result.assets[0]);
-    
-        if (!result.canceled) {
-          setImage(result.assets[0].uri);
+        const formdata = new FormData()
+        formdata.append('file', {
+          uri: image.assets[0].uri,
+          type: image.assets[0].type
+        })
+        if (image.canceled) {
+          navigation.goBack()
         }
+        if (!image.canceled) {
+          setImage(image.assets[0].uri);
+            // console.log(picture.uri)
+          await axios.post(
+            console.log('sending')
+          )
       };
+    }
 
 
     const renderLabel = () => {
@@ -75,38 +97,82 @@ function Profile(){
         switch (inputType) {
             case 'first_name':
                 setFirstName(enteredValue);
-                break;
+              break;
             case 'last_name':
                 setLastName(enteredValue);
-                break;
+              break;
             case 'phone':
                 setPhone(enteredValue);
-                break;
+              break;
             case 'sex':
                 setSex(enteredValue);
-                break;
+              break;
         }
     }
 
-      function updateProfilehandler(){
-        console.log(sex, phone, last_name, first_name, image)
+      async function updateProfilehandler(){
+        const customerId = authCtx.customerId
+        const token = authCtx.token
+
+        if(!last_name || !first_name || !sex || !phone){
+         Alert.alert("Empty Field", "Please fill in the fields correctly")
+        }else{
+          setIsLoading(true)
+        try {
+            const response = await updateUserinfo(last_name, first_name, sex, phone, customerId, token)
+            console.log(response.data.data)
+            setFirstName('')
+            setLastName('')
+            setPhone('')
+            setSex('')
+            navigation.navigate('Welcome')
+          } catch (error) {
+            console.log(error)
+            
+          }
+          setIsLoading(false)
+        }
+      }
+
+      if(isLoading){
+        return <LoadingOverlay/>
       }
     return (
         <ScrollView>
+        <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]}
+        onPress={() => navigation.goBack()}
+        >
+        
+          <Image
+            style={styles.image2}
+            contentFit="cover"
+            source={require("../assets/vectors/vector30.png")}
+          />
+    
+          <Text style={styles.back}>Back</Text>
+    
+       
+      </Pressable>
         <View style={styles.container}>
+
             <View style={styles.imageView}>
                 {!image ?
-                <Image
-                    style={styles.Image}
-                    source={require("../assets/vectors/person.png")}
-                />
+                <Pressable onPress={pickImage}>
+                  <Image
+                  style={styles.Image}
+                  source={require("../assets/vectors/person.png")}
+                  />
+                </Pressable>
                     : 
-                <Image
-                    style={styles.Image}
-                    source={{ uri: image }}
-                />
+                <Pressable onPress={pickImage}>
+                  <Image
+                  style={styles.Image}
+                  source={{ uri: image }}
+                  />
+                </Pressable>
                 }
-                <Button style={styles.upload}  onPress={pickImage}>Upload Image</Button>
+                {/*<Button style={styles.upload}  onPress={pickImage}>Upload Image</Button>*/}
+                <Button3 style={styles.upload} onPress={pickImage}>Upload Image</Button3>
             </View>
             <Input
             placeholder={"First Name"}
@@ -126,11 +192,11 @@ function Profile(){
             keyboardType={'numeric'}
             value={phone}
             onUpdateValue={updateInputValueHandler.bind(this, 'phone')}
-
+            maxLength={11}
             />
 
 
-            {renderLabel()}
+        {renderLabel()}
         <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
           placeholderStyle={styles.placeholderStyle}
@@ -171,15 +237,36 @@ function Profile(){
 export default Profile;
 
 const styles = StyleSheet.create({
+  space:{
+    marginTop: 10
+  },
+  back:{
+    fontSize: FontSize.size_mid,
+    fontFamily: 'poppinsRegular',
+    marginTop: 0
+  },
+  image2:{
+    width: 15,
+    height: 15,
+    marginHorizontal: 10,
+    marginTop: 3,
+    marginBottom: 30
+  },
+  backParent:{
+    top: 50,
+    left: 10,
+    flexDirection: 'row',
+  },
     updatebutton:{
-        marginTop: 20
+        marginTop: 20,
+        backgroundColor: Color.limegreen
     },
     upload:{
         marginTop: 5,
         // padding: 20,
     },
     container:{
-        marginTop: "10%",
+        marginTop: "20%",
         flex: 1,
         marginHorizontal: 40
 
@@ -215,17 +302,18 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 0.5,
         borderRadius: 8,
-        paddingHorizontal: 8,
-        marginTop: 10
+        paddingHorizontal: 10,
+        // marginTop: 8
       },
       icon: {
         marginRight: 5,
       },
       label: {
-        position: 'absolute',
+        // position: 'absolute',
         backgroundColor: 'white',
         left: 22,
-        top: 437,
+        top: 15,
+        width:50,
         fontFamily: 'poppinsRegular',
         zIndex: 999,
         paddingHorizontal: 8,

@@ -69,19 +69,15 @@ async function showCustomer(customer_id, token){
     return response
 }
 
-
-export  function createUser(email, password,gender, phone, firstname, lastname) {
-  return authenticateSignUp(email, password, gender, phone, firstname, lastname)
-}
-
-export  function login(email, password) {
-    return authenticateLogin(email,password)
-  }
   
-  export function customerInfocheck(customer_id, token){
-    return showCustomer(customer_id, token)
-  }
-
+async function forgotPass(email){
+  const url = "http://phixotech.com/igoepp/public/api/customer/forgetpassword"
+  const response = await axios.post(url, {
+    email: email
+  })
+  console.log(response)
+  return response
+}
 
 async function walletcheck(customerId, token, InputAmount){
   try{
@@ -102,26 +98,90 @@ async function walletcheck(customerId, token, InputAmount){
   }
 }
 
-export function WalletCheckBalance(customerId, token, InputAmount){
-  return walletcheck(customerId, token, InputAmount)
+async function infoUpdate(last_name, first_name, sex, phone, customerId, token){
+  try{
+  const response = await axios.put(
+      `http://phixotech.com/igoepp/public/api/auth/customer/${customerId}/update`, 
+      {
+          last_name: last_name,
+          first_name: first_name,
+          phone: phone,
+          sex:sex
+      },{
+        headers:{
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+    console.log(response)
+      return response;
+  } catch(error){
+      Alert.alert("Error", "An Error Occured while updating your Wallet Balance")
+  }
 }
 
-  // async function walletbal(){
-  //     const url = `http://phixotech.com/igoepp/public/api/auth/customer/${id}/wallet`
-  //     const response = await axios.get(url)
-  // }
-  
-async function forgotPass(email){
-    const url = "http://phixotech.com/igoepp/public/api/customer/forgetpassword"
-    const response = await axios.post(url, {
-      email: email
-    })
-    console.log(response)
-    return response
+async function pictureupload(customerId, token, picture){
+  // console.log(picture.uri)
+  const formdata = new FormData()
+  formdata.append('file', {
+    uri: picture.uri,
+    type: picture.type
+  })  
+  try{
+  const response = await axios.post(
+      "http://phixotech.com/igoepp/public/api/auth/customer/uploadpicture", 
+      {
+          customerid: customerId,
+          picture: formdata
+      },
+      {
+        headers:{
+          'Content-type': 'multipart/form-data',
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        }
+      }
+    )
+      console.log(response)
+      return response;
+  } catch(error){
+      // console.log(error.response.data)
+      console.log(error.response.data.message)
+      // console.log(error.response.data.status)
+      Alert.alert("Error", "An Error Occured while uploading your Profile Picture")
+  }
+}
+
+
+export  function createUser(email, password,gender, phone, firstname, lastname) {
+  return authenticateSignUp(email, password, gender, phone, firstname, lastname)
+}
+
+export  function login(email, password) {
+  return authenticateLogin(email,password)
+}
+
+export function customerInfocheck(customer_id, token){
+  return showCustomer(customer_id, token)
+}
+
+
+export function WalletCheckBalance(customerId, token, InputAmount){
+  return walletcheck(customerId, token, InputAmount)
 }
 
 export function ForgotCustomerPassword(email){
   return  forgotPass(email)
 }
+
+export function updateUserinfo(last_name, first_name, sex, phone, customerId, token){
+  return infoUpdate(last_name, first_name, sex, phone, customerId, token)
+}
+
+export function upLoadPicture(customerId, token, picture){
+  return pictureupload(customerId, token, picture)
+}
+
 
 

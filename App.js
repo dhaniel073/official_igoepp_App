@@ -37,6 +37,8 @@ import MakePayment from './screens/MakePayment';
 import RequestHelpQuestionaries from './screens/RequestHelpQuestionaries';
 import Payments from './screens/Payments';
 import Profile from './screens/Profile';
+import ViewProfile from './screens/ViewProfile';
+import ImageViewer from './screens/ImageViewer';
 
 const Stack = createNativeStackNavigator();
 
@@ -82,7 +84,7 @@ const Drawer = createDrawerNavigator();
 function DrawerNavigation(){
 
   const [fetchedMessage, setFetchedMesssage] = useState('');
-  // const navigation = useNavigation()
+  const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
   const authCtx = useContext(AuthContext);
 
@@ -181,14 +183,18 @@ function DrawerNavigation(){
       />
 
       <Drawer.Screen
-       name='Profile'
-       component={Profile}
+       name='View Profile'
+       component={ViewProfile}
        options={{ 
         headerTintColor: Color.lightgreen,
-        title: "Profile Update",
+        title: "View Profile",
         // headerShown: false,
-        drawerIcon: ({color, size}) => <Ionicons name="image" color={color} size={size}/>
-
+        drawerIcon: ({color, size}) => <Ionicons name="image" color={color} size={size}/>,
+        headerRight: () => (
+          <View style={styles.exitIcon}>
+            <Text style={styles.Username} onPress={() => navigation.navigate("Profile")}>Update Profile</Text>
+          </View>
+        )
         }}
       />
 
@@ -292,7 +298,18 @@ function AuthenticatedStack() {
       component={RequestHelpQuestionaries}
       options={{ headerShown: false }}
       />
+
+      <Stack.Screen
+      name='Profile'
+      component={Profile}
+      options={{ headerShown: false }}
+      />
     
+      <Stack.Screen
+      name='ImageViewer'
+      component={ImageViewer}
+      options={{ headerShown: false }}
+      />
       
       </Stack.Navigator>
 
@@ -382,7 +399,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   Username:{
-    fontSize: 20,
+    fontSize: 15,
     color: Color.lightgreen,
   },
   notificationIcon:{

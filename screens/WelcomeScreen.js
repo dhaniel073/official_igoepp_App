@@ -561,7 +561,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: Color.limegreen,
-    borderRadius: 30,
+    borderRadius: 20,
     elevation: 2,
     shadowColor: 'black',
     shadowOffset: { width: 1, height: 1 },
@@ -576,7 +576,7 @@ const styles = StyleSheet.create({
     // paddingVertical:
   },
   walletBalance:{
-    marginTop: 3,
+    // marginTop: 0,
     fontSize: 30,
     color: 'white',
     // fontWeight: 'bold',
