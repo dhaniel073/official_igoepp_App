@@ -117,7 +117,7 @@ async function infoUpdate(last_name, first_name, sex, phone, customerId, token){
     console.log(response)
       return response;
   } catch(error){
-      Alert.alert("Error", "An Error Occured while updating your Wallet Balance")
+      Alert.alert("Error", "An Error Occured while updating your info")
   }
 }
 
@@ -153,6 +153,25 @@ async function pictureupload(customerId, token, picture){
   }
 }
 
+async function subcatquestion(subcatId, token){
+  try{
+  const response = await axios.put(
+      `http://phixotech.com/igoepp/public/api/auth/category/subcategoryquestionshow/${subcatId}`, 
+     {
+        headers:{
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+      console.log(response)
+      return response;
+  } catch(error){
+    Alert.alert("Error", error.response.message)
+
+  }
+}
+
 
 export  function createUser(email, password,gender, phone, firstname, lastname) {
   return authenticateSignUp(email, password, gender, phone, firstname, lastname)
@@ -181,6 +200,10 @@ export function updateUserinfo(last_name, first_name, sex, phone, customerId, to
 
 export function upLoadPicture(customerId, token, picture){
   return pictureupload(customerId, token, picture)
+}
+
+export function ShowSubCatQuestion(subcatId, token){
+      return subcatquestion(subcatId, token)
 }
 
 

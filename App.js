@@ -3,7 +3,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppLoading from 'expo-app-loading';
+// import AppLoading from 'expo-app-loading';
 import {Ionicons} from '@expo/vector-icons'
 
 import LoginScreen from './screens/LoginScreen';
@@ -11,15 +11,15 @@ import SignupScreen from './screens/SignupScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import { Colors } from './constants/styles';
 import AuthContextProvider, { AuthContainer, AuthContainerProvider, AuthContext } from './store/auth-context';
-import IconButton from './components/ui/IconButton';
+// import IconButton from './components/ui/IconButton';
 import LoadingOverlay from './components/ui/LoadingOverlay';
-import Welcome1 from './screens/WelcomeScreen1';
+// import Welcome1 from './screens/WelcomeScreen1';
 import AddWallet from './screens/AddWallet';
 import NotificationScreen from './screens/NotificationScreen';
 import FundWallet from './screens/FundWallet';
 import RequestHelp from './screens/RequestHelp';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import DrawerScreen from './screens/DrawerScreen';
+// import DrawerScreen from './screens/DrawerScreen';
 import { Color } from './components/ui/GlobalStyles';
 import MarketPlace from './screens/MarketPlace';
 import TermsAndCondition from './screens/TermsAndCondition';
@@ -28,17 +28,20 @@ import axios from 'axios';
 import { Text, StyleSheet, View, Image, Pressable } from 'react-native';
 import ServiceHistory from './screens/ServiceHistory';
 import { sin } from 'react-native-reanimated';
-import PayStack from './screens/PayStack';
+// import PayStack from './screens/PayStack';
 import PayStackScreen from './screens/PayStack';
 import ForgotPassword from './screens/ForgotPassword';
 import FirstDisplayScreen from './screens/FirstDisplayScreen';
-import ViewHelper from './screens/ViewHelpers';
+// import ViewHelper from './screens/ProceedCategory';
 import MakePayment from './screens/MakePayment';
 import RequestHelpQuestionaries from './screens/RequestHelpQuestionaries';
 import Payments from './screens/Payments';
 import Profile from './screens/Profile';
 import ViewProfile from './screens/ViewProfile';
 import ImageViewer from './screens/ImageViewer';
+import SubCategory from './screens/SubCategory';
+import ProceedCategory from './screens/ProceedCategory';
+import { customerInfocheck } from './util/auth';
 
 const Stack = createNativeStackNavigator();
 
@@ -91,6 +94,34 @@ function DrawerNavigation(){
 
   const token = authCtx.token;
   const customerId = authCtx.customerId
+  
+  useEffect(() => {
+
+  async function UserInfo(){
+    setIsLoading(true)
+    try{
+      await customerInfocheck(authCtx.customerId, authCtx.token)
+      .then((res) => {
+        console.log(res.data.data)
+        setFetchedMesssage(res.data.data)
+      })  
+    }catch(error){
+      console.log(error.response)
+    }
+    setIsLoading(false)
+  }
+  UserInfo()
+}, [])
+
+    function imageCheck(){
+      if(fetchedMessage.picture === null){
+        return <Image style={styles.imageIcon} source={require("./assets/vectors/person.png")}/>
+      }else{
+        return <Image source={{ uri: `https://phixotech.com/igoepp/public/customers/${fetchedMessage.picture}` }}/>
+      }
+  }
+
+
 
   if(isLoading){
     return <LoadingOverlay/>
@@ -100,8 +131,8 @@ function DrawerNavigation(){
     <Drawer.Navigator screenOptions={{  
         headerTintColor: 'black',
         sceneContainerStyle: {backgroundColor: '#fff'},
-        // drawerContentStyle: { height: "50%", marginTop: "60%", },
-        drawerContentStyle: { marginTop: "10%", },
+        // drawerContentStyle: { marginTop: "60%", },
+        drawerContentStyle: { marginTop: "50%", },
         drawerInactiveTintColor: Color.darkolivegreen_100,
         drawerActiveBackgroundColor: Color.limegreen,
         drawerActiveTintColor: 'white'
@@ -118,9 +149,18 @@ function DrawerNavigation(){
         headerRight: () => (
           <View style={styles.exitIcon}>
             <Text style={styles.Username}>{fetchedMessage.first_name} {fetchedMessage.last_name}</Text>
-            <Pressable onPress={() => authCtx.logout()}>
+            <View style={styles.images}>
+            {/*<Pressable onPress={() => authCtx.logout()}>
               <Image  transition={500} style={styles.notificationIcon} source={require('./assets/vectors/group-517.png')}/>
+        </Pressable>*/}
+            <Pressable style={({pressed}) => [pressed && styles.pressed]} onPress={() => navigation.navigate('ViewProfile', 
+              {
+                fetchedMessage
+              }
+            )}>
+              {imageCheck()}
             </Pressable>
+            </View>
           </View>)
        }}
       />
@@ -180,22 +220,6 @@ function DrawerNavigation(){
         // headerShown: false,
         drawerIcon: ({color, size}) => <Ionicons name="book" color={color} size={size}/>
        }}
-      />
-
-      <Drawer.Screen
-       name='View Profile'
-       component={ViewProfile}
-       options={{ 
-        headerTintColor: Color.lightgreen,
-        title: "View Profile",
-        // headerShown: false,
-        drawerIcon: ({color, size}) => <Ionicons name="image" color={color} size={size}/>,
-        headerRight: () => (
-          <View style={styles.exitIcon}>
-            <Text style={styles.Username} onPress={() => navigation.navigate("Profile")}>Update Profile</Text>
-          </View>
-        )
-        }}
       />
 
 
@@ -282,8 +306,8 @@ function AuthenticatedStack() {
       />
 
       <Stack.Screen
-      name='ViewHelpers'
-      component={ViewHelper}
+      name='ProceedCategory'
+      component={ProceedCategory}
       options={{ headerShown: false }}
       />
     
@@ -300,6 +324,12 @@ function AuthenticatedStack() {
       />
 
       <Stack.Screen
+       name='ViewProfile'
+       component={ViewProfile}
+       options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
       name='Profile'
       component={Profile}
       options={{ headerShown: false }}
@@ -310,7 +340,14 @@ function AuthenticatedStack() {
       component={ImageViewer}
       options={{ headerShown: false }}
       />
+
+      <Stack.Screen
+      name='SubCategory'
+      component={SubCategory}
+      options={{ headerShown: false }}
+      />
       
+
       </Stack.Navigator>
 
   );
@@ -394,11 +431,18 @@ export default function App() {
 
 
 const styles = StyleSheet.create({
+  pressed:{
+    opacity: 0.45
+  },
   exitIcon: {
     paddingRight: 20,
     flexDirection: 'row',
   },
+  images:{
+    flexDirection: 'row'
+  },
   Username:{
+    marginTop: 10,
     fontSize: 15,
     color: Color.lightgreen,
   },
@@ -406,5 +450,9 @@ const styles = StyleSheet.create({
     width: 20,
     height: 24,
     marginLeft: 8,
+  },
+  imageIcon:{
+    width:40,
+    height: 40
   }
 })

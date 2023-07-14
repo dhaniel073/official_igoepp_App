@@ -5,11 +5,13 @@ import { useFonts } from "expo-font";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { useNavigation } from "@react-navigation/native";
 
-function ViewHelper({route, navigation}){
-    const catId = route.params.categoryId
-    const catName = route.params.categoryName
-    const catDesc = route.params.categoryDesc
-    // const cat = route.params.categoryId
+function ProceedCategory({route, navigation}){
+    const subcatId = route.params.subcategoryId
+    const subcatName = route.params.subcategoryName
+    const subcatDesc = route.params.subcategoryDesc
+    const catId = route.params.catId
+    const image = route.params.image
+    console.log(route.param)
 
     const [fontloaded] =  useFonts({
         'poppinsRegular': require("../assets/font/Poppins/Poppins-Regular.ttf"),
@@ -22,7 +24,7 @@ function ViewHelper({route, navigation}){
         return <LoadingOverlay/>
       }
   
-    console.log(catId)
+    console.log(subcatId)
     return (
         <View style={styles.container}>
 
@@ -45,15 +47,16 @@ function ViewHelper({route, navigation}){
                 <View style={styles.image2container}>
                     <Image
                     style={styles.image2}
-                    source={require("../assets/vectors/g101.png")}
+                    source={{ uri: `https://phixotech.com/igoepp/public/subcategory/${image}` }}
                     />
                 </View>
-            <Text style={styles.catNameText}>{catName}</Text>
-            <Text style={styles.catDescText}>{catDesc}</Text>
+            <Text style={styles.catNameText}>{subcatName}</Text>
+            <Text style={styles.catDescText}>{subcatDesc}</Text>
             <Button onPress={() => navigation.navigate("RequestHelpQuestionaries", {
-                catId: catId,
-                catDesc: catDesc,
-                catName: catName
+                subcatId: subcatId,
+                subcatDesc: subcatDesc,
+                subcatName: subcatName,
+                catId: catId
 
             })} style={[styles.button]}>Proceed</Button>
             </View>
@@ -62,7 +65,7 @@ function ViewHelper({route, navigation}){
     )
 }
 
-export default ViewHelper;
+export default ProceedCategory;
 
 const styles = StyleSheet.create({
     pressed: {

@@ -1,5 +1,6 @@
 import { useFonts } from 'expo-font';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { Color } from './GlobalStyles';
 
 function LoadingOverlay({ message }) {
   const [fontloaded] =  useFonts({
@@ -15,7 +16,7 @@ function LoadingOverlay({ message }) {
   return (
     <View style={styles.rootContainer}>
       <Text style={styles.message}>{message}</Text>
-      <ActivityIndicator size="large" />
+      <ActivityIndicator size="large"  color={Color.limegreen}/>
     </View>
   );
 }

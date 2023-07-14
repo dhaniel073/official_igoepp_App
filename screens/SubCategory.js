@@ -1,35 +1,58 @@
-import { FlatList, Image, Pressable, StyleSheet } from "react-native";
+import { FlatList, Image, Pressable, StyleSheet, Text } from "react-native";
 import { SafeAreaView, View } from "react-native";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+import { Color, FontSize } from "../components/ui/GlobalStyles";
+import { useFonts } from "expo-font";
+import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../store/auth-context";
+import axios from "axios";
 
 function SubCategory({route}){
     
     // "https://phixotech.com/igoepp/public/api/showsubcategorybycatid/1"
-    const firstname = route.params.firstname
-    const catId = route.params.categoryId
-      
+    const navigation = useNavigation();
+    const authCtx = useContext(AuthContext)
+    const [fetchedcategory, setFetchedCategory] = useState('')
+    const [isFetching, setIsFetching] = useState(true)
+    
+    
+    const categoryId = route.params.categoryId
+    const first_name = route.params.first_name
+    // console.log(categoryId, first_name)
+
+
+
+  
   useEffect(() => {
-    async function fetchSubCategorydata(){
-    try {
-      setIsFetching(true)
-      await axios.get(`https://phixotech.com/igoepp/public/api/showsubcategorybycatid/${catId}`)
-      .then((res) => {
-        // console.log(res.data)
-        setFetchedCategory(res.data.data)
-        setIsFetching(false)
+    async function fetchData(){
+        try{
+            setIsFetching(true)
+            const response = await axios.get(`https://phixotech.com/igoepp/public/api/showsubcategorybycatid/${categoryId}`)
+            console.log(response.data)
+            setFetchedCategory(response.data.data)
+            setIsFetching(false)
+        }catch(error){
+          Alert.alert("Error", "Error fetching Subcategories")
+        }
+    }
+    fetchData()
+  }, [])
 
-      })
-    } catch (error) {
-      setIsFetching(false)
 
+  const [fontloaded] =  useFonts({
+    'poppinsRegular': require("../assets/font/Poppins/Poppins-Regular.ttf"),
+    'montserratBold': require("../assets/font/Montserrat_bold.ttf"),
+    'poppinsMedium': require("../assets/font/Poppins_medium.ttf"),
+    'poppinsSemiBold': require("../assets/font/Poppins_semibold.ttf"),
+    'poppinsBold': require("../assets/font/Poppins_bold.ttf")
+  
+  })
+  
+  if(!fontloaded){
+    return <LoadingOverlay message={"..."}/>
   }
-  }
-  fetchSubCategorydata()
-}, [setIsFetching, setFetchedCategory])
-
-
-
+  
     return (
         <SafeAreaView style={styles.mainContainer}>
     <View style={styles.header}>
@@ -48,32 +71,34 @@ function SubCategory({route}){
    
   </Pressable>
       <View>
-        <Text style={styles.name}>Hi {firstname}</Text>
+        <Text style={styles.name}>Hi {first_name}</Text>
       </View>
     </View>
 
-    <Text style={styles.requestHelptext}>Request Help</Text>
+    <Text style={styles.requestHelptext}>SubCategory</Text>
     {isFetching ? <LoadingOverlay/> :
         <FlatList
-        style={styles.flatlists}
+        // style={styles.flatlists}
         showsVerticalScrollIndicator={false}
         data={fetchedcategory}
         keyExtractor={(item) => item.id}
         renderItem={({item}) => 
             <View style={styles.container}  >
-              <Pressable style={({pressed}) => [styles.pressables, pressed && styles.pressed]} onPress={() => navigation.navigate("ViewHelpers", {
-                categoryId: item.id,
-                categoryName: item.cat_name,
-                categoryDesc: item.cat_desc,
+              <Pressable style={({pressed}) => [styles.pressables, pressed && styles.pressed]} onPress={() => navigation.navigate("ProceedCategory", {
+                subcategoryId: item.id,
+                subcategoryName: item.sub_cat_name,
+                subcategoryDesc: item.sub_cat_desc,
+                image: item.image,
+                catId: item.cat_id,
               })}>
               <Image
               style={styles.image2}
-              source={{ uri:`https://phixotech.com/igoepp/public/category/${item.image}`  }}
+              source={{ uri:`https://phixotech.com/igoepp/public/subcategory/${item.image}`  }}
               // source={require("../assets/vectors/g101.png")}
               />
-
+               {/* {console.log(`https://phixotech.com/igoepp/public/subcategory/${item.image}`)}*/}
                 <Text style={styles.item}>
-                  {item.cat_name}
+                  {item.sub_cat_name}
                 </Text>
               </Pressable>
             </View>
@@ -91,7 +116,10 @@ const styles = StyleSheet.create({
     container: {
       // padding: 5,
       flex: 1,
-      justifyContent:'space-between',
+      // justifyContent:'center',
+      // width: 100,
+      // height: 300
+      // alignItems: 'center'
       // marginBottom: 20
   
     },
@@ -101,6 +129,10 @@ const styles = StyleSheet.create({
     },
     pressables:{
       // backgroundColor: Color.skyblue,
+      justifyContent: 'center',
+      alignItems: 'center',
+      // width: 150,
+      flex: 1,
       borderRadius: 10,
       elevation: 4,
       shadowColor: 'black',
@@ -129,7 +161,7 @@ const styles = StyleSheet.create({
       fontSize: 10,
       // marginTop: 80,
       fontFamily: 'poppinsSemiBold',
-      textAlign: 'center',
+      // textAlign: 'center',
       // position: 'absolute',  
       color: Color.darkolivegreen_100
     },
@@ -153,9 +185,9 @@ const styles = StyleSheet.create({
       marginBottom: 30
     },
     image2:{
-      width: 50,
+      width: 70,
       height: 50,
-      marginLeft: 50,
+      // marginLeft: 50,
       marginTop: 30,
       // alignItems: 'center'
       marginBottom: 15

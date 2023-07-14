@@ -51,7 +51,7 @@ useEffect(() => {
     const name = response.data.data
     setFetchedName(name)
   }catch(error){
-    Alert.alert("Error Occured", "An error Occured check your internet conection and try again")
+    Alert.alert("Error", error.response.message)
   }
 }
   fetchUserdata()
@@ -70,7 +70,6 @@ const [fontloaded] =  useFonts({
 if(!fontloaded){
   return <LoadingOverlay message={"..."}/>
 }
-
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -103,10 +102,11 @@ if(!fontloaded){
         keyExtractor={(item) => item.id}
         renderItem={({item}) => 
             <View style={styles.container}  >
-              <Pressable style={({pressed}) => [styles.pressables, pressed && styles.pressed]} onPress={() => navigation.navigate("ViewHelpers", {
+              <Pressable style={({pressed}) => [styles.pressables, pressed && styles.pressed]} onPress={() => navigation.navigate("SubCategory", {
                 categoryId: item.id,
-                categoryName: item.cat_name,
-                categoryDesc: item.cat_desc,
+                // categoryName: item.cat_name,
+                // categoryDesc: item.cat_desc,
+                first_name: fetchedName.first_name
               })}>
               <Image
               style={styles.image2}
@@ -144,6 +144,8 @@ const styles = StyleSheet.create({
   pressables:{
     // backgroundColor: Color.skyblue,
     borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
     elevation: 4,
     shadowColor: 'black',
     shadowOpacity: 0.25,
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
   image2:{
     width: 50,
     height: 50,
-    marginLeft: 50,
+    // marginLeft: 50,
     marginTop: 30,
     // alignItems: 'center'
     marginBottom: 15

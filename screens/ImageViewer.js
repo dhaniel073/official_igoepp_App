@@ -1,8 +1,8 @@
 import { Image, StyleSheet, View, Pressable, Text } from "react-native";
 
 function ImageViewer({route, navigation}){
-    const imageUrl = route.params.ImageUrl
-    console.log(imageUrl)
+    const imageUrl = route.params.image
+    console.log(route.params)
 
     function check(){
         if(imageUrl === null){

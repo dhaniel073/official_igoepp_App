@@ -1,8 +1,8 @@
-import { StyleSheet, View, Text, Image, ScrollView, Alert, Pressable } from "react-native";
+import { StyleSheet, View, Text, Image, ScrollView, Alert, Pressable, Platform } from "react-native";
 import { Color, FontSize } from "../components/ui/GlobalStyles";
 import Input from "../components/Auth/Input";
 import Button from "../components/ui/Button";
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+// import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { launchImageLibraryAsync } from "expo-image-picker";
 import { useContext, useEffect, useState } from "react";
@@ -15,7 +15,7 @@ import { AuthContext } from "../store/auth-context";
 import { useNavigation } from "@react-navigation/native";
 import Button3 from "../components/ui/Button3";
 import axios from "axios";
-
+import { androidCameraPermission } from "../util/Permissions";
 const data = [
     { label: 'Male ', value: 'M' },
     { label: 'Female ', value: 'F' },
@@ -50,23 +50,46 @@ function Profile(){
     const pickImage = async () => {
         const image = await launchImageLibraryAsync(option)
         console.log(image.assets[0]);
-
-        const formdata = new FormData()
-        formdata.append('file', {
-          uri: image.assets[0].uri,
-          type: image.assets[0].type
-        })
         if (image.canceled) {
           navigation.goBack()
         }
         if (!image.canceled) {
           setImage(image.assets[0].uri);
-            // console.log(picture.uri)
-          await axios.post(
-            console.log('sending')
-          )
+          imageUpload(image.assets[0])
       };
-    }
+  }
+
+  const imageUpload = async (imagePath) => {
+    console.log(imagePath)
+    const imageData = new FormData()
+    imageData.append("file", JSON.stringify({
+      uri: imagePath.uri,
+      name: 'image.png',
+      fileName: 'image',
+      type: imagePath.type
+    }))
+    console.log("form data", imageData)
+
+    const url = "http://phixotech.com/igoepp/public/api/auth/customer/uploadpicture"
+
+    try{
+    const response = await axios.post(url, 
+      {
+        customerid: authCtx.customerId,
+        picture: imagePath.uri
+      },
+    {
+      headers: {
+        Accept: 'application/json',
+        'Content-type': 'multipart/form-data',
+        Authorization: `Bearer ${authCtx.token}`
+      }
+    }, )
+    console.log(response)
+  }catch(error){
+      console.log(error.response.data.message)
+  }
+  }
 
 
     const renderLabel = () => {
