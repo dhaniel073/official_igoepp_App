@@ -25,7 +25,7 @@ import MarketPlace from './screens/MarketPlace';
 import TermsAndCondition from './screens/TermsAndCondition';
 import Requests from './screens/Requests';
 import axios from 'axios';
-import { Text, StyleSheet, View, Image, Pressable } from 'react-native';
+import { Text, StyleSheet, View, Image, Pressable, Modal, Alert } from 'react-native';
 import ServiceHistory from './screens/ServiceHistory';
 import { sin } from 'react-native-reanimated';
 // import PayStack from './screens/PayStack';
@@ -42,6 +42,8 @@ import ImageViewer from './screens/ImageViewer';
 import SubCategory from './screens/SubCategory';
 import ProceedCategory from './screens/ProceedCategory';
 import { customerInfocheck } from './util/auth';
+import { useFonts } from 'expo-font';
+// import { Modal } from 'antd';
 
 const Stack = createNativeStackNavigator();
 
@@ -94,6 +96,7 @@ function DrawerNavigation(){
 
   const token = authCtx.token;
   const customerId = authCtx.customerId
+  const [modalVisible, setModalVisible] = useState(false);
   
   useEffect(() => {
 
@@ -117,8 +120,21 @@ function DrawerNavigation(){
       if(fetchedMessage.picture === null){
         return <Image style={styles.imageIcon} source={require("./assets/vectors/person.png")}/>
       }else{
-        return <Image source={{ uri: `https://phixotech.com/igoepp/public/customers/${fetchedMessage.picture}` }}/>
+        return <Image style={styles.imageIcon} source={{ uri:`https://phixotech.com/igoepp/public/customers/${fetchedMessage.picture}` }}/>
       }
+  }
+
+  const [fontloaded] =  useFonts({
+    'poppinsRegular': require("./assets/font/Poppins/Poppins-Regular.ttf"),
+    'montserratBold': require("./assets/font/Montserrat_bold.ttf"),
+    'poppinsMedium': require("./assets/font/Poppins_medium.ttf"),
+    'poppinsSemiBold': require("./assets/font/Poppins_semibold.ttf"),
+    'poppinsBold': require("./assets/font/Poppins_bold.ttf")
+  
+  })
+  
+  if(!fontloaded){
+  return <LoadingOverlay/>
   }
 
 
@@ -152,14 +168,18 @@ function DrawerNavigation(){
             <View style={styles.images}>
             {/*<Pressable onPress={() => authCtx.logout()}>
               <Image  transition={500} style={styles.notificationIcon} source={require('./assets/vectors/group-517.png')}/>
-        </Pressable>*/}
-            <Pressable style={({pressed}) => [pressed && styles.pressed]} onPress={() => navigation.navigate('ViewProfile', 
-              {
-                fetchedMessage
-              }
-            )}>
+            </Pressable>*/}
+                        
+            <Pressable style={({pressed}) => [pressed && styles.pressed]} 
+            onPress={() => navigation.navigate('ViewProfile',{fetchedMessage})}
+            >
               {imageCheck()}
             </Pressable>
+            {/*<Pressable
+            style={[styles.button, styles.buttonOpen]}
+              >
+            <Text style={styles.textStyle}>Show Modal</Text>
+          </Pressable>*/}
             </View>
           </View>)
        }}
@@ -326,7 +346,8 @@ function AuthenticatedStack() {
       <Stack.Screen
        name='ViewProfile'
        component={ViewProfile}
-       options={{ headerShown: false }}
+       options={{ headerShown: false, 
+      }}
       />
 
       <Stack.Screen
@@ -431,6 +452,9 @@ export default function App() {
 
 
 const styles = StyleSheet.create({
+  modalText2:{
+      fontFamily: 'poppinsMedium'
+  },
   pressed:{
     opacity: 0.45
   },
@@ -444,6 +468,7 @@ const styles = StyleSheet.create({
   Username:{
     marginTop: 10,
     fontSize: 15,
+    marginRight:10,
     color: Color.lightgreen,
   },
   notificationIcon:{
@@ -453,6 +478,48 @@ const styles = StyleSheet.create({
   },
   imageIcon:{
     width:40,
-    height: 40
-  }
+    height: 40,
+    borderRadius: 500
+  },
+  centeredView: {
+    position: 'absolute',
+    flex: 1,
+    marginLeft: 180,
+    justifyContent: 'center',
+    // alignItems: 'flex-end',
+    marginTop: 30,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'flex-start',
+    elevation: 2,
+    shadowColor: 'black',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'left',
+    flexDirection: 'row'
+  },
 })

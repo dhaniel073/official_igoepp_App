@@ -172,6 +172,26 @@ async function subcatquestion(subcatId, token){
   }
 }
 
+async function fetchedData(customerId, token){
+  try{
+    const response = await axios.get(
+        `http://phixotech.com/igoepp/public/api/auth//hrequest/showrequestbycustomerid/${customerId}`, 
+       {
+          headers:{
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+        console.log(response)
+        return response.data;
+    } catch(error){
+      console.log(error)
+      Alert.alert("Error", error.response.data.message)
+  
+    }
+}
+
 
 export  function createUser(email, password,gender, phone, firstname, lastname) {
   return authenticateSignUp(email, password, gender, phone, firstname, lastname)
@@ -204,6 +224,10 @@ export function upLoadPicture(customerId, token, picture){
 
 export function ShowSubCatQuestion(subcatId, token){
       return subcatquestion(subcatId, token)
+}
+
+export function ShowFetchedRequests(customerId, token){
+  return fetchedData(customerId, token)
 }
 
 

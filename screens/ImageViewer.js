@@ -15,7 +15,7 @@ function ImageViewer({route, navigation}){
     }
     return (
         <View style={styles.container}>
-            <Pressable onPress={() => navigation.goBack()}>
+            <Pressable style={({pressed}) => [styles.backParent,pressed && styles.pressed]} onPress={() => navigation.goBack()}>
                 <Image style={styles.image2} source={require("../assets/vectors/vector59.png")}/>
             </Pressable>
                 {check()}
@@ -29,6 +29,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "black",
     },
+    pressed:{
+        opacity: 0.55
+    },
     image:{
         // alignItems: 'center',
         marginTop: "35%",
@@ -37,7 +40,7 @@ const styles = StyleSheet.create({
     },
     backParent:{
         top: 20,
-        left: 10,
+        // left: 10,
         flexDirection: 'row',
     },
     image2:{

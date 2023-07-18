@@ -49,7 +49,7 @@ function ViewProfile({route}){
             )
         }else{
             return (
-                <Pressable style={({pressed}) => [pressed && styles.pressed]} onPress={(navigation.navigate('ImageViewer', {
+                <Pressable style={({pressed}) => [pressed && styles.pressed]} onPress={() => (navigation.navigate('ImageViewer', {
                     image: data.picture }))}
                 >
                     <Image style={styles.Image} source={{ uri: `https://phixotech.com/igoepp/public/customers/${data.picture}`}}/>
@@ -90,10 +90,26 @@ function ViewProfile({route}){
                 <RefreshControl refreshing={refreshing}/>
             }
         >
-        <Pressable onPress={() => navigation.goBack()}>
-            <Image style={styles.image2} source={require("../assets/vectors/vector35.png")}/>
-            <Text style={styles.back}>Back</Text>
+        <View style={styles.header}>
+        <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]}
+            onPress={() => navigation.goBack()}
+            >
+            
+            <Image
+                style={styles.image}
+                contentFit="cover"
+                source={require("../assets/vectors/vector30.png")}
+            />
+
+            <Text style={styles.back}>Back</Text>        
         </Pressable>
+
+        <Pressable onPress={() => navigation.navigate("Profile")}>
+            <Text>Update Profile</Text>
+        </Pressable>
+
+        </View>
+
         <View style={styles.mainContainer}>
         {!fontloaded || isLoading ? <LoadingOverlay/> :
             <View style={styles.container}>
@@ -139,27 +155,32 @@ function ViewProfile({route}){
 export default ViewProfile;
 
 const styles = StyleSheet.create({
+    header:{
+        marginTop: "15%"
+    },
+    backParent:{
+        flexDirection: 'row',
+    },
     back:{
         fontSize: FontSize.size_mid,
         fontFamily: 'poppinsRegular',
-        marginTop: 0
     },
-    image2:{
+   image:{
         width: 15,
         height: 15,
-        marginHorizontal: 15,
-        // marginTop: 3,
-        marginTop: "10%"
+        marginHorizontal: 10,
+        marginTop: 3,
+        marginBottom: 30
       },
     pressed:{
-        opacity: 0.45
+        opacity: 0.55
     },
     container:{
         justifyContent: 'center',
         // alignItems: 'flex-start'
     },
     mainContainer:{
-        marginHorizontal: "10%",
+        marginHorizontal: "5%",
         marginTop: 40,
     },
     Image:{

@@ -17,7 +17,7 @@ function Button2({children, onPress, style}){
   }
     return (
         <Pressable
-        style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+        style={({ pressed }) => [styles.button, pressed && styles.pressed, style]}
         onPress={onPress}
         >
       <View>

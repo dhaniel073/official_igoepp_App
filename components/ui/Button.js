@@ -24,7 +24,7 @@ function Button({ children, onPress, style }) {
       onPress={onPress}
     >
       <View>
-        <Text style={styles.buttonText}>{children}</Text>
+        <Text style={[styles.buttonText]}>{children}</Text>
       </View>
     </Pressable>
   );
