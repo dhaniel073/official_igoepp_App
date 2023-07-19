@@ -1,12 +1,12 @@
 import {useContext, useEffect, useState} from "react";
-import { Text, StyleSheet, View, Pressable, Image, FlatList, ScrollView, SafeAreaView, Platform } from "react-native";
+import { Text, StyleSheet, View, Pressable, Image, FlatList, ScrollView, SafeAreaView, Platform, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, Border, FontSize, FontFamily } from "../components/ui/GlobalStyles";
 import { AuthContext } from "../store/auth-context";
 import { ShowFetchedRequests } from "../util/auth";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import Button from '../components/ui/Button'
-import Button2 from '../components/ui/Button2'
+import Button4 from '../components/ui/Button4'
 import { useFonts } from "expo-font";
 
 const Requests = () => {
@@ -26,11 +26,30 @@ const Requests = () => {
 
   }
     fetchRequests()
-  }, [setFetchedRequest])
+  }, [])
 
+      function cancel(){
+        console.log("canceled successfully")
+      }
+
+      function cancelRequest(){
+        Alert.alert('Cancel Request', 'Are you sure you want to canel this request', [
+          {
+            text: 'Yes',
+            onPress: () => cancel() ,
+          },
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+        ])
+       
+      }
   
-      const check = fetchedRequest.length
-      console.log(check)
+
+      // const check = fetchedRequest.length
+      // console.log(check)
 
   
   const [fontloaded] =  useFonts({
@@ -48,7 +67,7 @@ const Requests = () => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <Text style={styles.requestText}>Requests</Text>
+      {/*<Text style={styles.requestText}>Requests</Text>*/}
 
     {isFetching ? <LoadingOverlay/> : 
       <FlatList
@@ -57,12 +76,15 @@ const Requests = () => {
         keyExtractor={(item) => item.id}
         renderItem={({item}) => 
           <View style={styles.container}>
+              <Text style={styles.requestDate}>{item.created_at}</Text>
             <Pressable style={styles.pressables}>
               <Text style={styles.requestName}>{item.cat_name}</Text>
-              <Text>{item.created_at}</Text>
             <View style={styles.buttonContainer}>
-              <Button2 style={styles.button2}>Cancel</Button2>
-              <Button style={styles.button}>View Request</Button>
+              <Button4 onPress={cancelRequest} style={styles.button2}>Cancel</Button4>
+              <Button onPress={() => navigation.navigate("View Requests", {
+                id: item.id
+              })} style={styles.button}>View Request</Button>
+              <Button4 style={styles.button2}>Bid ({item.bid_count === 0 ? "0" : item.bid_count})</Button4>
             </View>
             </Pressable>
           </View>
@@ -80,28 +102,31 @@ const styles = StyleSheet.create({
   mainContainer:{
     flex: 1,
     marginHorizontal: 8,
-    // marginTop: "5%"
   },
   flatlists:{
-    // top: 0,
     marginBottom: 20
   },
   requestName:{
-    // fontWeight: "700",
     fontSize: FontSize.size_xl,
     color: Color.darkolivegreen_100,
-    fontFamily: 'poppinsBold'
+    fontFamily: 'poppinsBold',
+    paddingBottom: 13,
+  },
+  requestDate:{
+    marginHorizontal: 10,
+    fontSize: 18,
+    fontFamily: 'montserratBold'
   },
   container: {
-    // padding: 5,
+    padding: 5,
     flex: 1,
     // justifyContent:'space-between',
-    // marginBottom: 20
+    marginTop: 20
 
   },
   pressables:{
     // backgroundColor: Color.skyblue,
-    borderRadius: 10,
+    // borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'flex-start',
     elevation: 4,
@@ -115,15 +140,18 @@ const styles = StyleSheet.create({
     margin: 8,
     height: 145,
     padding: 10
+    
   },
   buttonContainer:{
+    marginTop: 10,
     flexDirection: 'row',
-    // justifyContent: 'center',
-    // alignItems: 'center'
+    justifyContent: 'center',
+    alignItems: 'center',
     width: "100%"
   },
   button:{
     paddingTop: 7,
+    backgroundColor: Color.limegreen,
     height: 40
   },
   button2: {

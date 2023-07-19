@@ -25,6 +25,8 @@ const API_KEY = 'AIzaSyClgp52iRKjMlTREeh-TSkykXbYpforQR4';
 //   return token;
 // }
 
+
+//signup route
 async function authenticateSignUp(email, password, gender, phone, firstname, lastname){
   let base = 'customer/store'
   const loginUrl = 'https://phixotech.com/igoepp/public/api/'+ base
@@ -44,6 +46,7 @@ async function authenticateSignUp(email, password, gender, phone, firstname, las
   return data;
 }
 
+//login route
 async function authenticateLogin(email, password){
   let base = 'igoeppauth/logincustomer'
   const loginUrl = 'https://phixotech.com/igoepp/public/api/'+ base
@@ -57,6 +60,7 @@ async function authenticateLogin(email, password){
   return data;
 }
 
+//show customer details route
 async function showCustomer(customer_id, token){
     const url = `http://phixotech.com/igoepp/public/api/auth/customer/${customer_id}`
     const response = await axios.get(url, {
@@ -70,16 +74,19 @@ async function showCustomer(customer_id, token){
 }
 
   
+//forgot route
 async function forgotPass(email){
   const url = "http://phixotech.com/igoepp/public/api/customer/forgetpassword"
   const response = await axios.post(url, {
     email: email
   })
-  console.log(response)
+  // console.log(response)
   return response
 }
 
-async function walletcheck(customerId, token, InputAmount){
+
+//update wallet route
+async function walletupdate(customerId, token, InputAmount){
   try{
   const response = await axios.put(
       `http://phixotech.com/igoepp/public/api/auth/customer/${customerId}/walletupdate`, 
@@ -98,6 +105,7 @@ async function walletcheck(customerId, token, InputAmount){
   }
 }
 
+//update customer details route
 async function infoUpdate(last_name, first_name, sex, phone, customerId, token){
   try{
   const response = await axios.put(
@@ -114,13 +122,15 @@ async function infoUpdate(last_name, first_name, sex, phone, customerId, token){
         }
       }
     )
-    console.log(response)
+    // console.log(response)
       return response;
   } catch(error){
       Alert.alert("Error", "An Error Occured while updating your info")
   }
 }
 
+
+//upload customer picture route
 async function pictureupload(customerId, token, picture){
   // console.log(picture.uri)
   const formdata = new FormData()
@@ -143,7 +153,7 @@ async function pictureupload(customerId, token, picture){
         }
       }
     )
-      console.log(response)
+      // console.log(response)
       return response;
   } catch(error){
       // console.log(error.response.data)
@@ -153,6 +163,7 @@ async function pictureupload(customerId, token, picture){
   }
 }
 
+//subcategory questions route
 async function subcatquestion(subcatId, token){
   try{
   const response = await axios.put(
@@ -164,7 +175,7 @@ async function subcatquestion(subcatId, token){
         }
       }
     )
-      console.log(response)
+      // console.log(response)
       return response;
   } catch(error){
     Alert.alert("Error", error.response.message)
@@ -172,6 +183,7 @@ async function subcatquestion(subcatId, token){
   }
 }
 
+//fetch customer requests route
 async function fetchedData(customerId, token){
   try{
     const response = await axios.get(
@@ -183,7 +195,7 @@ async function fetchedData(customerId, token){
           }
         }
       )
-        console.log(response)
+        // console.log(response)
         return response.data;
     } catch(error){
       console.log(error)
@@ -192,6 +204,28 @@ async function fetchedData(customerId, token){
     }
 }
 
+//fetch requests by request id
+
+
+async function fetchrequestbyid(requestid, token){
+  try{
+    const response = await axios.get(
+        `http://phixotech.com/igoepp/public/api/auth/hrequest/showrequestbyrequestid/${requestid}`, 
+       {
+          headers:{
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+        // console.log(response)
+        return response.data;
+    } catch(error){
+      console.log(error.response.data)
+      Alert.alert("Error", "Error Fetching Request Infomations")
+  
+    }
+}
 
 export  function createUser(email, password,gender, phone, firstname, lastname) {
   return authenticateSignUp(email, password, gender, phone, firstname, lastname)
@@ -207,7 +241,7 @@ export function customerInfocheck(customer_id, token){
 
 
 export function WalletCheckBalance(customerId, token, InputAmount){
-  return walletcheck(customerId, token, InputAmount)
+  return walletupdate(customerId, token, InputAmount)
 }
 
 export function ForgotCustomerPassword(email){
@@ -228,6 +262,10 @@ export function ShowSubCatQuestion(subcatId, token){
 
 export function ShowFetchedRequests(customerId, token){
   return fetchedData(customerId, token)
+}
+
+export function ShowFetchedRequestsById(requestid, token){
+  return fetchrequestbyid(requestid, token)
 }
 
 

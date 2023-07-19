@@ -11,7 +11,6 @@ function ProceedCategory({route, navigation}){
     const subcatDesc = route.params.subcategoryDesc
     const catId = route.params.catId
     const image = route.params.image
-    console.log(route.param)
 
     const [fontloaded] =  useFonts({
         'poppinsRegular': require("../assets/font/Poppins/Poppins-Regular.ttf"),
@@ -24,7 +23,7 @@ function ProceedCategory({route, navigation}){
         return <LoadingOverlay/>
       }
   
-    console.log(subcatId)
+    // console.log(subcatId)
     return (
         <View style={styles.container}>
 
@@ -52,7 +51,7 @@ function ProceedCategory({route, navigation}){
                 </View>
             <Text style={styles.catNameText}>{subcatName}</Text>
             <Text style={styles.catDescText}>{subcatDesc}</Text>
-            <Button onPress={() => navigation.navigate("RequestHelpQuestionaries", {
+            <Button onPress={() => navigation.navigate("RequestSendInfo", {
                 subcatId: subcatId,
                 subcatDesc: subcatDesc,
                 subcatName: subcatName,

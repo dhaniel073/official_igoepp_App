@@ -17,7 +17,8 @@ function Input({
   style,
   maxLength,
   placeholder,
-  multiline
+  multiline,
+  editable
   
 }) {
 
@@ -46,6 +47,7 @@ function Input({
         value={value}
         maxLength={maxLength}
         placeholder={placeholder}
+        editable={editable}
         multiline={multiline}
       />
     </View>

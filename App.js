@@ -43,6 +43,8 @@ import SubCategory from './screens/SubCategory';
 import ProceedCategory from './screens/ProceedCategory';
 import { customerInfocheck } from './util/auth';
 import { useFonts } from 'expo-font';
+import ViewRequests from './screens/ViewRequests';
+import RequestSendInfo from './screens/RequestSendInfo';
 // import { Modal } from 'antd';
 
 const Stack = createNativeStackNavigator();
@@ -190,7 +192,7 @@ function DrawerNavigation(){
       component={Payments}
       options={{ 
         headerTintColor: Color.lightgreen,
-        title: "PAYMENT",
+        title: "Payment",
         // headerShown: false,
         drawerIcon: ({color, size}) => <Ionicons name="wallet" color={color} size={size}/>,
         // drawerIcon: ({color, size}) => <Text>{fetchedMessage.first_name}</Text>,
@@ -202,7 +204,7 @@ function DrawerNavigation(){
       component={ServiceHistory}
       options={{ 
         headerTintColor: Color.lightgreen,
-        title: "SERVICE HISTORY",
+        title: "Service History",
         drawerIcon: ({color, size}) => <Ionicons name="list" color={color} size={size}/>,
         // headerShown: falses
        }}
@@ -213,7 +215,7 @@ function DrawerNavigation(){
       name="Requests"
       component={Requests}
       options={{ 
-        title: "VIEW REQUESTS",
+        title: "Requests",
         headerTintColor: Color.lightgreen,
         // headerShown: false,
         drawerIcon: ({color, size}) => <Ionicons name="exit" color={color} size={size}/>
@@ -226,7 +228,7 @@ function DrawerNavigation(){
       options={{ 
         // headerShown: false,
         headerTintColor: Color.lightgreen,
-        title: "MARKET PLACE",
+        title: "Market Place",
         drawerIcon: ({color, size}) => <Ionicons name="globe" color={color} size={size}/>
        }}
       />
@@ -365,6 +367,18 @@ function AuthenticatedStack() {
       <Stack.Screen
       name='SubCategory'
       component={SubCategory}
+      options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+      name='View Requests'
+      component={ViewRequests}
+      options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+      name='RequestSendInfo'
+      component={RequestSendInfo}
       options={{ headerShown: false }}
       />
       
