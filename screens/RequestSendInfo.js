@@ -8,6 +8,7 @@ import DateTimePicker from "@react-native-community/datetimepicker"
 import { useNavigation } from "@react-navigation/native";
 import { Dropdown } from "react-native-element-dropdown";
 import axios from "axios";
+import GoBack from "../components/ui/GoBack";
 
 const data = [
     { label: 'Nigeria', value: 'Nigeria' },
@@ -49,7 +50,13 @@ const data = [
 
 function RequestSendInfo(){
     // const [value, setValue] = useState(null);
-    const [isFocus, setIsFocus] = useState(false);
+    const [isCountryFocus, setIsCountryFocus] = useState(false);
+    const [isStateFocus, setIsStateFocus] = useState(false);
+    const [isCityFocus, setIsCityFocus] = useState(false);
+    const [isFrequencyFocus, setIsFrequencyFocus] = useState(false);
+    const [isVehicleFocus, setIsVehicleFocus] = useState(false);
+    const [isHelpSizeFocus, setIsHelpSizeFocus] = useState(false);
+
 
     const navigation = useNavigation()
     const [isLoading, setIsLoading] = useState(false)
@@ -60,6 +67,14 @@ function RequestSendInfo(){
     const [countryData, setCountryData] = useState([]);
     const [stateData, setStateData] = useState([]);
     const [cityData, setCityData] = useState([]);
+
+    const [country, setCountry] = useState([]);
+    const [state, setState] = useState([]);
+    const [city, setCity] = useState([]);
+
+    const [countryName, setCountryName] = useState('');
+    const [stateName, setStateName] = useState('');
+    const [cityName, setCityName] = useState('');
 
     const [date, setDate] = useState(new Date())
     const [time, setTime] = useState(new Date())
@@ -78,12 +93,13 @@ function RequestSendInfo(){
 
     const [answerfield, setDescritionField] = useState('')
 
+    const API_KEY = 'NzkyaWJJTlhGNXlNREhQV2UzSGJRWTkzVFBkMU9qOEt4V3hKenRBNg=='
     useEffect(() => {
         var config = {
             method: 'get',
             url: "https://api.countrystatecity.in/v1/countries",
             headers:{
-                'X-CSCAPI-KEY': ''
+                'X-CSCAPI-KEY': API_KEY
             } 
         }
 
@@ -95,8 +111,8 @@ function RequestSendInfo(){
             let countryArray = []
             for (var i = 0; i < count; i++){
                 countryArray.push({
+                    label: response.data[i].name,
                     value: response.data[i].iso2,
-                    label: response.data[i].name
                 })
             }
             setCountryData(countryArray)
@@ -106,6 +122,61 @@ function RequestSendInfo(){
         })
         setIsLoading(false)
     }, [])
+
+    const handleState = (countryCode) => {
+        var config = {
+            method: 'get',
+            url: `https://api.countrystatecity.in/v1/countries/${countryCode}/states`,
+            headers:{
+                'X-CSCAPI-KEY': API_KEY
+            }
+        }
+
+        axios(config)
+        .then(function (response) {
+            console.log(JSON.stringify(response.data))
+            var count = Object.keys(response.data).length;
+            let stateArray = []
+            for (var i = 0; i < count; i++){
+                stateArray.push({
+                    label: response.data[i].name,
+                    value: response.data[i].iso2,
+                })
+            }
+            setStateData(stateArray)
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+    }
+
+    const handleCity = (countryCode, stateCode) => {
+        var config = {
+            method: 'get',
+            url: `https://api.countrystatecity.in/v1/countries/${countryCode}/states/${stateCode}/cities`,
+            headers:{
+                'X-CSCAPI-KEY': API_KEY
+            }
+        }
+
+        axios(config)
+        .then(function (response) {
+            console.log(JSON.stringify(response.data))
+            var count = Object.keys(response.data).length;
+            let cityArray = []
+            for (var i = 0; i < count; i++){
+                cityArray.push({
+                    label: response.data[i].name,
+                    value: response.data[i].id,
+                })
+            }
+            setCityData(cityArray)
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+    }
+
 
     function updateInputValueHandler(inputType, enteredValue) {
         switch(inputType){
@@ -125,9 +196,13 @@ function RequestSendInfo(){
                 setCityData(enteredValue);
                 break;
 
-            case 'desccription':
+            case 'description':
                 setDescription(enteredValue);
                 break;
+            
+            case 'landmark':
+                    setLandmark(enteredValue);
+                    break;
                      
             // break;
         }
@@ -176,25 +251,18 @@ function RequestSendInfo(){
   
 
     const SubmitInformationHandler = async () => {
-        if(!answerfield || !date || !addressfield){
+        if(!addressfield || !date || !time || !countryName || !stateName || !cityName || !landmark || !description || !vehiclerequest || !frequency || !helpsize){
             Alert.alert("Invalid Inputs", "Check Values and try again")
         }else{
-           console.log(answerfield, date, addressfield)
+           console.log(time , date , addressfield , countryName , stateName ,cityName , landmark , description , vehiclerequest , frequency , helpsize)
         }
     }
 
     return (
         <View style={styles.mainContainer} 
       showsVerticalScrollIndicator={false}>
-      <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]} onPress={() => navigation.goBack()}>
-      <Image
-          style={styles.image}
-          contentFit="cover"
-          source={require("../assets/vectors/vector30.png")}
-          
-      />
-      <Text style={styles.back}>Back</Text>
-      </Pressable>
+      <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
+
 
       {isLoading ? <LoadingOverlay/> :
         <ScrollView style={styles.container} 
@@ -220,7 +288,7 @@ function RequestSendInfo(){
             <View style={{ backgroundColor: "#fff", borderBottomWidth: 1, paddingBottom: 20, borderBottomColor: Color.darkslategray_300,}}>
             <Text style={[styles.label, styles.labelInvalid]}>Country :</Text>
             <Dropdown
-                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                style={[styles.dropdown, isCountryFocus && { borderColor: 'blue' }]}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
@@ -230,62 +298,67 @@ function RequestSendInfo(){
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
-                placeholder={!isFocus ? 'Select Country' : '...'}
+                placeholder={!isCountryFocus ? 'Select Country' : '...'}
                 searchPlaceholder="Search..."
-                value={countryData}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
+                value={country}
+                onFocus={() => setIsCountryFocus(true)}
+                onBlur={() => setIsCountryFocus(false)}
                 onChange={item => {
-                    setCountryData(item.value);
-                    setIsFocus(false);
+                    setCountry(item.value);
+                    handleState(item.value);
+                    setCountryName(item.label)
+                    setIsCountryFocus(false);
           }}
           
         />
 
         <Text style={[styles.label, styles.labelInvalid]}>State :</Text>
         <Dropdown
-                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                style={[styles.dropdown, isStateFocus && { borderColor: 'blue' }]}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
-                data={data}
+                data={stateData}
                 search
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
-                placeholder={!isFocus ? 'Select State' : '...'}
+                placeholder={!isStateFocus ? 'Select State' : '...'}
                 searchPlaceholder="Search..."
-                value={stateData}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
+                value={state}
+                onFocus={() => setIsStateFocus(true)}
+                onBlur={() => setIsStateFocus(false)}
                 onChange={item => {
-                    setStateData(item.value);
-                    setIsFocus(false);
+                    setState(item.value);
+                    handleCity(country, item.value)
+                    setStateName(item.label)
+                    setIsStateFocus(false);
           }}
           
         />
 
         <Text style={[styles.label, styles.labelInvalid]}>LGA :</Text>
         <Dropdown
-                style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                style={[styles.dropdown, isCityFocus && { borderColor: 'blue' }]}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
-                data={data}
+                data={cityData}
                 search
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
-                placeholder={!isFocus ? 'Select City' : '...'}
+                placeholder={!isCityFocus ? 'Select City' : '...'}
                 searchPlaceholder="Search..."
-                value={cityData}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
+                value={city}
+                onFocus={() => setIsCityFocus(true)}
+                onBlur={() => setIsCityFocus(false)}
                 onChange={item => {
-                    setCityData(item.value);
-                    setIsFocus(false);
+                    setCity(item.value);
+                    setCityName(item.label)
+                    setIsCityFocus(false);
           }}
           
         />
@@ -322,7 +395,7 @@ function RequestSendInfo(){
             
             <Text style={[styles.label, styles.labelInvalid]}>Size of Help</Text>
             <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+            style={[styles.dropdown, isHelpSizeFocus && { borderColor: 'blue' }]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
@@ -332,14 +405,14 @@ function RequestSendInfo(){
             maxHeight={300}
             labelField="label"
             valueField="value"
-            placeholder={!isFocus ? 'Select Help Size' : '...'}
+            placeholder={!isHelpSizeFocus ? 'Select Help Size' : '...'}
             searchPlaceholder="Search..."
             value={helpsize}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
+            onFocus={() => setIsHelpSizeFocus(true)}
+            onBlur={() => setIsHelpSizeFocus(false)}
             onChange={item => {
               setHelpSize(item.value);
-              setIsFocus(false);
+              setIsHelpSizeFocus(false);
             }}
           //   onChangeText={updateInputValueHandler.bind(this, 'sex')}
           />
@@ -357,7 +430,7 @@ function RequestSendInfo(){
 
             <Text style={[styles.label, styles.labelInvalid]}>Frequecy</Text>
             <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+            style={[styles.dropdown, isFrequencyFocus && { borderColor: 'blue' }]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
@@ -367,14 +440,14 @@ function RequestSendInfo(){
             maxHeight={300}
             labelField="label"
             valueField="value"
-            placeholder={!isFocus ? 'Select Frequency' : '...'}
+            placeholder={!isFrequencyFocus ? 'Select Frequency' : '...'}
             searchPlaceholder="Search..."
             value={frequency}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
+            onFocus={() => setIsFrequencyFocus(true)}
+            onBlur={() => setIsFrequencyFocus(false)}
             onChange={item => {
               setFrequency(item.value);
-              setIsFocus(false);
+              setIsFrequencyFocus(false);
             }}
           //   onChangeText={updateInputValueHandler.bind(this, 'sex')}
           />
@@ -385,16 +458,16 @@ function RequestSendInfo(){
                 Help Description:
             </Text>
             <Input
-                placeholder={"Whats your Landmark"}
+                placeholder={"Whats your help Description"}
                 value={description}
                 onUpdateValue={updateInputValueHandler.bind(this, 'description')}
                 multiline={true}
                 // style={styles.description}
             />
 
-            <Text style={[styles.label, styles.labelInvalid]}>Frequecy</Text>
+            <Text style={[styles.label, styles.labelInvalid]}>Vehicle Req:</Text>
             <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+            style={[styles.dropdown, isVehicleFocus && { borderColor: 'blue' }]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
@@ -404,14 +477,14 @@ function RequestSendInfo(){
             maxHeight={300}
             labelField="label"
             valueField="value"
-            placeholder={!isFocus ? 'Select Frequency' : '...'}
+            placeholder={!isVehicleFocus ? 'Do you need a Vehicle' : '...'}
             searchPlaceholder="Search..."
             value={vehiclerequest}
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
+            onFocus={() => setIsVehicleFocus(true)}
+            onBlur={() => setIsVehicleFocus(false)}
             onChange={item => {
               setVehicleRequest(item.value);
-              setIsFocus(false);
+              setIsVehicleFocus(false);
             }}
           //   onChangeText={updateInputValueHandler.bind(this, 'sex')}
           />

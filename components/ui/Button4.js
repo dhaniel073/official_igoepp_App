@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
     fontFamily: 'poppinsRegular',
     borderWidth: 1,
     borderColor: Color.firebrick_100,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
     // marginHorizontal: 15,
     backgroundColor: Color.white,
     // elevation: 2,
@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
     color: Color.firebrick_100,
     fontSize: 16,
     // fontWeight: 'bold',
-    fontFamily: 'poppinsBold'
+    fontFamily: 'poppinsBold',
   },
 });

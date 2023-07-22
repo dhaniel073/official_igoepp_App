@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import Button3 from "../components/ui/Button3";
 import axios from "axios";
 import { androidCameraPermission } from "../util/Permissions";
+import GoBack from "../components/ui/GoBack";
 const data = [
     { label: 'Male ', value: 'M' },
     { label: 'Female ', value: 'F' },
@@ -162,20 +163,8 @@ function Profile(){
       }
     return (
         <ScrollView>
-        <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]}
-        onPress={() => navigation.goBack()}
-        >
-        
-          <Image
-            style={styles.image2}
-            contentFit="cover"
-            source={require("../assets/vectors/vector30.png")}
-          />
-    
-          <Text style={styles.back}>Back</Text>
-    
-       
-      </Pressable>
+        <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
+
         <View style={styles.container}>
 
             <View style={styles.imageView}>

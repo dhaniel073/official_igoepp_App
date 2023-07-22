@@ -4,6 +4,7 @@ import { Color, FontSize } from "../components/ui/GlobalStyles";
 import { useFonts } from "expo-font";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { useNavigation } from "@react-navigation/native";
+import GoBack from "../components/ui/GoBack";
 
 function ProceedCategory({route, navigation}){
     const subcatId = route.params.subcategoryId
@@ -26,21 +27,8 @@ function ProceedCategory({route, navigation}){
     // console.log(subcatId)
     return (
         <View style={styles.container}>
+        <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
 
-                <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]}
-                onPress={() => navigation.goBack()}
-                >
-                
-                <Image
-                    style={styles.image}
-                    contentFit="cover"
-                    source={require("../assets/vectors/vector30.png")}
-                />
-            
-                <Text style={styles.back}>Back</Text>
-            
-            
-            </Pressable>
 
             <View style={styles.innerconatainer}>
                 <View style={styles.image2container}>
@@ -98,7 +86,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     container:{
-        marginTop: "18%",
+        marginTop: "15%",
         marginHorizontal: 10,
         // justifyContent: 'center',
         // alignItems: 'center',

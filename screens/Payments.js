@@ -1,6 +1,7 @@
-import { View, Text } from "react-native";
+import { Image, StyleSheet } from "react-native";
+import { View, Text, Pressable } from "react-native";
 
-function Payments(){
+function Payments({navigation}){
     return (
         <View>
             <Text>Payment</Text>
@@ -9,3 +10,6 @@ function Payments(){
 }
 
 export default Payments
+const styles = StyleSheet.create({
+
+})

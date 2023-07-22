@@ -11,6 +11,7 @@ import Button from "../components/ui/Button";
 import { Color, FontSize } from "../components/ui/GlobalStyles";
 import { PayStackAuth, WalletCheckBalance } from "../util/auth";
 import { useFonts } from "expo-font";
+import GoBack from "../components/ui/GoBack";
 
 function PayStackScreen(){    
     const paystackWebViewRef = useRef(); 
@@ -82,20 +83,8 @@ function PayStackScreen(){
 
         <ScrollView >
 
-            <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]}
-            onPress={() => navigation.goBack()}
-            >
+        <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
 
-            <Image
-            style={styles.image}
-            contentFit="cover"
-            source={require("../assets/vectors/vector30.png")}
-            />
-
-            <Text style={styles.back}>Back</Text>
-
-
-            </Pressable>
             <View style={styles.container}>
             <Text style={styles.text}>How Much would you like to fund with</Text>
 

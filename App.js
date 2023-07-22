@@ -45,7 +45,12 @@ import { customerInfocheck } from './util/auth';
 import { useFonts } from 'expo-font';
 import ViewRequests from './screens/ViewRequests';
 import RequestSendInfo from './screens/RequestSendInfo';
+import FeedBack from './screens/FeedBack';
+import BidScreen from './screens/BidScreen';
+import CancelRequest from './screens/CancleRequest';
 // import { Modal } from 'antd';
+import DrawerContent from './screens/DrawerContent';
+import CustomDrawer from './screens/CustomDrawer';
 
 const Stack = createNativeStackNavigator();
 
@@ -56,19 +61,33 @@ function Logout(){
 
 
 function AuthStack() {
-  
-  
-  return (
-    <Stack.Navigator
+  const [isFirstLaunch, setIsFirstLaunch] = useState(null);
+
+  useEffect(() => {
+    AsyncStorage.getItem('alreadyLaunched').then(value => {
+      if(value === null){
+        AsyncStorage.setItem('alreadyLaunched', 'true');
+        setIsFirstLaunch(true);
+      }else{
+        setIsFirstLaunch(false)
+      }
+    })
+  }, [])
+
+  if(isFirstLaunch === null){
+    return null
+  }else if( isFirstLaunch === true) {
+    return (
+      <Stack.Navigator
       screenOptions={{
         // headerStyle: { backgroundColor: Colors.primary500 },
         headerTintColor: 'white',
         contentStyle: { backgroundColor: "#fff" },
       }}
     >
-      {/*<Stack.Screen name="FirstDisplayScreen" component={FirstDisplayScreen} 
+      <Stack.Screen name="FirstDisplayScreen" component={FirstDisplayScreen} 
       options={{ headerShown: false }}
-    />*/}
+      />
 
       <Stack.Screen name="Login" component={LoginScreen} 
       options={{ headerShown: false }}
@@ -83,48 +102,39 @@ function AuthStack() {
       options={{ headerShown: false }}
       />
     </Stack.Navigator>
-  );
+
+    )
+  }else{
+    return (
+      <Stack.Navigator
+      screenOptions={{
+        // headerStyle: { backgroundColor: Colors.primary500 },
+        headerTintColor: 'white',
+        contentStyle: { backgroundColor: "#fff" },
+      }}
+    >
+
+      <Stack.Screen name="Login" component={LoginScreen} 
+      options={{ headerShown: false }}
+      />
+      <Stack.Screen name="Signup" component={SignupScreen} 
+      options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+      name='ForgotPassword'
+      component={ForgotPassword}
+      options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+    )
+  }
+  
 }
 
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigation(){
-
-  const [fetchedMessage, setFetchedMesssage] = useState('');
-  const navigation = useNavigation()
-  const [isLoading, setIsLoading] = useState(false)
-  const authCtx = useContext(AuthContext);
-
-
-  const token = authCtx.token;
-  const customerId = authCtx.customerId
-  const [modalVisible, setModalVisible] = useState(false);
-  
-  useEffect(() => {
-
-  async function UserInfo(){
-    setIsLoading(true)
-    try{
-      await customerInfocheck(authCtx.customerId, authCtx.token)
-      .then((res) => {
-        console.log(res.data.data)
-        setFetchedMesssage(res.data.data)
-      })  
-    }catch(error){
-      console.log(error.response)
-    }
-    setIsLoading(false)
-  }
-  UserInfo()
-}, [])
-
-    function imageCheck(){
-      if(fetchedMessage.picture === null){
-        return <Image style={styles.imageIcon} source={require("./assets/vectors/person.png")}/>
-      }else{
-        return <Image style={styles.imageIcon} source={{ uri:`https://phixotech.com/igoepp/public/customers/${fetchedMessage.picture}` }}/>
-      }
-  }
 
   const [fontloaded] =  useFonts({
     'poppinsRegular': require("./assets/font/Poppins/Poppins-Regular.ttf"),
@@ -140,20 +150,18 @@ function DrawerNavigation(){
   }
 
 
-
-  if(isLoading){
-    return <LoadingOverlay/>
-  }  
-
+  
   return (
-    <Drawer.Navigator screenOptions={{  
-        headerTintColor: 'black',
+    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props}/>} screenOptions={{  
+        // headerTintColor: 'black',
+        // headerShown: false,
         sceneContainerStyle: {backgroundColor: '#fff'},
         // drawerContentStyle: { marginTop: "60%", },
         drawerContentStyle: { marginTop: "50%", },
         drawerInactiveTintColor: Color.darkolivegreen_100,
         drawerActiveBackgroundColor: Color.limegreen,
-        drawerActiveTintColor: 'white'
+        drawerActiveTintColor: 'white',
+        drawerLabelStyle: {marginLeft: -20, fontFamily: 'poppinsSemiBold'}
       
     }}>
 
@@ -163,27 +171,11 @@ function DrawerNavigation(){
       options={{ 
         title: "HOME",
         headerTintColor: Color.lightgreen,
+        headerShown: false,
         drawerIcon: ({color, size}) => <Ionicons name="home" color={color} size={size}/>,
         headerRight: () => (
-          <View style={styles.exitIcon}>
-            <Text style={styles.Username}>{fetchedMessage.first_name} {fetchedMessage.last_name}</Text>
-            <View style={styles.images}>
-            {/*<Pressable onPress={() => authCtx.logout()}>
-              <Image  transition={500} style={styles.notificationIcon} source={require('./assets/vectors/group-517.png')}/>
-            </Pressable>*/}
-                        
-            <Pressable style={({pressed}) => [pressed && styles.pressed]} 
-            onPress={() => navigation.navigate('ViewProfile',{fetchedMessage})}
-            >
-              {imageCheck()}
-            </Pressable>
-            {/*<Pressable
-            style={[styles.button, styles.buttonOpen]}
-              >
-            <Text style={styles.textStyle}>Show Modal</Text>
-          </Pressable>*/}
-            </View>
-          </View>)
+          ""
+          )
        }}
       />
 
@@ -218,7 +210,7 @@ function DrawerNavigation(){
         title: "Requests",
         headerTintColor: Color.lightgreen,
         // headerShown: false,
-        drawerIcon: ({color, size}) => <Ionicons name="exit" color={color} size={size}/>
+        drawerIcon: ({color, size}) => <Ionicons name="chatbox-ellipses" color={color} size={size}/>
        }}
       />
 
@@ -244,14 +236,6 @@ function DrawerNavigation(){
        }}
       />
 
-
-      <Drawer.Screen
-      name="SignOut"
-      component={Logout}
-      options={{ 
-        headerTintColor: Color.lightgreen,
-       }}
-      />
 
     </Drawer.Navigator>
   )
@@ -381,6 +365,26 @@ function AuthenticatedStack() {
       component={RequestSendInfo}
       options={{ headerShown: false }}
       />
+
+      
+      <Stack.Screen
+      name='FeedBack'
+      component={FeedBack}
+      options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+      name='BidScreen'
+      component={BidScreen}
+      options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+      name='CancelRequest'
+      component={CancelRequest}
+      options={{ headerShown: false }}
+      />
+      
       
 
       </Stack.Navigator>
@@ -390,18 +394,8 @@ function AuthenticatedStack() {
 
 function Navigation() {
   const authCtx = useContext(AuthContext);
-  const [firstLaunch , setFirstLaunch] = useState(true);
     
-  useEffect(() => {
-    async function CheckFirstLaunch(){
-       const check = await AsyncStorage.getItem('FIRST_CHECK')
-       console.log(check)
-       setFirstLaunch(true)
-    }
-    CheckFirstLaunch()
-  }, [])
-
-
+ 
 
   return (
     <NavigationContainer>
@@ -472,24 +466,14 @@ const styles = StyleSheet.create({
   pressed:{
     opacity: 0.45
   },
-  exitIcon: {
-    paddingRight: 20,
-    flexDirection: 'row',
-  },
-  images:{
-    flexDirection: 'row'
-  },
+
   Username:{
     marginTop: 10,
     fontSize: 15,
     marginRight:10,
     color: Color.lightgreen,
   },
-  notificationIcon:{
-    width: 20,
-    height: 24,
-    marginLeft: 8,
-  },
+
   imageIcon:{
     width:40,
     height: 40,

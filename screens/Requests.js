@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import { Text, StyleSheet, View, Pressable, Image, FlatList, ScrollView, SafeAreaView, Platform, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, Border, FontSize, FontFamily } from "../components/ui/GlobalStyles";
@@ -14,33 +14,36 @@ const Requests = () => {
   const authCtx = useContext(AuthContext)
   const [fetchedRequest, setFetchedRequest] = useState('')
   const [isFetching, setIsFetching] = useState(true)
-
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
-  const fetchRequests = async() => {
-      setIsFetching(true)
-      const response = await ShowFetchedRequests(authCtx.customerId, authCtx.token)
-      console.log(response)
-      setFetchedRequest(response)
-      setIsFetching(false)
-
-  }
-    fetchRequests()
+    
+       // Your useEffect code here to be run on update
+       const fetchRequests = async() => {
+        setIsFetching(true)
+        const response = await ShowFetchedRequests(authCtx.customerId, authCtx.token)
+        console.log(response)
+        setFetchedRequest(response)
+        setIsFetching(false)
+  
+      }
+      fetchRequests()
+  
   }, [])
 
-      function cancel(){
-        console.log("canceled successfully")
-      }
 
-      function cancelRequest(){
+      function cancelRequest(id){
         Alert.alert('Cancel Request', 'Are you sure you want to canel this request', [
           {
             text: 'Yes',
-            onPress: () => cancel() ,
+            onPress: () => navigation.navigate("CancelRequest", {
+              id: id
+            }) ,
           },
           {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
+            text: 'No',
+            // onPress: () => navigation.goBack(),
+            cancelable: true,
             style: 'cancel',
           },
         ])
@@ -80,11 +83,17 @@ const Requests = () => {
             <Pressable style={styles.pressables}>
               <Text style={styles.requestName}>{item.cat_name}</Text>
             <View style={styles.buttonContainer}>
-              <Button4 onPress={cancelRequest} style={styles.button2}>Cancel</Button4>
+              <Button4 onPress={() => cancelRequest(item.id)} style={styles.button2}>Cancel</Button4>
               <Button onPress={() => navigation.navigate("View Requests", {
-                id: item.id
+                bid_id: item.id
               })} style={styles.button}>View Request</Button>
-              <Button4 style={styles.button2}>Bid ({item.bid_count === 0 ? "0" : item.bid_count})</Button4>
+              <Button4 onPress={() => {
+                navigation.navigate("BidScreen",
+                {
+                  bid_id: item.id
+                })
+              }} 
+              style={styles.button2}>Bid ({item.bid_count === 0 ? "0" : item.bid_count})</Button4>
             </View>
             </Pressable>
           </View>
@@ -143,11 +152,13 @@ const styles = StyleSheet.create({
     
   },
   buttonContainer:{
+    flex:1,
     marginTop: 10,
+    marginLeft: 83,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    width: "100%"
+    width: "50%"
   },
   button:{
     paddingTop: 7,

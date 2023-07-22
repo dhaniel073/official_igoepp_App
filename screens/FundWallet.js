@@ -1,22 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Color, FontSize } from "../components/ui/GlobalStyles";
+import GoBack from "../components/ui/GoBack";
 
 function FundWallet(){
     const navigation = useNavigation() 
     return (
         <View style={styles.container}>
-        <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]}
-        onPress={() => navigation.goBack()}
-    >
-        <Text style={styles.back}>Back</Text>
-        <Image
-          style={[styles.vectorIcon, styles.iconLayout]}
-          contentFit="cover"
-          source={require("../assets/vectors/vector30.png")}
-        />
-       
-        </Pressable>
+        <GoBack>Back</GoBack>
+
             <Text>Fund Wallet</Text>
         </View>
     )

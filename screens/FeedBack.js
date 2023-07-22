@@ -1,21 +1,38 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Color, FontSize } from "../components/ui/GlobalStyles";
+import { useFonts } from "expo-font";
+import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { useNavigation } from "@react-navigation/native";
 import GoBack from "../components/ui/GoBack";
 
-function MakePayment(){
-
+function FeedBack(){
     const navigation = useNavigation()
+
+    const [fontloaded] =  useFonts({
+        'poppinsRegular': require("../assets/font/Poppins/Poppins-Regular.ttf"),
+        'montserratBold': require("../assets/font/Montserrat_bold.ttf"),
+        'poppinsMedium': require("../assets/font/Poppins_medium.ttf"),
+        'poppinsSemiBold': require("../assets/font/Poppins_semibold.ttf"),
+        'poppinsBold': require("../assets/font/Poppins_bold.ttf")
+      
+      })
+      
+      if(!fontloaded){
+        return <LoadingOverlay message={"..."}/>
+      }
+
+
     return (
         <View style={styles.mainContainer}>
         <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
 
-            <Text style={styles.makepaymenttext}>Make Payments</Text>
+
+            <Text style={styles.feedbacktext}>FeedBack</Text>
         </View>
     )
 }
 
-export default MakePayment;
+export default FeedBack;
 
 const styles = StyleSheet.create({
     backParent:{
@@ -38,7 +55,7 @@ const styles = StyleSheet.create({
         fontFamily: 'poppinsRegular',
         marginTop: 0
     },
-    makepaymenttext:{
+    feedbacktext:{
         color: Color.darkolivegreen_100,
         fontSize: FontSize.size_15xl,
         fontFamily: 'poppinsBold',
@@ -48,5 +65,4 @@ const styles = StyleSheet.create({
     pressed:{
         opacity: 0.75
     }
-    
 })

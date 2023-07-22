@@ -205,8 +205,6 @@ async function fetchedData(customerId, token){
 }
 
 //fetch requests by request id
-
-
 async function fetchrequestbyid(requestid, token){
   try{
     const response = await axios.get(
@@ -219,6 +217,52 @@ async function fetchrequestbyid(requestid, token){
         }
       )
         // console.log(response)
+        return response.data;
+    } catch(error){
+      console.log(error.response.data)
+      Alert.alert("Error", "Error Fetching Request Infomations")
+  
+    }
+}
+
+async function cancelrequests(id, token, reason){
+  try{
+    const response = await axios.post(
+        `http://phixotech.com/igoepp/public/api/auth/hrequest/cancelrequest`, 
+        {
+            book_id: id,
+            cancel_reason: reason
+        },
+       {
+          headers:{
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+        console.log(response)
+        return response.data;
+    } catch(error){
+      console.log(error.response.data)
+      Alert.alert("Error", "Error Fetching Request Infomations")
+  
+    }
+}
+
+
+
+async function bidrequests(bi_id, token){
+  try{
+    const response = await axios.post(
+        `http://phixotech.com/igoepp/public/api/auth/hrequest/showbidrequestbyrequestid/${bid_id}`, 
+       {
+          headers:{
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+        console.log(response)
         return response.data;
     } catch(error){
       console.log(error.response.data)
@@ -268,5 +312,12 @@ export function ShowFetchedRequestsById(requestid, token){
   return fetchrequestbyid(requestid, token)
 }
 
+export function CancelRequests(id, token, reason){
+  return cancelrequests(id, token, reason)
+}
+
+export function BidRequests(bid_id, token){
+  return bidrequests(bid_id, token)
+}
 
 

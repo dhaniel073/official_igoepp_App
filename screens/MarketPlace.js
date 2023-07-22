@@ -1,4 +1,4 @@
-import { Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 
 function MarketPlace(){
     return (
@@ -7,3 +7,7 @@ function MarketPlace(){
 }
 
 export default MarketPlace; 
+
+const styles = StyleSheet.create({
+
+})

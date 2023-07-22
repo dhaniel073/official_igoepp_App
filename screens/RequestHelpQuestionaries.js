@@ -9,6 +9,7 @@ import { ShowSubCatQuestion } from "../util/auth";
 import { AuthContext } from "../store/auth-context";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import GoBack from "../components/ui/GoBack";
 
 
 function RequestHelpQuestionaries({route}){
@@ -125,15 +126,8 @@ function RequestHelpQuestionaries({route}){
 
       {isLoading ? <LoadingOverlay/> :
         <View style={styles.container}>
-            <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]} onPress={() => navigation.goBack()}>
-            <Image
-                style={styles.image}
-                contentFit="cover"
-                source={require("../assets/vectors/vector30.png")}
-                
-            />
-            <Text style={styles.back}>Back</Text>
-            </Pressable>
+        <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
+
 
             <Text style={styles.enterinformation}> Enter Information</Text>
             <View style={styles.inputContainer}>

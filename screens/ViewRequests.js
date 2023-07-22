@@ -14,8 +14,8 @@ function ViewRequests({route}){
     const [isFetching, setIsFetching] = useState(true)
     const [fetchedData, setFetchedData] = useState('')
     const authCtx = useContext(AuthContext)
-    const requestid = route.params?.id
-    // console.log(requestid)
+    const requestid = route.params.bid_id
+    console.log(requestid)
 
 
     useEffect(() => {
@@ -102,10 +102,10 @@ function ViewRequests({route}){
                                         <Text style={styles.textValue}> {item.assigned_helper === null ? "None" : item.assigned_helper}</Text>
                                     </View>
 
-                                    <View style={styles.nameContainer}>
+                                    {/*<View style={styles.nameContainer}>
                                         <Text style={styles.labelText}>Customer Satisfaction: </Text>
                                         <Text style={styles.textValue}> {item.customer_statisfy === null ? "No Set" : item.customer_statisfy}</Text>
-                                    </View>
+    </View>*/}
 
                                     <View style={styles.nameContainer}>
                                         <Text style={styles.labelText}>Country: </Text>

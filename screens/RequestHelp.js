@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, Pressable, ScrollView, FlatList, Button, SafeAreaView } from "react-native";
+import { Text, StyleSheet, View, Pressable, ScrollView, FlatList, Button, SafeAreaView, Alert } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { FontSize, Color, FontFamily, Border } from "../components/ui/GlobalStyles";
@@ -9,6 +9,7 @@ import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { useFonts } from "expo-font";
 import { customerInfocheck } from "../util/auth";
 import { AuthContext } from "../store/auth-context";
+import GoBack from "../components/ui/GoBack";
 
 
 const RequestHelp = () => {
@@ -36,7 +37,7 @@ const RequestHelp = () => {
   }
   }
   fetchCategorydata()
-}, [setIsFetching, setFetchedCategory])
+},[setFetchedCategory, setIsFetching])
 
 
 // console.log(fetchedcategory)
@@ -74,20 +75,7 @@ if(!fontloaded){
   return (
     <SafeAreaView style={styles.mainContainer}>
     <View style={styles.header}>
-    <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]}
-    onPress={() => navigation.goBack()}
-    >
-    
-      <Image
-        style={styles.image}
-        contentFit="cover"
-        source={require("../assets/vectors/vector30.png")}
-      />
-
-      <Text style={styles.back}>Back</Text>
-
-   
-  </Pressable>
+      <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
       <View>
         <Text style={styles.name}>Hi {fetchedName.first_name}</Text>
       </View>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useContext, useEffect, useMemo, useState } from 'react';
 
-import { StyleSheet, Text, View, Pressable, FlatList, ScrollView,  } from 'react-native';
+import { StyleSheet, Text, View, Pressable, FlatList, ScrollView, SafeAreaView,  } from 'react-native';
 import { AuthContext, CustomerContext } from '../store/auth-context';
 import { Color, FontSize } from '../components/ui/GlobalStyles';
 import { Image } from 'expo-image';
@@ -64,6 +64,21 @@ return <LoadingOverlay/>
 
   return (
     <View style={styles.rootContainer}>
+      <View style={styles.exitIcon}>
+
+        <View style={{ flexDirection: 'row' }}>
+          <Pressable onPress={() => navigation.openDrawer()}>
+            <Image style={styles.imageIcon} source={require("../assets/vectors/person.png")}/>
+          </Pressable>
+          <Text style={{ fontSize:15, fontFamily: 'poppinsSemiBold', marginLeft: 8, marginTop: 8, color: Color.limegreen }}>Hi Chinedu</Text>
+        </View>
+
+        <View>
+          <Pressable>
+            <Image  transition={500} style={styles.notificationIcon} source={require('../assets/vectors/group-517.png')}/>
+          </Pressable>
+        </View>
+      </View>
 
         <View style={styles.walletContainer}>  
 
@@ -161,7 +176,7 @@ return <LoadingOverlay/>
               transition={500}
 
               />
-              <Text style={styles.requestText}>Request For Help</Text>
+              <Text style={styles.requestText}>Request Help</Text>
             </Pressable>
 
         </View>
@@ -229,9 +244,15 @@ return <LoadingOverlay/>
             </Pressable>
             </View>
 
+            
            
 
             {/*Requests Payment   panel */}
+            <SafeAreaView>
+            <Pressable style={({pressed}) => [styles.feedback, pressed &&  styles.pressed]} onPress={() => navigation.navigate("FeedBack")}>
+              <Text style={styles.feedbackText}>FeedBack</Text>
+            </Pressable>
+
             <Pressable style={({pressed}) => [styles.requestPanel, pressed && styles.pressed]}
             onPress={() => navigation.navigate("Requests")}
             >
@@ -261,7 +282,11 @@ return <LoadingOverlay/>
                 <Text style={styles.requestsText}>Requests</Text>
             </Pressable>
             
+            
+            </SafeAreaView>
+
             <View style={styles.emptyView}></View>
+          
         </ScrollView>
 
     </View>
@@ -271,6 +296,44 @@ return <LoadingOverlay/>
 export default WelcomeScreen;
 
 const styles = StyleSheet.create({
+  imageIcon:{
+    width:40,
+    height: 40,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: Color.limegreen,
+    marginLeft:8 
+  },
+  exitIcon: {
+    paddingRight: 10,
+    marginBottom: "2%",
+    marginTop: "15%",
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  images:{
+    flexDirection: 'row'
+  },
+  notificationIcon:{
+    width: 24,
+    height: 30,
+    marginLeft: 8,
+  },
+  feedback:{
+    // marginTop: 10,
+    backgroundColor: Color.limegreen,
+    width:160,
+    marginLeft: 10,
+    borderRadius: 10,
+    marginBottom: 15,
+    height: '22%'
+  },
+  feedbackText:{
+    color: 'white',
+    padding: 10,
+    fontFamily: 'poppinsRegular',
+    fontSize: 15
+  },
   emptyView:{
     marginBottom: "100%",
   },
@@ -293,11 +356,12 @@ const styles = StyleSheet.create({
   requestText:{
     marginTop: 70,
     color: Color.blueviolet,
-    fontFamily: 'poppinsMedium',
-    fontSize: FontSize.size_base
+    fontFamily: 'poppinsRegular',
+    fontSize: 15
 
   },
   makePaymentPanel:{
+    // marginTop: 10,
     width: 160,
     // marginRight: 10,
     borderRadius: 10,
@@ -372,10 +436,11 @@ const styles = StyleSheet.create({
     marginTop: 60,
     marginLeft: 10,
     color: Color.steelblue,
-    fontSize: FontSize.size_base,
-    fontFamily: 'poppinsMedium'
+    fontSize: 15,
+    fontFamily: 'poppinsRegular'
   },
   serviceHistoryPanel:{
+    // marginTop: 10,
     width:160,
     // marginRight: 10,
     borderRadius: 10,
@@ -435,9 +500,9 @@ const styles = StyleSheet.create({
     position: 'relative',
     top: 200,
     left: 10,
-    fontSize: FontSize.size_base,
+    fontSize: 15,
     color: Color.steelblue,
-    fontFamily: 'poppinsMedium'
+    fontFamily: 'poppinsRegular'
 
   },
   requestsIcon:{
@@ -490,16 +555,16 @@ const styles = StyleSheet.create({
 
   marketPlaceText:{
     // fontWeight: 'bold',
-    fontSize: FontSize.size_base,
+    fontSize: 15,
     marginTop: 18,
     color: Color.peru,
-    fontFamily: 'poppinsMedium'
+    fontFamily: 'poppinsRegular'
     // bottom: 5,
   },
   ScrollViewContainer:{
     flex: 1,
-    marginTop: 20,
-    height: "60%",
+    marginTop: 30,
+    height: "70%",
     
   },
   flexContainer:{
@@ -567,7 +632,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    height: '23%'
+    height: '21%'
   },
   walletText:{
     color: 'white',
@@ -597,8 +662,8 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   quickLinksContainer:{
-    marginTop: 50,
-    // marginBottom: 15,
+    marginTop: 40,
+    // marginBottom: -25,
   },
   quickLinksContainer2:{
     flex: 1,

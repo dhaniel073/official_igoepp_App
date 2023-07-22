@@ -7,6 +7,7 @@ import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { useFonts } from "expo-font";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import GoBack from "../components/ui/GoBack";
 
 
 function ViewProfile({route}){
@@ -91,18 +92,8 @@ function ViewProfile({route}){
             }
         >
         <View style={styles.header}>
-        <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]}
-            onPress={() => navigation.goBack()}
-            >
-            
-            <Image
-                style={styles.image}
-                contentFit="cover"
-                source={require("../assets/vectors/vector30.png")}
-            />
+        <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
 
-            <Text style={styles.back}>Back</Text>        
-        </Pressable>
 
         <Pressable onPress={() => navigation.navigate("Profile")}>
             <Text>Update Profile</Text>

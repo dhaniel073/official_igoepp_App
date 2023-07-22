@@ -7,6 +7,7 @@ import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../store/auth-context";
 import axios from "axios";
+import GoBack from "../components/ui/GoBack";
 
 function SubCategory({route}){
     
@@ -37,7 +38,7 @@ function SubCategory({route}){
         }
     }
     fetchData()
-  }, [])
+  }, [setFetchedCategory, setIsFetching])
 
 
   const [fontloaded] =  useFonts({
@@ -55,21 +56,9 @@ function SubCategory({route}){
   
     return (
         <SafeAreaView style={styles.mainContainer}>
-    <View style={styles.header}>
-    <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]}
-    onPress={() => navigation.goBack()}
-    >
-    
-      <Image
-        style={styles.image}
-        contentFit="cover"
-        source={require("../assets/vectors/vector30.png")}
-      />
+        <View style={styles.header}>
+        <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
 
-      <Text style={styles.back}>Back</Text>
-
-   
-  </Pressable>
       <View>
         <Text style={styles.name}>Hi {first_name}</Text>
       </View>
@@ -168,7 +157,7 @@ const styles = StyleSheet.create({
     mainContainer:{
       flex: 1,
       marginHorizontal: 8,
-      marginTop: "18%"
+      marginTop: "15%"
     },
     requestHelptext:{
       color: Color.darkolivegreen_100,

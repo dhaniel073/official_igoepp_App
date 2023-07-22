@@ -1,8 +1,9 @@
 import { useFonts } from "expo-font";
 import { Image, Pressable, StyleSheet, Text } from "react-native";
 import LoadingOverlay from "./LoadingOverlay";
+import { FontSize } from "./GlobalStyles";
 
-function GoBack(onPress, children){
+function GoBack({onPress, children}){
   const [fontloaded] =  useFonts({
     'poppinsRegular': require("../../assets/font/Poppins/Poppins-Regular.ttf"),
     'montserratBold': require("../../assets/font/Montserrat_bold.ttf"),
@@ -17,12 +18,13 @@ function GoBack(onPress, children){
     <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]}
         onPress={onPress}
     >
-        <Text style={styles.back}>{children}</Text>
         <Image
-          style={[styles.vectorIcon, styles.iconLayout]}
+          style={styles.image}
           contentFit="cover"
-          source={require("../assets/vectors/vector30.png")}
+          source={require("../../assets/vectors/vector30.png")}
         />
+        <Text style={styles.back}>{children}</Text>
+
       </Pressable>
     )
 }
@@ -30,33 +32,23 @@ function GoBack(onPress, children){
 export default GoBack;
 
 const styles = StyleSheet.create({
-    pressed:{
-        opacity: 0.75,
-    },
-    vectorIcon: {
-        height: "70%",
-        width: "30%",
-        top: "20.77%",
-        right: "76.97%",
-        bottom: "24.35%",
-        left: "0%",
-      },
-      iconLayout: {
-        maxHeight: "100%",
-        maxWidth: "100%",
-        position: "absolute",
-        overflow: "hidden",
-      },
-      backParent: {
-        top: 40,
-        left: 25,
-        width: 57,
-        height: 21,
-        position: "absolute",
-        fontFamily: 'poppinsRegular'
-      },
-      back:{
-        fontFamily: 'poppinsRegular',
-      }
+  backParent:{
+    flexDirection: 'row',
+},
+image:{
+  width: 15,
+  height: 15,
+  marginHorizontal: 10,
+  marginTop: 5,
+  marginBottom: 30,
+},
+back:{
+  fontSize: FontSize.size_mid,
+  fontFamily: 'poppinsRegular',
+  // marginTop: -20
+},
+pressed:{
+  opacity: 0.7
+}
 })
 
