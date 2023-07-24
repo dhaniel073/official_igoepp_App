@@ -1,11 +1,11 @@
 import { View, Text } from "react-native";
 
-function Transaction(){
+function Transfer(){
     return (
         <View>
-            <Text></Text>
+            <Text>Transfer</Text>
         </View>
     )
 }
 
-export default Transaction
+export default Transfer

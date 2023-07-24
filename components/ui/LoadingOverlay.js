@@ -16,7 +16,7 @@ function LoadingOverlay({ message }) {
   return (
     <View style={styles.rootContainer}>
       <Text style={styles.message}>{message}</Text>
-      <ActivityIndicator size="large"  color={Color.limegreen}/>
+      <ActivityIndicator style={{ alignContent:'center', alignItems:'center', justifyContent: 'center' }} size="large"  color={Color.limegreen}/>
     </View>
   );
 }

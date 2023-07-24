@@ -51,6 +51,7 @@ import CancelRequest from './screens/CancleRequest';
 // import { Modal } from 'antd';
 import DrawerContent from './screens/DrawerContent';
 import CustomDrawer from './screens/CustomDrawer';
+import Transfer from './screens/Transfer';
 
 const Stack = createNativeStackNavigator();
 
@@ -161,7 +162,9 @@ function DrawerNavigation(){
         drawerInactiveTintColor: Color.darkolivegreen_100,
         drawerActiveBackgroundColor: Color.limegreen,
         drawerActiveTintColor: 'white',
-        drawerLabelStyle: {marginLeft: -20, fontFamily: 'poppinsSemiBold'}
+        drawerLabelStyle: {marginLeft: -20, fontFamily: 'poppinsSemiBold'},
+        headerShadowVisible: 0,
+        
       
     }}>
 
@@ -175,7 +178,7 @@ function DrawerNavigation(){
         drawerIcon: ({color, size}) => <Ionicons name="home" color={color} size={size}/>,
         headerRight: () => (
           ""
-          )
+          ),
        }}
       />
 
@@ -246,14 +249,17 @@ function DrawerNavigation(){
 
 function AuthenticatedStack() {
 
+  const navigation = useNavigation()
   
   return (
     <Stack.Navigator
       screenOptions={{
-        // headerStyle:{backgroundColor: '#351401'},
-        headerTintColor: 'white',
-        contentStyle: {backgroundColor: '#fff'}
-
+        headerTintColor: Color.limegreen,
+        contentStyle: {backgroundColor: '#fff'},
+        headerStyle:{
+          headerShadowVisible: ""
+        },
+        
       }}
     >
       {/* Welcome Screen*/}
@@ -332,14 +338,30 @@ function AuthenticatedStack() {
       <Stack.Screen
        name='ViewProfile'
        component={ViewProfile}
-       options={{ headerShown: false, 
+       options={{ 
+        headerShown: true,
+        title: '' ,
+        headerRight:() => (
+          <Ionicons
+            name='ios-pencil'
+            size={25}
+            backgroundColor= {'#fff'}
+            color=""
+            onPress={() => navigation.navigate("Profile")}
+          />
+        ),
+        headerShadowVisible: false
       }}
       />
 
       <Stack.Screen
       name='Profile'
       component={Profile}
-      options={{ headerShown: false }}
+      options={{
+         headerShown: true, 
+         title: 'Edit Profile' ,
+          headerShadowVisible: false
+      }}
       />
     
       <Stack.Screen
@@ -382,6 +404,12 @@ function AuthenticatedStack() {
       <Stack.Screen
       name='CancelRequest'
       component={CancelRequest}
+      options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+      name='Transfer'
+      component={Transfer}
       options={{ headerShown: false }}
       />
       

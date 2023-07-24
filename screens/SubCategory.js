@@ -13,7 +13,6 @@ function SubCategory({route}){
     
     // "https://phixotech.com/igoepp/public/api/showsubcategorybycatid/1"
     const navigation = useNavigation();
-    const authCtx = useContext(AuthContext)
     const [fetchedcategory, setFetchedCategory] = useState('')
     const [isFetching, setIsFetching] = useState(true)
     
@@ -30,7 +29,7 @@ function SubCategory({route}){
         try{
             setIsFetching(true)
             const response = await axios.get(`https://phixotech.com/igoepp/public/api/showsubcategorybycatid/${categoryId}`)
-            console.log(response.data)
+            // console.log(response.data)
             setFetchedCategory(response.data.data)
             setIsFetching(false)
         }catch(error){
@@ -64,7 +63,7 @@ function SubCategory({route}){
       </View>
     </View>
 
-    <Text style={styles.requestHelptext}>SubCategory</Text>
+    <Text style={styles.requestHelptext}>Sub-Category</Text>
     {isFetching ? <LoadingOverlay/> :
         <FlatList
         // style={styles.flatlists}
@@ -164,7 +163,7 @@ const styles = StyleSheet.create({
       fontSize: FontSize.size_15xl,
       fontFamily: 'poppinsBold',
       marginLeft: 10,
-      // marginBottom: 10
+      marginBottom: 10
     },
     image:{
       width: 15,

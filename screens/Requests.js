@@ -76,6 +76,7 @@ const Requests = () => {
       <FlatList
         style={styles.flatlists}
         data={fetchedRequest}
+        showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id}
         renderItem={({item}) => 
           <View style={styles.container}>

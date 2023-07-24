@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import FlatButton from '../ui/FlatButton';
 import AuthForm from './AuthForm';
 import { Colors } from '../../constants/styles';
+import Button from '../ui/Button';
 
 function AuthContent({ isLogin, onAuthenticate }) {
   const navigation = useNavigation();
@@ -62,6 +63,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
 
   return (
     <View style={styles.authContent}>
+      <Image style={{ width:70, height:70, marginLeft: "39%" }} source={require("../../assets/vectors/whatsapp-image-20201211-at-642-1.png")}/>
       <AuthForm
         isLogin={isLogin}
         onSubmit={submitHandler}
@@ -75,9 +77,12 @@ function AuthContent({ isLogin, onAuthenticate }) {
         )}
       </View>
       <View style={styles.buttons}>
-        <FlatButton onPress={switchAuthModeHandler}>
-          {isLogin ? 'New User? Create a new user' : 'Log in instead'}
-        </FlatButton>
+        <Button onPress={switchAuthModeHandler} style={{ marginLeft: "35%", marginRight: "35%" }} >
+          {isLogin ? 'Sign Up' : 'Back'}
+        </Button>
+        {/*<FlatButton onPress={switchAuthModeHandler}>
+          {isLogin ? 'New User? Create a new user' : 'Sign In'}
+        </FlatButton>*/}
      {/*   {isLogin && (
           <Image style={styles.image4} source={require("../../assets/vectors/whatsapp-image-20201211-at-642-1.png")}/>
     //  )} */}
@@ -90,7 +95,7 @@ export default AuthContent;
 
 const styles = StyleSheet.create({
   authContent: {
-    marginTop: 40,
+    // marginTop: 20,
     marginHorizontal: 25,
     padding: 16,
     borderRadius: 8,

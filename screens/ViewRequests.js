@@ -124,7 +124,7 @@ function ViewRequests({route}){
                                     
                                     <View style={styles.nameContainer}>
                                         <Text style={styles.labelText}>LandMark: </Text>
-                                        <Text style={styles.textValue}> {item.landmark}</Text>        
+                                        <Text style={styles.textValue}> {item.help_landmark}</Text>        
                                     </View>
 
                                     <View style={styles.nameContainer}>
@@ -139,7 +139,7 @@ function ViewRequests({route}){
 
                                     <View style={styles.nameContainer}>
                                         <Text style={styles.labelText}>State:</Text>
-                                        <Text style={styles.textValue}> {item.state}</Text>
+                                        <Text style={styles.textValue}> {item.help_state}</Text>
                                     </View>
 
                                     <View style={styles.nameContainer}>
@@ -197,12 +197,13 @@ const styles = StyleSheet.create({
     },
     flatlists:{
         flex: 1,
+        marginTop: 20,
         marginBottom: 20,
     },
     mainContainer:{
         flex:1,
         // alignItems: 'center',
-        // justifyContent: 'center'
+        // justifyContent: 'center',
         marginHorizontal: 20,
         marginTop: 70
     },

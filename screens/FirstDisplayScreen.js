@@ -63,14 +63,14 @@ function FirstDisplayScreen({navigation}){
           backgroundColor: Color.dimgray_100,
           image: <Image style={styles.image1} source={require('../assets/vectors/g10.png')}/>,
           title: 'Welcome To Igoepp',
-          subtitle: 'We Make Sure are Customers are satisfied with our services',
+          subtitle: 'We make sure our customers are satisfied with our services.',
         },
         {
           // backgroundColor: '#a6e4d0',
           backgroundColor: Color.darkgray,
           image: <Image style={styles.image2} source={require('../assets/vectors/onboarding2.png')} />,
           title: 'HandyMen',
-          subtitle: 'We make sure ur Request are carried out Properly as you need them to',
+          subtitle: 'We make sure your requests are carried out effectively.',
         },
         
         {
@@ -78,7 +78,7 @@ function FirstDisplayScreen({navigation}){
           backgroundColor: Color.darkolivegreen_100,
           image: <Image style={styles.image3} source={require("../assets/vectors/group-783.png")} />,
           title: 'Our Transactions',
-          subtitle: 'Our Transactions Are Smooth and steady ',
+          subtitle: 'Our Transactions are Smooth and Steady. ',
         },
         
         

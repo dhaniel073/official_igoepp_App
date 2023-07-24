@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, Text } from "react-native";
 import LoadingOverlay from "./LoadingOverlay";
 import { FontSize } from "./GlobalStyles";
 
-function GoBack({onPress, children}){
+function GoBack({onPress, children, style}){
   const [fontloaded] =  useFonts({
     'poppinsRegular': require("../../assets/font/Poppins/Poppins-Regular.ttf"),
     'montserratBold': require("../../assets/font/Montserrat_bold.ttf"),
@@ -15,7 +15,7 @@ function GoBack({onPress, children}){
     return <LoadingOverlay/>
   }
     return (
-    <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]}
+    <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed, style]}
         onPress={onPress}
     >
         <Image

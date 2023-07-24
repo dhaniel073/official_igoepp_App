@@ -20,11 +20,28 @@ function WelcomeScreen({route}) {
   const navigation = useNavigation()
   const authCtx = useContext(AuthContext);
 
+  useEffect(() => {
+  async function UserInfo(){
+    setIsLoading(true)
+    try{
+      await customerInfocheck(authCtx.customerId, authCtx.token)
+      .then((res) => {
+        // console.log(res.data.data)
+        setFetchedMesssage(res.data.data)
+      })  
+    }catch(error){
+      console.log(error.response)
+    }
+    setIsLoading(false)
+  }
+  UserInfo()
+},[])
+
 useEffect(() => {
   async function walletbal(){
   const url = `http://phixotech.com/igoepp/public/api/auth/customer/${authCtx.customerId}/wallet`
 
-  console.log(url)
+  // console.log(url)
   try {
     setIsLoading(true)
     const response = await axios.get(url, {
@@ -33,9 +50,9 @@ useEffect(() => {
         Authorization: `Bearer ${authCtx.token}`
       }
     })
-    console.log(response.data)
+    // console.log(response.data)
     const check = response.data.wallet_balance.toLocaleString()
-    console.log(response.data.wallet_balance.toLocaleString())
+    // console.log(response.data.wallet_balance.toLocaleString())
     authCtx.customerwalletbalance(check)
     setIsLoading(false)
   } catch (error) {
@@ -60,17 +77,32 @@ if(!fontloaded){
 return <LoadingOverlay/>
 }
 
+          
+function imageCheck(){
+  if(fetchedMessage.picture === null){
+    return <Image style={styles.imageIcon} source={require("../assets/vectors/person.png")}/>
+  }else{
+    return <Image style={styles.imageIcon} source={{ uri:`https://phixotech.com/igoepp/public/customers/${fetchedMessage.picture}` }}/>
+  }
+}
 
-
+// imageIcon:{
+//   width:40,
+//   height: 40,
+//   borderRadius: 50,
+//   borderWidth: 1,
+//   borderColor: Color.limegreen,
+//   marginLeft:8 
+// }
   return (
     <View style={styles.rootContainer}>
       <View style={styles.exitIcon}>
 
         <View style={{ flexDirection: 'row' }}>
           <Pressable onPress={() => navigation.openDrawer()}>
-            <Image style={styles.imageIcon} source={require("../assets/vectors/person.png")}/>
+            {imageCheck()}
           </Pressable>
-          <Text style={{ fontSize:15, fontFamily: 'poppinsSemiBold', marginLeft: 8, marginTop: 8, color: Color.limegreen }}>Hi Chinedu</Text>
+          <Text style={{ fontSize:15, fontFamily: 'poppinsSemiBold', marginLeft: 8, marginTop: 8, color: Color.limegreen }}>Hi {fetchedMessage.first_name}</Text>
         </View>
 
         <View>
@@ -93,7 +125,7 @@ return <LoadingOverlay/>
 
           {/*for wallet balance and the add sign */}
           <View style={styles.walletContainer3}>
-            <Text style={styles.walletText}>Wallet</Text>
+            <Text style={styles.walletText}>Balance</Text>
             <Pressable
               style={({pressed}) => [pressed && styles.pressed]}
               onPress={() => navigation.navigate("AddToWallet", {
@@ -315,9 +347,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   notificationIcon:{
-    width: 24,
-    height: 30,
+    width: 20,
+    height: 26,
     marginLeft: 8,
+
   },
   feedback:{
     // marginTop: 10,
@@ -636,12 +669,12 @@ const styles = StyleSheet.create({
   },
   walletText:{
     color: 'white',
-    fontSize: 23,
+    fontSize: 20,
     fontFamily:'poppinsRegular'
     // paddingVertical:
   },
   walletBalance:{
-    // marginTop: 0,
+    marginTop: 3,
     fontSize: 30,
     color: 'white',
     // fontWeight: 'bold',

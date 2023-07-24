@@ -240,7 +240,7 @@ async function cancelrequests(id, token, reason){
           }
         }
       )
-        console.log(response)
+        // console.log(response)
         return response.data;
     } catch(error){
       console.log(error.response.data)
@@ -251,9 +251,10 @@ async function cancelrequests(id, token, reason){
 
 
 
-async function bidrequests(bi_id, token){
+
+async function bidrequests(bid_id, token){
   try{
-    const response = await axios.post(
+    const response = await axios.get(
         `http://phixotech.com/igoepp/public/api/auth/hrequest/showbidrequestbyrequestid/${bid_id}`, 
        {
           headers:{
@@ -262,7 +263,7 @@ async function bidrequests(bi_id, token){
           }
         }
       )
-        console.log(response)
+        // console.log(response.data)
         return response.data;
     } catch(error){
       console.log(error.response.data)
@@ -271,6 +272,47 @@ async function bidrequests(bi_id, token){
     }
 }
 
+async function sendrequest(token){
+  console.log(token)
+
+  try{
+    const response = await axios.post(url, {
+      headers:{
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+    // console.log(response)
+  }catch(error){
+    console.log(error)
+  }
+         
+}
+
+async function subcategoryquestionstore(sub_category_id,category_id,answerfield, question_type, token){
+  const url = "http://phixotech.com/igoepp/public/api/auth/category/subcategoryquestionstore"
+  try {
+      const response = await axios.post(url, 
+          {
+              "subcategoryid": sub_category_id,
+              "categoryid": category_id,
+              "sub_cat_question": answerfield,
+              "question_type": question_type
+          },
+          {
+              headers: {
+                  Accept: 'application/json',                        
+                  Authorization: `Bearer ${token}`
+              }
+          }
+      )
+      // console.log(response)
+      // return response.data
+  } catch (error) {
+      console.log(error.response)
+      Alert.alert("Error", "An error occured")
+  }
+}
 export  function createUser(email, password,gender, phone, firstname, lastname) {
   return authenticateSignUp(email, password, gender, phone, firstname, lastname)
 }
@@ -320,4 +362,12 @@ export function BidRequests(bid_id, token){
   return bidrequests(bid_id, token)
 }
 
+export function MakeRequest(token){
+  return sendrequest(token)
+  
+}
+
+export function SubcategoryQuestionStore(sub_category_id,category_id,answerfield,question_type,token){
+  return subcategoryquestionstore(sub_category_id,category_id, answerfield, question_type,  token)
+}
 

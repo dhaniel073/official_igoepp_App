@@ -1,5 +1,5 @@
 import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, ImageBackground, Image, TouchableOpacity } from "react-native";
 import { Color } from "../components/ui/GlobalStyles";
 import { useFonts } from "expo-font";
@@ -8,9 +8,50 @@ import {Ionicons} from '@expo/vector-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import Icon from "react-native-ionicons";
 import { AuthContext } from "../store/auth-context";
+import { customerInfocheck } from "../util/auth";
+import { useNavigation } from "@react-navigation/native";
 
 const CustomDrawer = (props) => {
     const authCtx = useContext(AuthContext)
+    const navigation = useNavigation()
+    const [fetchedMessage, setFetchedMesssage] = useState('');
+    const [isLoading, setIsLoading] = useState(false)
+
+
+    useEffect(() => {
+
+        async function UserInfo(){
+          setIsLoading(true)
+          try{
+            await customerInfocheck(authCtx.customerId, authCtx.token)
+            .then((res) => {
+              // console.log(res.data.data)
+              setFetchedMesssage(res.data.data)
+            })  
+          }catch(error){
+            console.log(error.response)
+          }
+          setIsLoading(false)
+        }
+        UserInfo()
+      },[]) 
+      
+          function imageCheck(){
+            if(fetchedMessage.picture === null){
+              return (
+                <TouchableOpacity onPress={() => navigation.navigate("ViewProfile", {fetchedMessage: fetchedMessage})}>
+                  <Image style={{height:100, width:100, borderRadius:50, marginBottom: 10}} source={require("../assets/vectors/person.png")}/>
+                </TouchableOpacity>
+              )
+            }else{
+              return (
+                  <TouchableOpacity onPress={() => navigation.navigate("ViewProfile", {fetchedMessage: fetchedMessage})}>
+                    <Image style={{height:100, width:100, borderRadius:50, marginBottom: 10}} source={{ uri:`https://phixotech.com/igoepp/public/customers/${fetchedMessage.picture}` }}/>
+                  </TouchableOpacity>
+              )
+            }
+        }
+
     const [fontloaded] =  useFonts({
         'poppinsRegular': require("../assets/font/Poppins/Poppins-Regular.ttf"),
         'montserratBold': require("../assets/font/Montserrat_bold.ttf"),
@@ -24,18 +65,20 @@ const CustomDrawer = (props) => {
       return <LoadingOverlay/>
       }
 
+
     return (
         <View style={{ flex: 1 }}>
             <DrawerContentScrollView {...props}
-                contentContainerStyle={{ backgroundColor: Color.limegreen }}
-            >
+                contentContainerStyle={{ backgroundColor: Color.limegreen }}>
+
                 <ImageBackground source={require("../assets/vectors/backgroundImage.jpeg")} style={{padding: 20}}>
-                    <Image source={require("../assets/vectors/person.png")} style={{height:100, width:100, borderRadius:50, marginBottom: 10}}/>
-                    <Text style={{ color:'#fff', fontSize: 18, fontFamily:'poppinsMedium'}}>Chinedu Daniel</Text>
+                    {/*<Image source={require("../assets/vectors/person.png")} />*/}
+                    {imageCheck()}
+                    <Text style={{ color:'#fff', fontSize: 18, fontFamily:'poppinsMedium'}}>{fetchedMessage.first_name} {fetchedMessage.last_name}</Text>
                     
                     <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ color:'#fff', fontFamily:'poppinsRegular', marginRight: 5}}></Text>
-                    <Ionicons name="cash" size={18} color="#fff"/>
+                    <Text style={{ color:'#fff', fontFamily:'poppinsRegular', marginRight: 5}}>{fetchedMessage.email}</Text>
+                    <Ionicons name="mail" size={18} color="#fff"/>
                     </View>
 
                 </ImageBackground>

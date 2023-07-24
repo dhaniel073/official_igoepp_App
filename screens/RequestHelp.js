@@ -48,7 +48,7 @@ useEffect(() => {
   async function fetchUserdata(){
   try{
     const response = await customerInfocheck(authCtx.customerId, authCtx.token)
-    console.log(response.data.data.first_name)
+    // console.log(response.data.data.first_name)
     const name = response.data.data
     setFetchedName(name)
   }catch(error){

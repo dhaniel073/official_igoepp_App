@@ -7,6 +7,7 @@ import {useRef, useContext, useState, useEffect} from "react";
 import { AuthContext } from "../store/auth-context";
 import { useFonts } from "expo-font";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
+import {Ionicons} from '@expo/vector-icons'
 
 
 const AddWallet = ({route}) => {
@@ -73,15 +74,27 @@ const AddWallet = ({route}) => {
             <Pressable  style={({pressed}) => [styles.fundwallet, pressed && styles.pressed]}
             onPress={()=> navigation.navigate('PayStack')}
             >
-                    <Image
-                      style={styles.fundwalletIcon}
-                      source={require("../assets/vectors/vector33.png")}
-                    />
-                    <Text style={styles.text1}>Fund Wallet</Text>
+                <Image
+                style={styles.fundwalletIcon}
+                source={require("../assets/vectors/vector33.png")}
+              />
+                    <Text style={styles.text1}>Fund With Card</Text>
             </Pressable>
           </View>
 
-          <View style={styles.shadowProps}>
+          <View style={styles.shadowProps} >
+            <Pressable  style={({pressed}) => [styles.fundwallet, pressed && styles.pressed]}
+              onPress={() => navigation.navigate("Transfer")}
+            >
+                    <Image
+                    style={styles.fundwalletIcon}
+                    source={require("../assets/vectors/vector33.png")}
+                  />
+                    <Text style={styles.text1}>Fund With Transfer</Text>
+            </Pressable>
+          </View>
+
+          {/*<View style={styles.shadowProps}>
             <Pressable style={({pressed}) => [styles.paywithwallet, pressed && styles.pressed]}>
                 <Text style={styles.text3}>Pay with Wallet</Text>
                 <Image
@@ -89,7 +102,7 @@ const AddWallet = ({route}) => {
                 source={require("../assets/vectors/shape-stroke.png")}
                 />
             </Pressable>
-          </View>
+  </View>*/}
           
         </View>
       </View>
@@ -158,7 +171,9 @@ const styles = StyleSheet.create({
     walletbalanceText:{
       marginTop: 10,
       color: Color.white,
-      fontFamily: 'poppinsMedium'
+      fontFamily: 'poppinsMedium',
+      fontSize: 20
+
     },
     nairaAmount:{
       flexDirection: 'row',

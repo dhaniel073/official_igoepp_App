@@ -83,7 +83,7 @@ function PayStackScreen(){
 
         <ScrollView >
 
-        <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
+            <GoBack style={{ marginTop: "15%" }} onPress={() => navigation.goBack()}>Back</GoBack>
 
             <View style={styles.container}>
             <Text style={styles.text}>How Much would you like to fund with</Text>
@@ -165,11 +165,12 @@ const styles = StyleSheet.create({
     },
     inputstyle:{
         // minWidth: "50%",
-        paddingTop: 13,
+        paddingTop: 3,
         fontSize: FontSize.size_41xl,
         fontWeight: "600",
         // fontWeight: 'bold'
-        fontFamily: 'poppinsSemiBold'
+        fontFamily: 'poppinsSemiBold',
+        color: Color.darkolivegreen_100
     },
     extrastyle:{
         marginTop: "50%",

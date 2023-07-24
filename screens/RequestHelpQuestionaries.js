@@ -5,7 +5,7 @@ import { Color, FontSize } from "../components/ui/GlobalStyles";
 import Button from "../components/ui/Button";
 import Input from "../components/Auth/Input"
 import { useContext, useEffect, useState } from "react";
-import { ShowSubCatQuestion } from "../util/auth";
+import { MakeRequest, ShowSubCatQuestion, SubcategoryQuestionStore } from "../util/auth";
 import { AuthContext } from "../store/auth-context";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
@@ -13,11 +13,29 @@ import GoBack from "../components/ui/GoBack";
 
 
 function RequestHelpQuestionaries({route}){
-    const subcatId = route.params.subcatId
-    const subcatDesc = route.params.subcatDesc
-    const subcatName = route.params.subcatName
-    const catId = route.params.catId
+    const sub_category_id = route.params.sub_category_id
+    const category_id = route.params.category_id
+    // console.log(route.params)
+    
     const authCtx = useContext(AuthContext)
+    const token = authCtx.token
+
+    const customerId = route.params.customer_id
+    const time = route.params.help_time
+    const date = route.params.help_date
+    const frequency = route.params.help_frequency
+    const description = route.params.help_desc
+    const help_size = route.params.help_size
+    const interest = route.params.help_interest
+    const addressfield = route.params.help_location
+    const landmark = route.params.help_landmark
+    const countryName = route.params.help_country
+    const stateName = route.params.help_state
+    const cityName = route.params.help_lga
+    const vehiclerequest = route.params.vehicle_req
+
+
+
     const [fetchedquestion, setFetchedQuestion] = useState('')
     const [isLoading, setIsLoading] = useState(true)
         // const [addressfield, setAddressField] = useState('')
@@ -25,24 +43,24 @@ function RequestHelpQuestionaries({route}){
     const [answerfield, setDescritionField] = useState('')
     const navigation = useNavigation()
 
-    console.log(route.params)
+    // console.log(route.params.help_date)
 
     
     useEffect(() => {
         async function subcatquestion(){
             try {
                 setIsLoading(true)
-            const url = `https://phixotech.com/igoepp/public/api/auth/category/subcategoryquestionshow/${subcatId}`
+            const url = `https://phixotech.com/igoepp/public/api/auth/category/subcategoryquestionshow/${sub_category_id}`
             const res = await axios.get(url,{
                 headers: {
                     Authorization: `Bearer ${authCtx.token}`
                 }
             })
-                console.log(res.data.data)
+                // console.log(res.data.data)
                 setFetchedQuestion(res.data.data)
                 // return res.data
             } catch (error) {
-                Alert.alert("Error", error.response.message)
+                Alert.alert("Error", error.response)
             }
             
         }
@@ -54,13 +72,6 @@ function RequestHelpQuestionaries({route}){
 
   function updateInputValueHandler(inputType, enteredValue) {
         switch(inputType){
-            // case 'address':
-            //     setAddressField(enteredValue);
-            //     break;
-            
-            // case 'date' :
-            //     setDateField(enteredValue);
-            //     break;
 
             case 'answerfield' :
                 setDescritionField(enteredValue);
@@ -71,42 +82,45 @@ function RequestHelpQuestionaries({route}){
 
     }
 
-    const SubmitInformationHandler = async () => {
-        if(!answerfield){
-            Alert.alert("Invalid Inputs", "Check Values and try again")
-        }else{
-            console.log(answerfield)
-            const url = "http://phixotech.com/igoepp/public/api/auth/category/subcategoryquestionstore"
-            try {
-                setIsLoading(true)
-                const response = await axios.post(url, 
-                    {
-                        "subcategoryid": subcatId,
-                        "categoryid": catId,
-                        "sub_cat_question": answerfield,
-                        "question_type": fetchedquestion.question_type
-                    },
-                    {
-                        headers: {
-                            Accept: 'application/json',                        
-                            Authorization: `Bearer ${authCtx.token}`
-                        }
-                    }
-                )
-                console.log(response)
-                navigation.navigate("Welcome")
-                setIsLoading(false)
-            } catch (error) {
-                setIsLoading(false)
-                console.log(error.response)
-                Alert.alert("Error", "An error occured")
-                setDescritionField('')
-                return;
-            }
-            setIsLoading(true)
-
+ 
+    async function SubmitInformationHandler(){
+        const question_type = fetchedquestion.question_type
+        
+        const data = {
+            "customer_id": authCtx.customerId,
+            "help_interest": interest,
+            "help_location": addressfield,
+            "help_country": countryName,
+            "help_state": stateName,
+            "help_lga": cityName,
+            "help_landmark": landmark,
+            "help_size": help_size,
+            "vehicle_req": vehiclerequest,
+            "help_desc": description,
+            "category_id": category_id,
+            "sub_category_id": sub_category_id,
+            // "help_date": date,
+            "help_time": time,
+            "help_frequency": frequency
         }
+        
+        // const response = await fetch('http://phixotech.com/igoepp/public/api/auth/hrequest/store', {
+        //     method: "POST", 
+        //     mode: "cors",
+        //     cache: "no-cache", 
+        //     credentials: "same-origin", 
+        //     headers: {
+        //       "Accept": "application/json",
+        //       'Authorizatione': `Bearer ${authCtx.token}`,
+        //     },
+        //     redirect: "follow", // manual, *follow, error
+        //     referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        //     body: JSON.stringify(data), // body data type must match "Content-Type" header
+        //   });
+        //   return response.json(); // parses JSON response into native JavaScript objects
+        // }
     }
+
 
     const [fontloaded] =  useFonts({
         'poppinsRegular': require("../assets/font/Poppins/Poppins-Regular.ttf"),

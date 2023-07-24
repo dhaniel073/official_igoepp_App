@@ -1,14 +1,18 @@
 import { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet, View, Text, Image } from 'react-native';
-
-
-
 import Button from '../ui/Button';
 import Input from './Input';
 import { Color } from '../ui/GlobalStyles';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import LoadingOverlay from '../ui/LoadingOverlay';
+import { Dropdown } from 'react-native-element-dropdown';
+
+const sex = [
+  { label: 'Male', value: 'M' },
+  { label: 'Female', value: 'F' },
+ 
+];
 
 function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   const [enteredEmail, setEnteredEmail] = useState('');
@@ -18,6 +22,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   const [enteredPhone, setEnteredPhone] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState('');
+  const [isSexFocus, setSexFocus] = useState('')
 
   const [fontloaded] =  useFonts({
     'poppinsRegular': require("../../assets/font/Poppins/Poppins-Regular.ttf"),
@@ -52,9 +57,6 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         break;
       case 'lastname':
         setEnteredLastName(enteredValue);
-        break;
-      case 'gender':
-        setEnteredGender(enteredValue);
         break;
       case 'phone':
         setEnteredPhone(enteredValue);
@@ -118,8 +120,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
           isInvalid={emailIsInvalid}
 
           />
-        {!isLogin && (
-          <Input
+               {/*<Input
             // label="Gender"
             onUpdateValue={updateInputValueHandler.bind(this, 'gender')}
             value={enteredGender}
@@ -127,7 +128,31 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
             maxLength={1}
             placeholder={" 'M' for male and 'F' for Female"}
 
-          />
+        />*/}
+
+        {!isLogin && (
+     
+                <Dropdown
+                  style={[styles.dropdown, isSexFocus && { borderColor: 'blue' }]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  iconStyle={styles.iconStyle}
+                  data={sex}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={!isSexFocus ? 'Select Gender' : '...'}
+                  searchPlaceholder="Search..."
+                  value={enteredGender}
+                  onFocus={() => setSexFocus(true)}
+                  onBlur={() => setSexFocus(false)}
+                  onChange={item => {
+                      setEnteredGender(item.value);
+                      setSexFocus(false);
+                  }}
+                />
         )}
 
         {!isLogin && (
@@ -174,6 +199,28 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
 export default AuthForm;
 
 const styles = StyleSheet.create({
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  dropdown: {
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    marginTop: 10
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  }, 
+  placeholderStyle: {
+    fontSize: 16,
+  },
   buttons: {
     marginTop: 25,
   },
@@ -191,7 +238,7 @@ const styles = StyleSheet.create({
 
   },
   Title:{
-    marginTop: 30, 
+    marginTop: 10, 
     marginBottom: 30,
     // marginHorizontal: 50,
     fontSize: 30,
