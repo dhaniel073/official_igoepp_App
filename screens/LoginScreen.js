@@ -20,7 +20,7 @@ function LoginScreen() {
     try {
       const response = await login(email, password);
       if(response.wallet_balance === null){
-        console.log(response.wallet_balance)
+        // console.log(response.wallet_balance)
         const wallet_balance = ""
         authCtx.customerwalletbalance(wallet_balance)
       }else{

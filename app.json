@@ -1,18 +1,10 @@
 {
   "expo": {
-    "plugins": [
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
-        }
-      ]
-    ],
-    "name": "Authenticate_igoepp",
-    "slug": "Authenticate_igoepp",
+    "name": "igoepp",
+    "slug": "igoepp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Untitled-1.png",
+    "icon": "./assets/Untitled.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/Untitled.png",
@@ -27,12 +19,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/vectors/whatsapp-image-20201211-at-642-1.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/vectors/whatsapp-image-20201211-at-642-1.png"
     }
   }
 }

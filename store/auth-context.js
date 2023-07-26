@@ -10,11 +10,15 @@ export const AuthContext = createContext({
   customerId: '',
   email: '',
   walletBal: '',
+  sessionId: '',
+  request: '',
   isAuthenticated: false,
   authenticate: (token) => {},
   customerEmail: (email) => {},
   customeridauthenticate: (customerId) => {},
   customerwalletbalance: (walletBal) => {},
+  customerRequestsMade: (request) => {},
+  customerSessionId: (sessionId) => {},
   logout: () => {},
 
 });
@@ -26,6 +30,8 @@ function AuthContextProvider({ children }) {
   const [customerId, setCusomerId] = useState();
   const [email, setEmail] = useState();
   const [walletBal, setWalletBal] = useState();
+  const [request, setRequest] = useState();
+  const [sessionId, setSessionId] = useState();
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   if(isLoggingOut){
@@ -48,6 +54,17 @@ function AuthContextProvider({ children }) {
     AsyncStorage.setItem('email', email)
   }
 
+  function customerRequestsMade(request){
+    setRequest( request)
+    AsyncStorage.setItem('request', request)
+  }
+
+  function customerSessionId(sessionId){
+    const setSesId = sessionId === null ? "" : sessionId
+    setSessionId(sessionId)
+    AsyncStorage.setItem('sessionId', sessionId)
+  }
+
   function customerwalletbalance(walletBal){
     const setWalletbal = (walletBal === null ? "" : walletBal) 
     console.log(setWalletbal)
@@ -66,6 +83,8 @@ function AuthContextProvider({ children }) {
     AsyncStorage.removeItem('customerdetails')
     AsyncStorage.removeItem('email')
     AsyncStorage.removeItem('walletdetails')
+    AsyncStorage.removeItem('resquest')
+    AsyncStorage.removeItem('sessionId')
     setIsLoggingOut(false)
   }
 
@@ -74,11 +93,15 @@ function AuthContextProvider({ children }) {
     customerId: customerId,
     email: email,
     walletBal: walletBal,
+    sessionId: sessionId,
+    request: request,
     isAuthenticated: !!authToken,
     authenticate: authenticate,
     customerEmail: customerEmail,
     customeridauthenticate: customeridauthenticate,
+    customerRequestsMade: customerRequestsMade,
     customerwalletbalance: customerwalletbalance,
+    customerSessionId: customerSessionId,
     logout: logout,
   };
 

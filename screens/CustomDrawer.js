@@ -5,8 +5,6 @@ import { Color } from "../components/ui/GlobalStyles";
 import { useFonts } from "expo-font";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import {Ionicons} from '@expo/vector-icons'
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import Icon from "react-native-ionicons";
 import { AuthContext } from "../store/auth-context";
 import { customerInfocheck } from "../util/auth";
 import { useNavigation } from "@react-navigation/native";
@@ -14,7 +12,8 @@ import { useNavigation } from "@react-navigation/native";
 const CustomDrawer = (props) => {
     const authCtx = useContext(AuthContext)
     const navigation = useNavigation()
-    const [fetchedMessage, setFetchedMesssage] = useState('');
+    const [fetchedMessage, setFetchedMesssage] = useState('')
+    const [fetcheddata, setFetcheddata] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
 
@@ -27,6 +26,7 @@ const CustomDrawer = (props) => {
             .then((res) => {
               // console.log(res.data.data)
               setFetchedMesssage(res.data.data)
+              setFetcheddata(data)
             })  
           }catch(error){
             console.log(error.response)
@@ -39,15 +39,15 @@ const CustomDrawer = (props) => {
           function imageCheck(){
             if(fetchedMessage.picture === null){
               return (
-                <TouchableOpacity onPress={() => navigation.navigate("ViewProfile", {fetchedMessage: fetchedMessage})}>
+                <View>
                   <Image style={{height:100, width:100, borderRadius:50, marginBottom: 10}} source={require("../assets/vectors/person.png")}/>
-                </TouchableOpacity>
+                </View>
               )
             }else{
               return (
-                  <TouchableOpacity onPress={() => navigation.navigate("ViewProfile", {fetchedMessage: fetchedMessage})}>
+                  <View>
                     <Image style={{height:100, width:100, borderRadius:50, marginBottom: 10}} source={{ uri:`https://phixotech.com/igoepp/public/customers/${fetchedMessage.picture}` }}/>
-                  </TouchableOpacity>
+                  </View>
               )
             }
         }

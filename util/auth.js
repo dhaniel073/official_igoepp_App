@@ -73,6 +73,8 @@ async function showCustomer(customer_id, token){
     return response
 }
 
+
+
   
 //forgot route
 async function forgotPass(email){
@@ -106,7 +108,7 @@ async function walletupdate(customerId, token, InputAmount){
 }
 
 //update customer details route
-async function infoUpdate(last_name, first_name, sex, phone, customerId, token){
+async function infoUpdate(last_name, first_name, sex, phone, customerId, token, countryName, stateName, cityName){
   try{
   const response = await axios.put(
       `http://phixotech.com/igoepp/public/api/auth/customer/${customerId}/update`, 
@@ -114,7 +116,10 @@ async function infoUpdate(last_name, first_name, sex, phone, customerId, token){
           last_name: last_name,
           first_name: first_name,
           phone: phone,
-          sex:sex
+          sex:sex,
+          Country: countryName,
+          State: stateName,
+          lga: cityName1  
       },{
         headers:{
           Accept: 'application/json',
@@ -313,6 +318,23 @@ async function subcategoryquestionstore(sub_category_id,category_id,answerfield,
       Alert.alert("Error", "An error occured")
   }
 }
+
+async function sessionId(email, token,){
+  const url = `http://phixotech.com/igoepp/public/api/auth/igoeppauth/sessioncheckcustomer`
+  console.log(email)
+  const response = await axios.post(url,{
+      username: email,
+      application: 'mobileapp'
+  }, {
+    headers:{
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`
+    }
+  })
+  // console.log(response.data)
+  return response
+}
+
 export  function createUser(email, password,gender, phone, firstname, lastname) {
   return authenticateSignUp(email, password, gender, phone, firstname, lastname)
 }
@@ -334,8 +356,8 @@ export function ForgotCustomerPassword(email){
   return  forgotPass(email)
 }
 
-export function updateUserinfo(last_name, first_name, sex, phone, customerId, token){
-  return infoUpdate(last_name, first_name, sex, phone, customerId, token)
+export function updateUserinfo(last_name, first_name, sex, phone, customerId, token, countryName, stateName, cityName){
+  return infoUpdate(last_name, first_name, sex, phone, customerId, token, countryName, stateName, cityName)
 }
 
 export function upLoadPicture(customerId, token, picture){
@@ -364,6 +386,11 @@ export function BidRequests(bid_id, token){
 
 export function MakeRequest(token){
   return sendrequest(token)
+  
+}
+
+export function SessionIDCheck(email,token){
+  return sessionId(email, token)
   
 }
 

@@ -8,7 +8,7 @@ import { Image } from 'expo-image';
 import { useNavigation } from '@react-navigation/native';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { customerInfocheck, showVerifiedCustomer } from '../util/auth';
+import { SessionIDCheck, customerInfocheck, showVerifiedCustomer } from '../util/auth';
 import { useFonts } from 'expo-font';
 
 function WelcomeScreen({route}) {
@@ -37,6 +37,8 @@ function WelcomeScreen({route}) {
   UserInfo()
 },[])
 
+
+
 useEffect(() => {
   async function walletbal(){
   const url = `http://phixotech.com/igoepp/public/api/auth/customer/${authCtx.customerId}/wallet`
@@ -63,7 +65,24 @@ useEffect(() => {
 
 }, [setFetchedMesssage])
 
+useEffect(() => {
+  async function SessionId(){
+    setIsLoading(true)
+    try{
+      await SessionIDCheck(authCtx.email, authCtx.token)
+      .then((res) => {
+        // console.log(res.data)
+        authCtx.customerSessionId(res.data.login_session_id)
+      })  
+    }catch(error){
+      console.log(error.response)
+    }
+    setIsLoading(false)
+  }
+  SessionId()
+}, [])
 
+// console.log(authCtx.sessionId)
 const [fontloaded] =  useFonts({
   'poppinsRegular': require("../assets/font/Poppins/Poppins-Regular.ttf"),
   'montserratBold': require("../assets/font/Montserrat_bold.ttf"),

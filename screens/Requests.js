@@ -1,18 +1,20 @@
 import {useContext, useEffect, useRef, useState} from "react";
-import { Text, StyleSheet, View, Pressable, Image, FlatList, ScrollView, SafeAreaView, Platform, Alert } from "react-native";
+import { Text, StyleSheet, View, Pressable, Image, FlatList, ScrollView, SafeAreaView, Platform, Alert, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, Border, FontSize, FontFamily } from "../components/ui/GlobalStyles";
 import { AuthContext } from "../store/auth-context";
-import { ShowFetchedRequests } from "../util/auth";
+import { SessionIDCheck, ShowFetchedRequests } from "../util/auth";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import Button from '../components/ui/Button'
 import Button4 from '../components/ui/Button4'
 import { useFonts } from "expo-font";
+import { TouchableRipple } from "react-native-paper";
 
 const Requests = () => {
   const navigation = useNavigation();
   const authCtx = useContext(AuthContext)
   const [fetchedRequest, setFetchedRequest] = useState('')
+  const [session_id, setSession_Id] = useState('');
   const [isFetching, setIsFetching] = useState(true)
   const isInitialMount = useRef(true);
 
@@ -22,8 +24,9 @@ const Requests = () => {
        const fetchRequests = async() => {
         setIsFetching(true)
         const response = await ShowFetchedRequests(authCtx.customerId, authCtx.token)
-        console.log(response)
+        // console.log(response)
         setFetchedRequest(response)
+        authCtx.customerRequestsMade(JSON.stringify(fetchedRequest.length))
         setIsFetching(false)
   
       }
@@ -31,6 +34,19 @@ const Requests = () => {
   
   }, [])
 
+ 
+  // console.log(fetchedRequest.length)
+
+  const NoRequestNote = () => {
+    return (
+        <View style={{ justifyContent:'center', alignItems:'center', marginTop: '70%' }}>
+            <Text style={{ fontSize: FontSize.size_sm, color: 'grey', fontFamily: 'poppinsSemiBold' }}>No Request Made</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('RequestHelp')}>
+              <Text style={{ fontFamily: 'poppinsRegular', marginTop: 10, color: Color.limegreen }}>Make Request</Text>
+            </TouchableOpacity>
+        </View>
+    )
+}
 
       function cancelRequest(id){
         Alert.alert('Cancel Request', 'Are you sure you want to canel this request', [
@@ -50,7 +66,6 @@ const Requests = () => {
        
       }
   
-
       // const check = fetchedRequest.length
       // console.log(check)
 
@@ -64,44 +79,46 @@ const Requests = () => {
   
   })
   
-  if(!fontloaded){
+  if(!fontloaded || isFetching){
   return <LoadingOverlay/>
   }
 
   return (
     <SafeAreaView style={styles.mainContainer}>
       {/*<Text style={styles.requestText}>Requests</Text>*/}
+        {fetchedRequest.length === 0 ? <NoRequestNote/> :
+              
+          <FlatList
+            style={styles.flatlists}
+            data={fetchedRequest}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item) => item.id}
+            renderItem={({item}) => 
+              <View style={styles.container}>
+                  <Text style={styles.requestDate}>{item.created_at}</Text>
+                <Pressable style={styles.pressables}>
+                  <Text style={styles.requestName}>{item.cat_name}</Text>
+                <View style={styles.buttonContainer}>
+                  <Button4 onPress={() => cancelRequest(item.id)} style={styles.button2}>Cancel</Button4>
+                  <Button onPress={() => navigation.navigate("View Requests", {
+                    bid_id: item.id
+                  })} style={styles.button}>View Request</Button>
+                  <Button4 onPress={() => {
+                    navigation.navigate("BidScreen",
+                    {
+                      cat_name: item.cat_name,
+                      bid_id: item.id,
+                    })
+                  }} 
+                  style={styles.button2}>Bid ({item.bid_count === 0 ? "0" : item.bid_count})</Button4>
+                </View>
+                </Pressable>
+              </View>
+            }
+          
+          />
 
-    {isFetching ? <LoadingOverlay/> : 
-      <FlatList
-        style={styles.flatlists}
-        data={fetchedRequest}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
-        renderItem={({item}) => 
-          <View style={styles.container}>
-              <Text style={styles.requestDate}>{item.created_at}</Text>
-            <Pressable style={styles.pressables}>
-              <Text style={styles.requestName}>{item.cat_name}</Text>
-            <View style={styles.buttonContainer}>
-              <Button4 onPress={() => cancelRequest(item.id)} style={styles.button2}>Cancel</Button4>
-              <Button onPress={() => navigation.navigate("View Requests", {
-                bid_id: item.id
-              })} style={styles.button}>View Request</Button>
-              <Button4 onPress={() => {
-                navigation.navigate("BidScreen",
-                {
-                  bid_id: item.id
-                })
-              }} 
-              style={styles.button2}>Bid ({item.bid_count === 0 ? "0" : item.bid_count})</Button4>
-            </View>
-            </Pressable>
-          </View>
-        }
-      
-      />
-    }
+      }
     </SafeAreaView> 
   )
 };

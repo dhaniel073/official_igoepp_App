@@ -19,51 +19,82 @@ function ViewProfile({route}){
     const navigation = useNavigation()
     
 
+    // let somedat = route.params.fetchedMessage
     console.log(route?.params)
+    const [fetchedMessage, setFetchedMesssage] = useState('')
+    const [fetcheddata, setFetcheddata] = useState('')
+    const authCtx = useContext(AuthContext)
+
+  
     useEffect(() => {
-
-        async function fetchData(){
-            try{
-                setIsLoading(true)
-                let user= route?.params?.fetchedMessage
-                setData(user)
-                setIsLoading(false)
-            }catch(error){
-                alert("Something went wrong")        
-                setIsLoading(false)
-            }
+  
+      async function UserInfo(){
+        setIsLoading(true)
+        try{
+          await customerInfocheck(authCtx.customerId, authCtx.token)
+          .then((res) => {
+            console.log(res.data.data)
+            setFetchedMesssage(res.data.data)
+            // setFetcheddata(data)
+          })  
+        }catch(error){
+          console.log(error.response)
         }
+        setIsLoading(false)
+      }
+      UserInfo()
+    },[]) 
+  
+    const Country = fetchedMessage.Country
+    const State = fetchedMessage.State
+    const Lga = fetchedMessage.lga
+
+    const COUNTRY_STATE_CITY =  Country + " " + State + " " + Lga 
+    // useEffect(() => {
+
+    //     async function fetchData(){
+    //         try{
+    //             setIsLoading(true)
+    //             let user= route?.params?.fetchedMessage
+    //             setData(user)
+    //             setIsLoading(false)
+    //         }catch(error){
+    //             alert("Something went wrong")        
+    //             setIsLoading(false)
+    //         }
+    //     }
         
-        fetchData()
+    //     fetchData()
 
 
 
-    }, [setData])
+    // }, [setData])
 
 
     function imageCheck(){
-        if(data.picture === null){
+        if(fetchedMessage.picture === null){
             return (
                 <Pressable style={({pressed}) => [pressed && styles.pressed]} onPress={() => (navigation.navigate('ImageViewer', {
-                    image: data.picture
+                    image: fetchedMessage.picture,
                 }
                 ))}>
-                    <Avatar.Image style={styles.Image} source={require("../assets/vectors/person.png")}/>
+                    <Image style={{ width: 80, height: 80, borderWidth:1, borderColor: Color.darkolivegreen_100, borderRadius: 50 }} source={require("../assets/vectors/person.png")}/>
                 </Pressable>
             )
         }else{
             return (
                 <Pressable style={({pressed}) => [pressed && styles.pressed]} onPress={() => (navigation.navigate('ImageViewer', {
-                    image: data.picture }))}
+                    image: fetchedMessage.picture }))}
                 >
-                    <Avatar.Image style={styles.Image} size={80} source={{ uri: `https://phixotech.com/igoepp/public/customers/${data.picture}`}}/>
+                    <Image style={{ width: 80, height: 80, borderWidth:1, borderColor: Color.darkolivegreen_100, borderRadius: 50 }} size={80} source={{ uri: `https://phixotech.com/igoepp/public/customers/${fetchedMessage.picture}`}}/>
                 </Pressable>
                 )
         }
     }
 
+    console.log(authCtx.request)
     function sexCheck(){
-        if(data.sex === 'M'){
+        if(fetchedMessage.sex === 'M'){
             return <Text style={styles.dataitem}>Male</Text>
         }else if(data.sex === 'F'){
             return <Text style={styles.dataitem}>Female</Text>
@@ -81,7 +112,7 @@ function ViewProfile({route}){
   
   })
   
-  if(!fontloaded){
+  if(!fontloaded || isLoading){
     return <LoadingOverlay/>
   }
 
@@ -99,8 +130,8 @@ function ViewProfile({route}){
 
                         <View style={{ marginLeft: 20  }}>
                             <View style={{ flexDirection: 'row' }}>
-                                <Title style={[styles.title , {marginTop: 15, marginBottom: 5}]}>{data.first_name}</Title>
-                                <Title style={[styles.title , {marginTop: 15, margin: 5}]}> {data.last_name}</Title>
+                                <Title style={[styles.title , {marginTop: 15, marginBottom: 5}]}>{fetchedMessage.first_name}</Title>
+                                <Title style={[styles.title , {marginTop: 15, margin: 5}]}> {fetchedMessage.last_name}</Title>
                             </View>
                             <Caption style={styles.caption}>{data.email}</Caption>
                         </View>
@@ -109,18 +140,20 @@ function ViewProfile({route}){
                 
                 <View style={styles.userInfoSection}>
                     <View style={styles.row}>
-                        <Ionicons name="location" color={"#777777"} size={20}/>
-                        <Text style=    {{ color: '#777777', marginLeft: 20 }}>Nigeria Lagos</Text>
+                        <Ionicons name="location" color="#777777" size={20}/>
+                        <Text style=    {{ color: '#777777', marginLeft: 20 }}>{COUNTRY_STATE_CITY}</Text>
+                        
+
                     </View>
 
                      <View style={styles.row}>
-                        <Ionicons name="call" color={"#777777"} size={20}/>
-                        <Text style=    {{ color: '#777777', marginLeft: 20 }}>{data.phone}</Text>
+                        <Ionicons name="call" color="#777777" size={20}/>
+                        <Text style=    {{ color: '#777777', marginLeft: 20 }}>{fetchedMessage.phone}</Text>
                     </View>
 
                     <View style={styles.row}>
-                        <Ionicons name="mail" color={"#777777"} size={20}/>
-                        <Text style=    {{ color: '#777777', marginLeft: 20 }}>{data.email}</Text>
+                        <Ionicons name="mail" color="#777777" size={20}/>
+                        <Text style=    {{ color: '#777777', marginLeft: 20 }}>{fetchedMessage.email}</Text>
                     </View>
 
                     {/*<View style={styles.row}>
@@ -133,14 +166,15 @@ function ViewProfile({route}){
                 <View style={styles.inforBoxWrapper}>
                     <View style={[styles.infoBox, {borderRightColor: "#dddddd", borderRightWidth: 1}]}>
                         <View style={{ flexDirection:'row' }}>
-                            <Image source={require("../assets/vectors/group2.png")} style={{ width:18, height:18 }}/>
-                            <Title>{data.wallet_balance.toLocaleString()}</Title>
+                            <Image source={require("../assets/vectors/group2.png")} style={{ width:18, height:18, marginTop: 9 }}/>
+                            <Title>{fetchedMessage.wallet_balance.toLocaleString()}</Title>
                         </View>
                         <Caption>Wallet balance</Caption>
                     </View>
 
                     <View style={styles.infoBox}>
-                        <Title>{data.wallet_balance.toLocaleString()}</Title>
+
+                        <Title>{authCtx.request}</Title>
                         <Caption>Requests Made</Caption>
                     </View>
                 </View>
@@ -174,12 +208,7 @@ function ViewProfile({route}){
                         </View>
                     </TouchableRipple>
 
-                    <TouchableRipple onPress={() => {}}>
-                        <View style={styles.menuItem}>
-                            <Ionicons name="settings-outline" size={25} color={Color.limegreen}/>
-                            <Text style={styles.menuItemText}>Settings</Text>
-                        </View>
-                    </TouchableRipple>
+                    
                 </View>
             </SafeAreaView>
         )

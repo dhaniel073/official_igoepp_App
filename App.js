@@ -52,6 +52,7 @@ import CancelRequest from './screens/CancleRequest';
 import DrawerContent from './screens/DrawerContent';
 import CustomDrawer from './screens/CustomDrawer';
 import Transfer from './screens/Transfer';
+import Settings from './screens/Settings';
 
 const Stack = createNativeStackNavigator();
 
@@ -136,6 +137,8 @@ function AuthStack() {
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigation(){
+  const navigation = useNavigation()
+
 
   const [fontloaded] =  useFonts({
     'poppinsRegular': require("./assets/font/Poppins/Poppins-Regular.ttf"),
@@ -149,11 +152,9 @@ function DrawerNavigation(){
   if(!fontloaded){
   return <LoadingOverlay/>
   }
-
-
   
   return (
-    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props}/>} screenOptions={{  
+    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />} screenOptions={{  
         // headerTintColor: 'black',
         // headerShown: false,
         sceneContainerStyle: {backgroundColor: '#fff'},
@@ -229,15 +230,16 @@ function DrawerNavigation(){
       />
 
       <Drawer.Screen
-      name="TermsAndConditions"
-      component={TermsAndCondition}
-      options={{ 
-        headerTintColor: Color.lightgreen,
-        title: "TERMS AND CONDITIONS",
-        // headerShown: false,
-        drawerIcon: ({color, size}) => <Ionicons name="book" color={color} size={size}/>
-       }}
+       name='Settings'
+       component={Settings}
+       options={{ 
+        headerShown: false,
+        headerTintColor: Color.darkolivegreen_100,
+        drawerIcon: ({color, size}) => <Ionicons name="settings" color={color} size={size}/>
+
+        }}
       />
+       
 
 
     </Drawer.Navigator>
@@ -248,8 +250,6 @@ function DrawerNavigation(){
 
 
 function AuthenticatedStack() {
-
-  const navigation = useNavigation()
   
   return (
     <Stack.Navigator
@@ -336,25 +336,6 @@ function AuthenticatedStack() {
       />
 
       <Stack.Screen
-       name='ViewProfile'
-       component={ViewProfile}
-       options={{ 
-        headerShown: true,
-        title: '' ,
-        headerRight:() => (
-          <Ionicons
-            name='ios-pencil'
-            size={25}
-            backgroundColor= {'#fff'}
-            color=""
-            onPress={() => navigation.navigate("Profile")}
-          />
-        ),
-        headerShadowVisible: false
-      }}
-      />
-
-      <Stack.Screen
       name='Profile'
       component={Profile}
       options={{
@@ -363,6 +344,18 @@ function AuthenticatedStack() {
           headerShadowVisible: false
       }}
       />
+
+      <Stack.Screen
+       name='ViewProfile'
+       component={ViewProfile}
+       options={{ 
+        headerShown: true,
+        title: '' ,
+        headerShadowVisible: false
+      }}
+      />
+
+
     
       <Stack.Screen
       name='ImageViewer'
@@ -414,6 +407,17 @@ function AuthenticatedStack() {
       />
       
       
+      <Stack.Screen
+      name="TermsAndConditions"
+      component={TermsAndCondition}
+      options={{ 
+        headerShown: false,
+        headerTintColor: Color.lightgreen,
+        title: "TERMS AND CONDITIONS",
+       }}
+      />
+
+      
 
       </Stack.Navigator>
 
@@ -445,15 +449,19 @@ function Root() {
       const storedId = await AsyncStorage.getItem('customerdetails')
       const storedEmail = await AsyncStorage.getItem('email')
       const storedWalletBalance = await AsyncStorage.getItem('walletdetails')
-      const check =  AsyncStorage.setItem('FIRST_CHECK', 'false')
+      const storedRequestsMade = await AsyncStorage.getItem('request')
+      const storedSessionId = await AsyncStorage.getItem('sessionId')
 
-      // console.log(storedEmail)
+
+      console.log(storedRequestsMade)
 
       if(storedToken && storedId && storedEmail){
         authCtx.customeridauthenticate(storedId)
         authCtx.authenticate(storedToken);
         authCtx.customerEmail(storedEmail);
         authCtx.customerwalletbalance(storedWalletBalance)
+        authCtx.customerRequestsMade(storedRequestsMade)
+        authCtx.customerSessionId(storedSessionId)
       }
 
       // if (storedToken) {
