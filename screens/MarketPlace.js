@@ -17,13 +17,18 @@ function MarketPlace(){
   const [fetchedcategory, setFetchedCategory] = useState('')
   const [fetchedName, setFetchedName] = useState('')
   const [isFetching, setIsFetching] = useState(true)
+  const [url, setUrl] = useState('')
+
 
   
   useEffect(() => {
-    async function fetchCategorydata(){
+      async function fetchCategorydata(){
+        setUrl('http://phixotech.com/igoepp/public/api/category')
+        console.log(url)
+        const category = 'category'
     try {
       setIsFetching(true)
-      await axios.get("http://phixotech.com/igoepp/public/api/category")
+      await axios.get(url)
       .then((res) => {
         // console.log(res.data)
         setFetchedCategory(res.data.data)
@@ -36,7 +41,7 @@ function MarketPlace(){
   }
   }
   fetchCategorydata()
-},[setFetchedCategory, setIsFetching])
+},[url])
 
 
 // console.log(fetchedcategory)
@@ -54,7 +59,7 @@ useEffect(() => {
     Alert.alert("Error", error.response.message)
   }
 }
-  fetchUserdata()
+  fetchUserdata(authCtx.customerId, authCtx.token)
 }, [])
 
 

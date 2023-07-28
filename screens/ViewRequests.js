@@ -137,7 +137,7 @@ function ViewRequests({route}){
 
                                     <View style={styles.nameContainer}>
                                         <Text style={styles.labelText}>Status: </Text>
-                                        <Text style={styles.textValue}> {item.help_status}</Text>
+                                        <Text style={styles.textValue}> {item.help_status ===  'A' ? 'Accepted' : item.help_status === 'X' ? 'Canceled' : 'Pending'}</Text>
                                     </View>
                                     
                                     <View style={styles.nameContainer}>

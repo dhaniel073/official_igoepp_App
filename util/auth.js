@@ -319,26 +319,45 @@ async function subcategoryquestionstore(sub_category_id,category_id,answerfield,
   }
 }
 
-async function sessionId(email, token,){
-  const url = `http://phixotech.com/igoepp/public/api/auth/igoeppauth/sessioncheckcustomer`
-  // console.log(email)
-  try{
-
-  const response = await axios.post(url,{
-      username: email,
-      application: 'mobileapp'
-  }, {
-    headers:{
+async function sessionId(email, token){
+  const url = 'https://phixotech.com/igoepp/public/api/auth/igoeppauth/sessioncheckcustomer'
+ try {
+  const response = await axios.post(url, {
+    username: email,
+    application: 'webapp'
+  },
+  {
+    headers: {
       Accept: 'application/json',
       Authorization: `Bearer ${token}`
     }
-  })
-  // console.log(response.data)
-  return response
-  }catch(error){
-    console.log(error.response)
+  }
+  )
+  return response;
+ } catch (error) {
+  console.log(error.response)
+ }
+}
+
+async function walletbal(customerId, token){
+  const url = `http://phixotech.com/igoepp/public/api/auth/customer/${customerId}/wallet`
+
+  // console.log(url)
+  try {
+
+    const response = await axios.get(url, {
+      headers:{
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+    // console.log(response.data)
+    return response;
+  } catch (error) {
+    console.log(error)
   }
 }
+
 
 export  function createUser(email, password,gender, phone, firstname, lastname) {
   return authenticateSignUp(email, password, gender, phone, firstname, lastname)
@@ -398,6 +417,13 @@ export function SessionIDCheck(email,token){
   return sessionId(email, token)
   
 }
+
+export function WalletBalance(customerId,token){
+  return walletbal(customerId, token)
+  
+}
+
+
 
 export function SubcategoryQuestionStore(sub_category_id,category_id,answerfield,question_type,token){
   return subcategoryquestionstore(sub_category_id,category_id, answerfield, question_type,  token)

@@ -12,7 +12,7 @@ function CancelRequest({route, navigation}){
     const authCtx = useContext(AuthContext)
     const id = route.params.id;
     const [reason, setReason] = useState('')
-    const [IsLoading, setIsLoading] = useState(true)
+    const [IsLoading, setIsLoading] = useState(false)
 
 
     function updateInputValueHandler(inputType, enteredValue) {
@@ -79,7 +79,8 @@ export default CancelRequest;
 const styles = StyleSheet.create({
     mainContainer:{
         flex: 1,
-        marginTop: "15%"
+        marginTop: "15%",
+        marginHorizontal: 8,
     },
     cancelRequestText:{
         color: Color.darkolivegreen_100,
@@ -93,8 +94,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 2,
         // backgroundColor: Colors.primary100,
         // borderBottomColor: Color.lightgreen,
-        borderColor: Color.lightgreen,
-        borderWidth: 1,
+        borderBottomColor: Color.lightgreen,
+        borderBottomWidth: 1,
         fontFamily: 'poppinsRegular',
         // borderRadius: 4,
         fontSize: 18,
@@ -107,7 +108,8 @@ const styles = StyleSheet.create({
         fontFamily: 'poppinsMedium'
     },
     container:{
-        marginHorizontal: 20
+        marginHorizontal: 20,
+
     },
     button:{
         marginTop: 20

@@ -111,6 +111,8 @@ function BidScreen({route}){
     }
 
 
+
+
     const AcceptBidHandler = async() => {
         if(!paymentmethod){
             Alert.alert('Payment Method', 'Select payment method to continue')
@@ -138,7 +140,7 @@ function BidScreen({route}){
          console.log(response.data)
          setPaymentMethod(null)
          setIsFocus(false)
-         navigation.navigate("Welcome")
+         navigation.navigate("Requests")
          setIsLoading(true)
         console.log(paymentmethod, Id)
         } catch (error) {
@@ -175,7 +177,7 @@ function BidScreen({route}){
             ) 
             console.log(response.data)
             setBudget(null)
-            navigation.navigate("Welcome")
+            navigation.navigate("Requests")
            } catch (error) {
              console.log(error.response)
            }
@@ -185,10 +187,27 @@ function BidScreen({route}){
       }
 
 
-    const DeclineHandler = (id) => {
-        const url = `http://phixotech.com/igoepp/public/api/auth/hrequest/declinebidrequest/${id}`
+    const DeclineHandler = async (id) => {
         console.log(id)
-        alert('declined')    
+        const url = `http://phixotech.com/igoepp/public/api/auth/hrequest/declinebidrequest/${id}`
+        try {
+            const response = await axios.get(url, {
+                headers:{
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${authCtx.token}`
+                }
+            })
+            console.log(response.data);
+            console.log(id)
+            Alert.alert('Decline Bid', 'Successful', [
+                {
+                    text: 'Ok',
+                    onPress: () => navigation.goBack("Requests") ,
+                }
+            ])    
+        } catch (error) {
+            console.log(error)
+        }
     }
     
     
@@ -266,7 +285,7 @@ function BidScreen({route}){
                                     </TouchableOpacity>
 
                                 :
-                                    <TouchableOpacity onPress={() => DeclineHandler(item.id)} style={{ margin:10, padding:5, borderRadius: 3, borderWidth: 1, borderColor:Color.firebrick_100, backgroundColor: 'white'   }}>
+                                    <TouchableOpacity onPress={() => [DeclineHandler(item.id)]} style={{ margin:10, padding:5, borderRadius: 3, borderWidth: 1, borderColor:Color.firebrick_100, backgroundColor: 'white'   }}>
                                         <View style={{ paddingLeft: 35, paddingRight: 35 }}>
                                             <Text style={{ fontFamily: 'poppinsSemiBold', color:Color.firebrick_100 }}>Decline</Text>
                                         </View>
@@ -391,6 +410,8 @@ function BidScreen({route}){
                     </View>
                 </SafeAreaView>
             </Modal>
+
+
             </SafeAreaView>
     )
 }

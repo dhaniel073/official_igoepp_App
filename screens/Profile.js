@@ -8,7 +8,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useFonts } from "expo-font";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
-import { upLoadPicture, updateUserinfo } from "../util/auth";
+import { customerInfocheck, upLoadPicture, updateUserinfo } from "../util/auth";
 import { AuthContext } from "../store/auth-context";
 import Animated from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
@@ -44,12 +44,12 @@ const option = {
 
 
 
-function Profile({route}){
-  console.log(route.params)
+function Profile(){
   const navigation = useNavigation()
   // const [value, setValue] = useState(null);
   const authCtx = useContext(AuthContext)
   const [isFocus, setIsFocus] = useState(false);
+  const [fetchedmessage, setFetchedMesssage] = useState('')
   const [image, setImage] = useState(null);
   const [first_name, setFirstName] = useState('')
   const [last_name, setLastName] = useState('')
@@ -92,10 +92,28 @@ function Profile({route}){
   }
 
 
+  useEffect(() => {
+  
+    async function UserInfo(){
+      setIsLoading(true)
+      try{
+        await customerInfocheck(authCtx.customerId, authCtx.token)
+        .then((res) => {
+          console.log(res.data.data)
+          setFetchedMesssage(res.data.data)
+          // setFetcheddata(data)
+        })  
+      }catch(error){
+        console.log(error.response)
+      }
+      setIsLoading(false)
+    }
+    UserInfo()
+  },[]) 
+
 
 
   useEffect(() => {
-    setIsLoading(true)
 
     var config = {
         method: 'get',
@@ -124,11 +142,9 @@ function Profile({route}){
     .catch(function (error) {
         console.log(error);
     })
-    setIsLoading(false)
 }, [])
 
 const handleState = (countryCode) => {
-    setIsLoading(true)
 
     var config = {
         method: 'get',
@@ -156,12 +172,10 @@ const handleState = (countryCode) => {
     .catch(function (error) {
         console.log(error);
     })
-    setIsLoading(false)
 
 }
 
 const handleCity = (countryCode, stateCode) => {
-    setIsLoading(true)
     // console.log(`http://phixotech.com/igoepp/public/api/auth/general/lga/${stateCode}`)
     var config = {
         method: 'get',
@@ -189,7 +203,6 @@ const handleCity = (countryCode, stateCode) => {
     .catch(function (error) {
         console.log(error);
     })
-    setIsLoading(false)
 
 }
 
@@ -202,7 +215,7 @@ const handleCity = (countryCode, stateCode) => {
 
         })
 
-        if(!fontloaded){
+        if(!fontloaded || isLoading){
         return <LoadingOverlay/>
         }
 
@@ -247,7 +260,7 @@ const handleCity = (countryCode, stateCode) => {
               setCountryName()
               setStateName()
               setCityName()
-              navigation.navigate('Welcome')
+              navigation.navigate('ViewProfile')
             } catch (error) {
               console.log(error)
               
@@ -255,13 +268,6 @@ const handleCity = (countryCode, stateCode) => {
             setIsLoading(false)
           }
         }
-  
-  
-  
-        if(isLoading){
-          return <LoadingOverlay/>
-        }
-  
   
   
 
@@ -303,7 +309,7 @@ const handleCity = (countryCode, stateCode) => {
                     </View>
                   </TouchableOpacity>
 
-                  <Text style={{ marginTop: 10,fontSize: 18, fontWeight:'bold' }}>Daniel Emmanuel</Text>
+                  <Text style={{ marginTop: 10,fontSize: 18, fontWeight:'bold' }}>{fetchedmessage.first_name} {fetchedmessage.last_name}</Text>
               </View>
 
               <View style={styles.action}>
@@ -313,6 +319,7 @@ const handleCity = (countryCode, stateCode) => {
                       placeholderTextColor="#666666"
                       onChangeText={updateInputValueHandler.bind(this, 'first_name')}
                       autoCorrect={false}
+                      autoCapitalize='sentences'
                       value={first_name}
                       // autoCapitalize={true}
                       style={[styles.textInput, 
@@ -329,6 +336,7 @@ const handleCity = (countryCode, stateCode) => {
                       placeholderTextColor="#666666"
                       onChangeText={updateInputValueHandler.bind(this, 'last_name')}
                       autoCorrect={false}
+                      autoCapitalize='sentences'
                       value={last_name}
                       // autoCapitalize={true}
                       style={[styles.textInput, 

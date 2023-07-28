@@ -18,6 +18,7 @@ function Input({
   maxLength,
   placeholder,
   multiline,
+  autoCapitalize,
   editable
   
 }) {
@@ -40,7 +41,7 @@ function Input({
       <TextInput
         style={[styles.input, isInvalid && styles.inputInvalid, style]}
         // autoCapitalize={false}
-        autoCapitalize="none"
+        autoCapitalize={autoCapitalize}
         keyboardType={keyboardType}
         secureTextEntry={secure}
         onChangeText={onUpdateValue}

@@ -57,6 +57,8 @@ import MarketPlaceItems from './screens/MarketPlaceItems';
 import ProceedMarketItem from './screens/ProceedMarketItem';
 import RequestDrawer from './screens/RequestDrawer';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import ChatScreen from './screens/ChatScreen';
+import DisputeScreen from './screens/DisputeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -178,7 +180,7 @@ function DrawerNavigation(){
       component={WelcomeScreen}
       options={{ 
         title: "HOME",
-        headerTintColor: Color.lightgreen,
+        headerTintColor: Color.darkolivegreen_100,
         headerShown: false,
         drawerIcon: ({color, size}) => <Ionicons name="home" color={color} size={size}/>,
         headerRight: () => (
@@ -191,7 +193,7 @@ function DrawerNavigation(){
       name="Drawer Payment"
       component={Payments}
       options={{ 
-        headerTintColor: Color.lightgreen,
+        headerTintColor: Color.darkolivegreen_100,
         title: "Payment",
         // headerShown: false,
         drawerIcon: ({color, size}) => <Ionicons name="wallet" color={color} size={size}/>,
@@ -203,7 +205,7 @@ function DrawerNavigation(){
       name="Drawer Service"
       component={ServiceHistory}
       options={{ 
-        headerTintColor: Color.lightgreen,
+        headerTintColor: Color.darkolivegreen_100,
         title: "Service History",
         drawerIcon: ({color, size}) => <Ionicons name="list" color={color} size={size}/>,
         // headerShown: falses
@@ -216,7 +218,7 @@ function DrawerNavigation(){
       component={RequestDrawer}
       options={{ 
         title: "Requests",
-        headerTintColor: Color.lightgreen,
+        headerTintColor: Color.darkolivegreen_100,
         // headerShown: false,
         drawerIcon: ({color, size}) => <Ionicons name="chatbox-ellipses" color={color} size={size}/>
        }}
@@ -228,7 +230,7 @@ function DrawerNavigation(){
       options={{ 
         // headerShown: false,
         headerShadowVisible: false,
-        headerTintColor: Color.lightgreen,
+        headerTintColor: Color.darkolivegreen_100,
         title: "Market Place",
         drawerIcon: ({color, size}) => <Ionicons name="globe" color={color} size={size}/>
        }}
@@ -260,7 +262,7 @@ function AuthenticatedStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerTintColor: Color.limegreen,
+        headerTintColor: Color.darkolivegreen_100,
         contentStyle: {backgroundColor: '#fff'},
         headerStyle:{
           headerShadowVisible: ""
@@ -373,7 +375,7 @@ function AuthenticatedStack() {
         title: '' ,
         headerShadowVisible: false,
         headerRight: ({color, size}) => (
-          <MaterialCommunityIcons name="note-edit" size={24} color="black" onPress={() => navigation.navigate('Profile')}/>
+          <MaterialCommunityIcons name="note-edit" size={24} color={Color.limegreen} onPress={({...props}) => navigation.navigate('Profile', {...props})}/>
           )
         }}
         />
@@ -435,6 +437,13 @@ function AuthenticatedStack() {
       component={Transfer}
       options={{ headerShown: false }}
       />
+
+      <Stack.Screen
+      name='Chat'
+      component={ChatScreen}
+      options={{ headerShown: false }}
+      />
+      
       
       
       <Stack.Screen
@@ -442,8 +451,16 @@ function AuthenticatedStack() {
       component={TermsAndCondition}
       options={{ 
         headerShown: false,
-        headerTintColor: Color.lightgreen,
+        headerTintColor: Color.darkolivegreen_100,
         title: "TERMS AND CONDITIONS",
+       }}
+      />
+
+      <Stack.Screen
+      name="DisputeScreen"
+      component={DisputeScreen}
+      options={{ 
+        headerShown: false,
        }}
       />
 

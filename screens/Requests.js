@@ -1,5 +1,5 @@
 import {useContext, useEffect, useRef, useState} from "react";
-import { Text, StyleSheet, View, Pressable, Image, FlatList, ScrollView, SafeAreaView, Platform, Alert, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, View, Pressable, Image, FlatList, ScrollView, SafeAreaView, Platform, Alert, TouchableOpacity, Dimensions, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, Border, FontSize, FontFamily } from "../components/ui/GlobalStyles";
 import { AuthContext } from "../store/auth-context";
@@ -13,21 +13,33 @@ import axios from "axios";
 import { AntDesign } from '@expo/vector-icons'; 
 import {Ionicons} from '@expo/vector-icons'
 import GoBack from "../components/ui/GoBack";
+import Modal from "react-native-modal";
+import { CancelRequests } from "../util/auth";
+
+
+const WIDTH = Dimensions.get('window').width
+const HEIGHT_MODAL = 200
+
 
 const Requests = () => {
   const navigation = useNavigation();
   const authCtx = useContext(AuthContext)
   const [fetchedRequest, setFetchedRequest] = useState('')
-  const [session_id, setSession_Id] = useState('');
+  const [Id, setId] = useState('');
   const [isFetching, setIsFetching] = useState(true)
+  const [isCancelModalVisible, setCancelModalVisible] = useState(false);
+  const [reason, setReason] = useState('')
   const isInitialMount = useRef(true);
 
+  const token = authCtx.token
+  const customerId = authCtx.customerId
+
+
   useEffect(() => {
-    
        // Your useEffect code here to be run on update
        const fetchRequests = async() => {
         setIsFetching(true)
-        const response = await ShowFetchedRequests(authCtx.customerId, authCtx.token)
+        const response = await ShowFetchedRequests(customerId, token)
         // console.log(response)
         setFetchedRequest(response)
         authCtx.customerRequestsMade(JSON.stringify(fetchedRequest.length))
@@ -36,10 +48,42 @@ const Requests = () => {
       }
       fetchRequests()
   
-  }, [])
+  }, [customerId, token])
+
 
  
-  // console.log(fetchedRequest.length)
+
+  const toggleCancelModal = (id) => {
+
+    if(id === 'cancel'){
+      console.log('cancel')
+      setReason(null)
+    }
+    let sendId = id
+    setId(sendId)
+    console.log(id)
+    setCancelModalVisible(!isCancelModalVisible)
+    
+  }
+
+  const CancelHandlerSubmit = async () => {
+    console.log(reason)
+    console.log(Id)
+    setIsFetching(true)
+    try {
+        setFetchedRequest(true)
+        const response = await CancelRequests(Id, authCtx.token, reason)
+        console.log(response)
+        setReason(null)
+        navigation.goBack()
+        setIsFetching(false)
+    } catch (error) {
+        setReason(null)
+        console.log(error)
+    }
+    setIsFetching(false)
+}
+
 
   const NoRequestNote = () => {
     return (
@@ -50,56 +94,29 @@ const Requests = () => {
             </TouchableOpacity>
         </View>
     )
-}
+ }
 
-      function cancelRequest(id){
-        Alert.alert('Cancel Request', 'Are you sure you want to canel this request', [
-          {
-            text: 'Yes',
-            onPress: () => navigation.navigate("CancelRequest", {
-              id: id
-            }) ,
-          },
-          {
-            text: 'No',
-            // onPress: () => navigation.goBack(),
-            cancelable: true,
-            style: 'cancel',
-          },
-        ])
+      // function CancelRequest(id){
+      //   console.log(id)
+      //   Alert.alert('Cancel Request', 'Are you sure you want to canel this request', [
+      //     {
+      //       text: 'Yes',
+      //       onPress: () => navigation.navigate('CancelRequest', {id:id}),
+      //     },
+      //     {
+      //       text: 'No',
+      //       onPress: () => navigation.goBack(),
+      //       cancelable: true,
+      //       style: 'cancel',
+      //     },
+      //   ])
        
-      }
+      // }
   
       // const check = fetchedRequest.length
       console.log(authCtx.sessionId)
 
-    // useEffect(() => {
-    //   setIsFetching(true)
-    //   async function SessionId(){
-    //     const url = 'https://phixotech.com/igoepp/public/api/auth/igoeppauth/sessioncheckcustomer'
-    //    try {
-    //     const response = await axios.post(url, {
-    //       username: authCtx.email,
-    //       application: 'mobileapp'
-    //     },
-    //     {
-    //       headers: {
-    //         Accept: 'application/json',
-    //         Authorization: `Bearer ${authCtx.token}`
-    //       }
-    //     }
-    //     )
-    //     console.log(response.data)
-    //     authCtx.customerSessionId(response.data.login_session_id)
 
-    //    } catch (error) {
-    //     console.log(error)
-    //    }
-    //   }
-    //   setIsFetching(false)
-    //   SessionId()
-    // },[])
-  
 
     //status of A == Acceptred
     const ButtonsConfig = (id) => {
@@ -112,7 +129,7 @@ const Requests = () => {
                 <Text style={{ fontFamily: 'poppinsSemiBold', color: 'white' }}>View Request</Text>
             </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={{ margin:10, padding:5, borderRadius: 3, borderWidth: 1, borderColor:Color.firebrick_100, backgroundColor: '#fff' }}>
+        <TouchableOpacity onPress={() => {navigation.navigate('DisputeScreen')}} style={{ margin:10, padding:5, borderRadius: 3, borderWidth: 1, borderColor:Color.firebrick_100, backgroundColor: '#fff' }}>
           <View style={{ paddingLeft: 35, paddingRight: 35 }}>
               <Text style={{ fontFamily: 'poppinsSemiBold', color:Color.firebrick_100 }}>Dispute</Text>
           </View>
@@ -125,7 +142,7 @@ const Requests = () => {
     const ButtonsConfig2 = (id) => {
       return (
         <View style={{ flexDirection: 'row' }}>
-          <TouchableOpacity onPress={() => cancelRequest(id)} style={{ margin:10, padding:5, borderRadius: 3, borderWidth: 1, borderColor:Color.firebrick_100, backgroundColor: '#fff' }}>
+          <TouchableOpacity onPress={() => [toggleCancelModal(id)]} style={{ margin:10, padding:5, borderRadius: 3, borderWidth: 1, borderColor:Color.firebrick_100, backgroundColor: '#fff' }}>
           <View style={{ paddingLeft: 35, paddingRight: 35 }}>
               <Text style={{ fontFamily: 'poppinsSemiBold', color:Color.firebrick_100 }}>Cancel</Text>
           </View>
@@ -157,8 +174,8 @@ const Requests = () => {
             bid_id: id,
           })}>
             <Image style={{width: 40, height:40, borderRadius:20, borderColor: 'red', borderWidth: 1, marginRight:28}}  source={require("../assets/vectors/gavel_5741343.png")}/>
-            <View style={{ backgroundColor: Color.tomato, position: 'absolute', top: -10, left: 40, borderRadius: 25, width:25,   }}>
-              <Text style={{ fontSize: 12, top:2, color: Color.white, fontFamily:'poppinsBold', textAlign:'center'}}>{count}</Text>
+            <View style={{ backgroundColor: Color.tomato, position: 'absolute', top: -10, left: 40, borderRadius: 25, width:20,   }}>
+              <Text style={{ fontSize: 12, top:1, color: Color.white, fontFamily:'poppinsBold', textAlign:'center'}}>{count}</Text>
             </View>
           </TouchableOpacity>
           : 
@@ -169,7 +186,7 @@ const Requests = () => {
           :
           <View>
               <Text style={{ fontFamily: 'poppinsBold', color: Color.tomato }}>Accepted</Text>
-              <TouchableOpacity style={{  marginLeft: 20, marginTop:4 }}>
+              <TouchableOpacity style={{  marginLeft: 20, marginTop:4 }} onPress={() => navigation.navigate('Chat')}>
               {/*  <AntDesign name="wechat" size={34} color={Color.limegreen} />*/}
                 <Ionicons name="chatbubbles" size={34} color={Color.limegreen} />
               </TouchableOpacity>
@@ -245,6 +262,53 @@ style={styles.button2}>Bid ({item.bid_count === 0 ? "0" : item.bid_count})</Butt
           
 
       }
+
+
+      {/*Cancel Request Modal*/}
+
+             
+      <Modal
+      isVisible={isCancelModalVisible}
+      animationInTiming={500}
+      >
+          <SafeAreaView style={styles.ontainer}>
+          
+              <View style={styles.modal}>
+                  <View>
+                  <Text style={[styles.text, {fontSize: 20, fontFamily: 'montserratBold'}]}>Cancel Request</Text>
+
+                  <SafeAreaView style={{ paddingLeft:20, paddingRight:20, paddingTop:5, margin: 10 }}>
+                      <TextInput
+                          placeholder="Reason For Canceling Request"
+                          autoCapitalize='sentences'
+                          onChangeText={setReason}
+                          multiline={true}
+                          value={reason}
+                          style={{ fontSize: 18, borderBottomWidth: 1, borderBottomColor: Color.darkolivegreen_100, padding:10, borderRadius:10 }}
+                      />
+                  </SafeAreaView>
+                  </View>
+                
+          
+
+              <View style={styles.buttonView}>
+              <TouchableOpacity onPress={() => toggleCancelModal('cancel')} style={{ margin:10, padding:5, borderRadius: 3, borderWidth:1, borderColor:Color.firebrick_100   }}>
+                <View style={{ paddingLeft: 25, paddingRight: 25 }}>
+                    <Text style={{ fontFamily: 'poppinsSemiBold', color:Color.firebrick_100 }}>Cancel</Text>
+                </View>
+              </TouchableOpacity>      
+              
+              <TouchableOpacity onPress={() => [toggleCancelModal(), CancelHandlerSubmit()]} style={{ margin:10, padding:5, borderRadius: 3, backgroundColor:Color.limegreen   }}>
+                  <View style={{ paddingLeft: 25, paddingRight: 25 }}>
+                      <Text style={{ fontFamily: 'poppinsSemiBold', color:Color.white }}>Submit</Text>
+                  </View>
+              </TouchableOpacity>                 
+              </View>
+
+              </View>
+          </SafeAreaView>
+      </Modal>
+
     </SafeAreaView> 
   )
 };
@@ -252,7 +316,35 @@ style={styles.button2}>Bid ({item.bid_count === 0 ? "0" : item.bid_count})</Butt
 export default Requests;
 
 const styles = StyleSheet.create({
-
+  buttonView:{
+    width: '100%',
+    flexDirection: 'row', 
+    alignItems: 'center',
+    justifyContent:'center'
+  },
+  text:{
+    margin:5,
+    fontSize: 16,
+    textAlign: 'center'
+  },
+  ontainer:{
+    // marginTop:'0%',
+      flex:1,
+      alignItems: 'center',
+      justifyContent: 'center'
+  },
+  modal:{
+    height: HEIGHT_MODAL,
+    borderWidth: 2,
+    borderColor: Color.darkolivegreen_100,
+    width: WIDTH - 40,
+    paddingTop: 10,
+    // padding: 10,
+    // backgroundColor: 'white'
+    // backgroundColor: '#FFFFEF',
+    backgroundColor: 'white',
+    borderRadius: 10 
+  },
   requestText:{
     color: Color.darkolivegreen_100,
     fontSize: FontSize.size_15xl,

@@ -8,23 +8,26 @@ import { Image } from 'expo-image';
 import { useNavigation } from '@react-navigation/native';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SessionIDCheck, customerInfocheck, showVerifiedCustomer } from '../util/auth';
+import { SessionIDCheck, WalletBalance, customerInfocheck, showVerifiedCustomer } from '../util/auth';
 import { useFonts } from 'expo-font';
 
 function WelcomeScreen({route}) {
   const [fetchedMessage, setFetchedMesssage] = useState('');
-  const [actualbalance, setActualBalance] = useState();
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
 
   const navigation = useNavigation()
   const authCtx = useContext(AuthContext);
+  const token = authCtx.token
+  const customerId = authCtx.customerId
 
+
+
+  //check customer info
   useEffect(() => {
-  async function UserInfo(){
-    setIsLoading(true)
+    setTimeout(async () => {
     try{
-      await customerInfocheck(authCtx.customerId, authCtx.token)
+      await customerInfocheck(customerId,token)
       .then((res) => {
         // console.log(res.data.data)
         setFetchedMesssage(res.data.data)
@@ -32,67 +35,35 @@ function WelcomeScreen({route}) {
     }catch(error){
       console.log(error.response)
     }
-    setIsLoading(false)
-  }
-  UserInfo()
-},[])
+    },3000)
+  
+},[customerId, token])
 
 
 
+//wallet balance check
 useEffect(() => {
-  async function walletbal(){
-  const url = `http://phixotech.com/igoepp/public/api/auth/customer/${authCtx.customerId}/wallet`
-
-  // console.log(url)
-  try {
-    setIsLoading(true)
-    const response = await axios.get(url, {
-      headers:{
-        Accept: 'application/json',
-        Authorization: `Bearer ${authCtx.token}`
-      }
-    })
+  setTimeout(async () => {
+    const response = await  WalletBalance(authCtx.customerId, authCtx.token )
     // console.log(response.data)
     const check = response.data.wallet_balance.toLocaleString()
-    // console.log(response.data.wallet_balance.toLocaleString())
     authCtx.customerwalletbalance(check)
-    setIsLoading(false)
-  } catch (error) {
-    console.log(error)
-  }
-  }
- walletbal()
+  }, 3000)
+    // console.log(response.data.wallet_balance.toLocaleString())
+  
+}, [])
 
-}, [setFetchedMesssage])
-
+//session id check
 useEffect(() => {
-  setIsLoading(true)
   async function SessionId(){
-    const url = 'https://phixotech.com/igoepp/public/api/auth/igoeppauth/sessioncheckcustomer'
-   try {
-    const response = await axios.post(url, {
-      username: authCtx.email,
-      application: 'webapp'
-    },
-    {
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${authCtx.token}`
-      }
-    }
-    )
-    console.log(response.data)
-    authCtx.customerSessionId(response.data.login_session_id)
-
-   } catch (error) {
-    console.log(error)
-   }
+  const response = await SessionIDCheck(authCtx.email, authCtx.token)
+  // console.log(response.data)
+  authCtx.customerSessionId(response.data.login_session_id)
   }
-  setIsLoading(false)
   SessionId()
 },[])
 
-console.log(authCtx.sessionId)
+
 
 // console.log(authCtx.sessionId)
 const [fontloaded] =  useFonts({
@@ -104,7 +75,7 @@ const [fontloaded] =  useFonts({
 
 })
 
-if(!fontloaded){
+if(!fontloaded || isLoading){
 return <LoadingOverlay/>
 }
 
@@ -126,7 +97,11 @@ function imageCheck(){
 //   marginLeft:8 
 // }
   return (
-    <View style={styles.rootContainer}>
+    <ScrollView style={styles.rootContainer}
+    scrollEnabled={false}
+    showsVerticalScrollIndicator={false}
+
+    >
       <View style={styles.exitIcon}>
 
         <View style={{ flexDirection: 'row' }}>
@@ -352,7 +327,7 @@ function imageCheck(){
           
         </ScrollView>
 
-    </View>
+    </ScrollView>
   );
 }
 
@@ -369,7 +344,7 @@ const styles = StyleSheet.create({
   },
   exitIcon: {
     paddingRight: 10,
-    marginBottom: "2%",
+    // marginBottom: "2%",
     marginTop: "15%",
     flexDirection: 'row',
     justifyContent: 'space-between'

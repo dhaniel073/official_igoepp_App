@@ -24,7 +24,7 @@ const Settings = () => {
   return <LoadingOverlay/>
   }
   return (
-    
+
     <View style={{ flex:1, marginTop:"20%", marginHorizontal: 20, }}>
       <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
       <SafeAreaView style={{marginTop: 20, justifyContent:'center'}}>
@@ -51,7 +51,7 @@ const Settings = () => {
 
           <TouchableOpacity style={{ alignItems: 'flex-start', borderBottomWidth:1,}} onPress={() => {}}>
               <View style={{ flexDirection: 'row',   paddingBottom: 15, marginTop: 15 }}>
-                  <Ionicons name='help' size={30}/>
+                  <Ionicons name='headset' size={30}/>
                   <Text style={styles.textStyle}>Help And Support</Text>
               </View>
           </TouchableOpacity>

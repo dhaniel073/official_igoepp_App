@@ -16,25 +16,25 @@ const CustomDrawer = (props) => {
     const [fetcheddata, setFetcheddata] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
+    const token = authCtx.token
+    const customerId = authCtx.customerId
 
     useEffect(() => {
-
-        async function UserInfo(){
-          setIsLoading(true)
-          try{
-            await customerInfocheck(authCtx.customerId, authCtx.token)
-            .then((res) => {
-              // console.log(res.data.data)
-              setFetchedMesssage(res.data.data)
-              setFetcheddata(data)
-            })  
-          }catch(error){
-            console.log(error.response)
-          }
-          setIsLoading(false)
+      setTimeout( async () => {
+        setIsLoading(true)
+        try{
+          await customerInfocheck(customerId,token)
+          .then((res) => {
+            // console.log(res.data.data)
+            setFetchedMesssage(res.data.data)
+            setFetcheddata(data)
+          })  
+        }catch(error){
+          console.log(error.response)
         }
-        UserInfo()
-      },[]) 
+        setIsLoading(false)
+      }, 3000)
+},[customerId, token]) 
       
           function imageCheck(){
             if(fetchedMessage.picture === null){
