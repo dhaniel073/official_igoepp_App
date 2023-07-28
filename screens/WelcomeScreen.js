@@ -66,21 +66,33 @@ useEffect(() => {
 }, [setFetchedMesssage])
 
 useEffect(() => {
+  setIsLoading(true)
   async function SessionId(){
-    setIsLoading(true)
-    try{
-      await SessionIDCheck(authCtx.email, authCtx.token)
-      .then((res) => {
-        // console.log(res.data)
-        authCtx.customerSessionId(res.data.login_session_id)
-      })  
-    }catch(error){
-      console.log(error.response)
+    const url = 'https://phixotech.com/igoepp/public/api/auth/igoeppauth/sessioncheckcustomer'
+   try {
+    const response = await axios.post(url, {
+      username: authCtx.email,
+      application: 'webapp'
+    },
+    {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${authCtx.token}`
+      }
     }
-    setIsLoading(false)
+    )
+    console.log(response.data)
+    authCtx.customerSessionId(response.data.login_session_id)
+
+   } catch (error) {
+    console.log(error)
+   }
   }
+  setIsLoading(false)
   SessionId()
-}, [])
+},[])
+
+console.log(authCtx.sessionId)
 
 // console.log(authCtx.sessionId)
 const [fontloaded] =  useFonts({

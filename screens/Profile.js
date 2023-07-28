@@ -21,10 +21,8 @@ import {Ionicons} from '@expo/vector-icons'
 import { useTheme } from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import * as React from 'react';
-import BottomSheetBehavior from "reanimated-bottom-sheet";
 import { BottomPopups } from "../components/ui/BottomPopups";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import BottomSheet from "./BottomSheet";
 
 const data = [
     { label: 'Male ', value: 'M' },

@@ -38,7 +38,7 @@ async function authenticateSignUp(email, password, gender, phone, firstname, las
     sex: gender,
     phone: phone,
     password: password,
-    // application: "webapp"
+    application: "mobileapp"
   })
 
   const data = response.data;
@@ -119,7 +119,7 @@ async function infoUpdate(last_name, first_name, sex, phone, customerId, token, 
           sex:sex,
           Country: countryName,
           State: stateName,
-          lga: cityName1  
+          lga: cityName  
       },{
         headers:{
           Accept: 'application/json',
@@ -321,7 +321,9 @@ async function subcategoryquestionstore(sub_category_id,category_id,answerfield,
 
 async function sessionId(email, token,){
   const url = `http://phixotech.com/igoepp/public/api/auth/igoeppauth/sessioncheckcustomer`
-  console.log(email)
+  // console.log(email)
+  try{
+
   const response = await axios.post(url,{
       username: email,
       application: 'mobileapp'
@@ -333,6 +335,9 @@ async function sessionId(email, token,){
   })
   // console.log(response.data)
   return response
+  }catch(error){
+    console.log(error.response)
+  }
 }
 
 export  function createUser(email, password,gender, phone, firstname, lastname) {

@@ -9,6 +9,10 @@ import Button from '../components/ui/Button'
 import Button4 from '../components/ui/Button4'
 import { useFonts } from "expo-font";
 import { TouchableRipple } from "react-native-paper";
+import axios from "axios";
+import { AntDesign } from '@expo/vector-icons'; 
+import {Ionicons} from '@expo/vector-icons'
+import GoBack from "../components/ui/GoBack";
 
 const Requests = () => {
   const navigation = useNavigation();
@@ -67,9 +71,116 @@ const Requests = () => {
       }
   
       // const check = fetchedRequest.length
-      // console.log(check)
+      console.log(authCtx.sessionId)
 
+    // useEffect(() => {
+    //   setIsFetching(true)
+    //   async function SessionId(){
+    //     const url = 'https://phixotech.com/igoepp/public/api/auth/igoeppauth/sessioncheckcustomer'
+    //    try {
+    //     const response = await axios.post(url, {
+    //       username: authCtx.email,
+    //       application: 'mobileapp'
+    //     },
+    //     {
+    //       headers: {
+    //         Accept: 'application/json',
+    //         Authorization: `Bearer ${authCtx.token}`
+    //       }
+    //     }
+    //     )
+    //     console.log(response.data)
+    //     authCtx.customerSessionId(response.data.login_session_id)
+
+    //    } catch (error) {
+    //     console.log(error)
+    //    }
+    //   }
+    //   setIsFetching(false)
+    //   SessionId()
+    // },[])
   
+
+    //status of A == Acceptred
+    const ButtonsConfig = (id) => {
+      return (
+        <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity onPress={() => navigation.navigate("View Requests", {
+          bid_id: id
+        })} style={{ margin:10, padding:5, borderRadius: 3, borderWidth: 1, borderColor:Color.limegreen, backgroundColor: Color.limegreen,  }}>
+            <View style={{ paddingLeft: 25, paddingRight: 25 }}>
+                <Text style={{ fontFamily: 'poppinsSemiBold', color: 'white' }}>View Request</Text>
+            </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {}} style={{ margin:10, padding:5, borderRadius: 3, borderWidth: 1, borderColor:Color.firebrick_100, backgroundColor: '#fff' }}>
+          <View style={{ paddingLeft: 35, paddingRight: 35 }}>
+              <Text style={{ fontFamily: 'poppinsSemiBold', color:Color.firebrick_100 }}>Dispute</Text>
+          </View>
+        </TouchableOpacity>
+        </View>
+      )
+    }
+
+    //status of N == Not Acceptred
+    const ButtonsConfig2 = (id) => {
+      return (
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity onPress={() => cancelRequest(id)} style={{ margin:10, padding:5, borderRadius: 3, borderWidth: 1, borderColor:Color.firebrick_100, backgroundColor: '#fff' }}>
+          <View style={{ paddingLeft: 35, paddingRight: 35 }}>
+              <Text style={{ fontFamily: 'poppinsSemiBold', color:Color.firebrick_100 }}>Cancel</Text>
+          </View>
+        </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigation.navigate("View Requests", {
+            bid_id: id
+          })} style={{ margin:10, padding:5, borderRadius: 3, borderWidth: 1, borderColor:Color.limegreen, backgroundColor: Color.limegreen,  }}>
+              <View style={{ paddingLeft: 25, paddingRight: 25 }}>
+                  <Text style={{ fontFamily: 'poppinsSemiBold', color: 'white' }}>View Request</Text>
+              </View>
+          </TouchableOpacity>
+        </View>
+
+      )
+    }
+
+
+    // request with status of  
+    const ButtonConfig3 = (name,id,count, status) => {
+      return(
+        <View style={{ flexDirection: 'row', justifyContent:'space-between', width: '100%' }}>
+          <Text style={styles.requestName}>{name}</Text>
+
+          {status === 'N' ? 
+          <TouchableOpacity onPress={() => navigation.navigate("BidScreen",
+          {
+            cat_name: name,
+            bid_id: id,
+          })}>
+            <Image style={{width: 40, height:40, borderRadius:20, borderColor: 'red', borderWidth: 1, marginRight:28}}  source={require("../assets/vectors/gavel_5741343.png")}/>
+            <View style={{ backgroundColor: Color.tomato, position: 'absolute', top: -10, left: 40, borderRadius: 25, width:25,   }}>
+              <Text style={{ fontSize: 12, top:2, color: Color.white, fontFamily:'poppinsBold', textAlign:'center'}}>{count}</Text>
+            </View>
+          </TouchableOpacity>
+          : 
+          status === 'X' ?
+          <View>
+              <Text style={{ fontFamily: 'poppinsBold', color: Color.tomato }}>Cancled</Text>
+          </View>
+          :
+          <View>
+              <Text style={{ fontFamily: 'poppinsBold', color: Color.tomato }}>Accepted</Text>
+              <TouchableOpacity style={{  marginLeft: 20, marginTop:4 }}>
+              {/*  <AntDesign name="wechat" size={34} color={Color.limegreen} />*/}
+                <Ionicons name="chatbubbles" size={34} color={Color.limegreen} />
+              </TouchableOpacity>
+          </View>
+        }
+        </View>
+      )
+    }
+
+
+    
   const [fontloaded] =  useFonts({
     'poppinsRegular': require("../assets/font/Poppins/Poppins-Regular.ttf"),
     'montserratBold': require("../assets/font/Montserrat_bold.ttf"),
@@ -78,6 +189,15 @@ const Requests = () => {
     'poppinsBold': require("../assets/font/Poppins_bold.ttf")
   
   })
+{/*
+  <Button4 onPress={() => {
+    navigation.navigate("BidScreen",
+    {
+      cat_name: item.cat_name,
+      bid_id: item.id,
+    })
+  }} 
+style={styles.button2}>Bid ({item.bid_count === 0 ? "0" : item.bid_count})</Button4>*/}
   
   if(!fontloaded || isFetching){
   return <LoadingOverlay/>
@@ -85,7 +205,8 @@ const Requests = () => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      {/*<Text style={styles.requestText}>Requests</Text>*/}
+    <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
+      <Text style={styles.requestText}>Requests</Text>
         {fetchedRequest.length === 0 ? <NoRequestNote/> :
               
           <FlatList
@@ -96,27 +217,32 @@ const Requests = () => {
             renderItem={({item}) => 
               <View style={styles.container}>
                   <Text style={styles.requestDate}>{item.created_at}</Text>
-                <Pressable style={styles.pressables}>
-                  <Text style={styles.requestName}>{item.cat_name}</Text>
-                <View style={styles.buttonContainer}>
-                  <Button4 onPress={() => cancelRequest(item.id)} style={styles.button2}>Cancel</Button4>
-                  <Button onPress={() => navigation.navigate("View Requests", {
-                    bid_id: item.id
-                  })} style={styles.button}>View Request</Button>
-                  <Button4 onPress={() => {
-                    navigation.navigate("BidScreen",
-                    {
-                      cat_name: item.cat_name,
-                      bid_id: item.id,
-                    })
-                  }} 
-                  style={styles.button2}>Bid ({item.bid_count === 0 ? "0" : item.bid_count})</Button4>
-                </View>
+                    <Pressable style={styles.pressables}>
+                    
+                    <SafeAreaView>{ButtonConfig3(item.cat_name,item.id, item.bid_count, item.help_status)}</SafeAreaView>
+
+                      {item.help_status === 'N' ? 
+                      <SafeAreaView>{ButtonsConfig2(item.id)}</SafeAreaView>
+                : 
+                      item.help_status === 'X' ?
+                      <TouchableOpacity onPress={() => navigation.navigate("View Requests", {
+                        bid_id: item.id
+                      })} style={{ margin:10, padding:5, borderRadius: 3, borderWidth: 1, borderColor:Color.limegreen, backgroundColor: Color.limegreen,  }}>
+                          <View style={{ paddingLeft: 25, paddingRight: 25 }}>
+                              <Text style={{ fontFamily: 'poppinsSemiBold', color: 'white' }}>View Request</Text>
+                          </View>
+                      </TouchableOpacity>
+                
+                :     
+                     <SafeAreaView>{ButtonsConfig(item.id)}</SafeAreaView>
+                         
+                }
                 </Pressable>
               </View>
             }
           
-          />
+          /> 
+          
 
       }
     </SafeAreaView> 
@@ -126,9 +252,17 @@ const Requests = () => {
 export default Requests;
 
 const styles = StyleSheet.create({
+
+  requestText:{
+    color: Color.darkolivegreen_100,
+    fontSize: FontSize.size_15xl,
+    fontFamily: 'poppinsBold',
+    marginLeft: 10,
+  },
   mainContainer:{
     flex: 1,
     marginHorizontal: 8,
+   marginTop: "18%"
   },
   flatlists:{
     marginBottom: 20
@@ -142,10 +276,10 @@ const styles = StyleSheet.create({
   requestDate:{
     marginHorizontal: 10,
     fontSize: 18,
-    fontFamily: 'montserratBold'
+    fontFamily: 'poppinsSemiBold'
   },
   container: {
-    padding: 5,
+    // padding: 5,
     flex: 1,
     // justifyContent:'space-between',
     marginTop: 20
@@ -171,12 +305,12 @@ const styles = StyleSheet.create({
   },
   buttonContainer:{
     flex:1,
-    marginTop: 10,
-    marginLeft: 83,
+    // marginTop: 10,
+    // marginLeft: 83,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    width: "50%"
+    width: "100%"
   },
   button:{
     paddingTop: 7,

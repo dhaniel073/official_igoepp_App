@@ -1,17 +1,20 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import Button from "../components/ui/Button";
-import { Color, FontSize } from "../components/ui/GlobalStyles";
-import { useFonts } from "expo-font";
-import LoadingOverlay from "../components/ui/LoadingOverlay";
-import { useNavigation } from "@react-navigation/native";
-import GoBack from "../components/ui/GoBack";
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import GoBack from '../components/ui/GoBack'
+import { Image } from 'expo-image'
+import Button from '../components/ui/Button'
+import {useFonts} from 'expo-font'
+import LoadingOverlay from '../components/ui/LoadingOverlay'
+import { Color, FontSize } from '../components/ui/GlobalStyles'
 
-function ProceedCategory({route, navigation}){
-    const subcatId = route.params.subcategoryId
-    const subcatName = route.params.subcategoryName
-    const subcatDesc = route.params.subcategoryDesc
+const ProceedMarketItem = ({route,navigation}) => {
+    const marketItemId = route.params.marketItemId
+    const subcatName = route.params.marketItemName
+    const subcatDesc = route.params.marketItemDesc
     const catId = route.params.catId
-    const image = route.params.image
+    const image = route.params.marketItemimage
+
+    console.log(route.params)
 
 
     const [fontloaded] =  useFonts({
@@ -25,9 +28,8 @@ function ProceedCategory({route, navigation}){
         return <LoadingOverlay/>
       }
   
-    // console.log(subcatId)
-    return (
-        <View style={styles.container}>
+  return (
+    <View style={styles.container}>
         <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
 
 
@@ -35,13 +37,13 @@ function ProceedCategory({route, navigation}){
                 <View style={styles.image2container}>
                     <Image
                     style={styles.image2}
-                    source={{ uri: `https://phixotech.com/igoepp/public/subcategory/${image}` }}
+                    source={{ uri: `https://phixotech.com/igoepp/public/products/${image}` }}
                     />
                 </View>
             <Text style={styles.catNameText}>{subcatName}</Text>
             <Text style={styles.catDescText}>{subcatDesc}</Text>
             <Button onPress={() => navigation.navigate("RequestSendInfo", {
-                subcatId: subcatId,
+                marketItemId: marketItemId,
                 subcatDesc: subcatDesc,
                 subcatName: subcatName,
                 catId: catId
@@ -50,10 +52,10 @@ function ProceedCategory({route, navigation}){
             </View>
 
         </View>
-    )
+  )
 }
 
-export default ProceedCategory;
+export default ProceedMarketItem
 
 const styles = StyleSheet.create({
     pressed: {

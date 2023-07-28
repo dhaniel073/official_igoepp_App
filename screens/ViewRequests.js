@@ -6,6 +6,7 @@ import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { useFonts } from "expo-font";
 import { Color, FontSize } from "../components/ui/GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
+import GoBack from "../components/ui/GoBack";
 // import {  } from "react-native";
 
 function ViewRequests({route}){
@@ -56,21 +57,8 @@ function ViewRequests({route}){
     
     return (
         <SafeAreaView style={styles.mainContainer}>
-            <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]}
-            onPress={() => navigation.goBack()}
-            >
-
-                <Image
-                style={styles.image}
-                contentFit="cover"
-                source={require("../assets/vectors/vector30.png")}
-                />
-
-            <Text style={styles.back}>Back</Text>
-
-
-            </Pressable>
-            <Text style={styles.requestHelptext}>View Request</Text>
+           <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
+            <Text style={styles.requestText}>View Request</Text>
 
             {isFetching ? <LoadingOverlay/> :
 
@@ -81,7 +69,7 @@ function ViewRequests({route}){
                             showsVerticalScrollIndicator={false}
                             keyExtractor={(item) => item.id}
                             renderItem={({item}) => 
-                                <View>
+                                <View style={{ padding:10 }}>
                                     <View style={styles.nameContainer}>
                                         <Text style={styles.labelText}>Category Name: </Text>
                                         <Text style={styles.textValue}>{item.cat_name}</Text>
@@ -204,7 +192,7 @@ const styles = StyleSheet.create({
         flex:1,
         // alignItems: 'center',
         // justifyContent: 'center',
-        marginHorizontal: 20,
+        marginHorizontal: 10,
         marginTop: 70
     },
     nameContainer:{
@@ -222,11 +210,10 @@ const styles = StyleSheet.create({
         textAlign: "right",
         maxWidth: "72.5%"
     },
-    requestHelptext:{
-        color: Color.darkolivegreen_100,
-        fontSize: FontSize.size_15xl,
-        fontFamily: 'poppinsBold',
-        // marginLeft: 10,
-        // marginBottom: 10
-    },
+        requestText:{
+            color: Color.darkolivegreen_100,
+            fontSize: FontSize.size_15xl,
+            fontFamily: 'poppinsBold',
+            marginLeft: 10,
+          }
 })

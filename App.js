@@ -53,6 +53,10 @@ import DrawerContent from './screens/DrawerContent';
 import CustomDrawer from './screens/CustomDrawer';
 import Transfer from './screens/Transfer';
 import Settings from './screens/Settings';
+import MarketPlaceItems from './screens/MarketPlaceItems';
+import ProceedMarketItem from './screens/ProceedMarketItem';
+import RequestDrawer from './screens/RequestDrawer';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Stack = createNativeStackNavigator();
 
@@ -208,8 +212,8 @@ function DrawerNavigation(){
 
 
       <Drawer.Screen
-      name="Requests"
-      component={Requests}
+      name="RequestDrawer"
+      component={RequestDrawer}
       options={{ 
         title: "Requests",
         headerTintColor: Color.lightgreen,
@@ -223,6 +227,7 @@ function DrawerNavigation(){
       component={MarketPlace}
       options={{ 
         // headerShown: false,
+        headerShadowVisible: false,
         headerTintColor: Color.lightgreen,
         title: "Market Place",
         drawerIcon: ({color, size}) => <Ionicons name="globe" color={color} size={size}/>
@@ -250,6 +255,7 @@ function DrawerNavigation(){
 
 
 function AuthenticatedStack() {
+  const navigation = useNavigation()
   
   return (
     <Stack.Navigator
@@ -308,6 +314,14 @@ function AuthenticatedStack() {
         headerShown: false,
        }}
       />
+      
+      <Stack.Screen
+      name='Requests'
+      component={Requests}
+      options={{ 
+        headerShown: false,
+       }}
+      />
 
       <Stack.Screen
       name='PayStack'
@@ -323,6 +337,12 @@ function AuthenticatedStack() {
       options={{ headerShown: false }}
       />
     
+      <Stack.Screen
+      name='ProceedMarketItem'
+      component={ProceedMarketItem}
+      options={{ headerShown: false }}
+      />
+
       <Stack.Screen
       name='MakePayment'
       component={MakePayment}
@@ -351,10 +371,14 @@ function AuthenticatedStack() {
        options={{ 
         headerShown: true,
         title: '' ,
-        headerShadowVisible: false
-      }}
-      />
-
+        headerShadowVisible: false,
+        headerRight: ({color, size}) => (
+          <MaterialCommunityIcons name="note-edit" size={24} color="black" onPress={() => navigation.navigate('Profile')}/>
+          )
+        }}
+        />
+        
+        {/*<Ionicons name='pencil' size={20} color={Color.limegreen} onPress={() => navigation.navigate('Profile')}/>*/}
 
     
       <Stack.Screen
@@ -369,6 +393,12 @@ function AuthenticatedStack() {
       options={{ headerShown: false }}
       />
 
+      <Stack.Screen
+      name='marketPlaceItems'
+      component={MarketPlaceItems}
+      options={{ headerShown: false }}
+      />
+      
       <Stack.Screen
       name='View Requests'
       component={ViewRequests}

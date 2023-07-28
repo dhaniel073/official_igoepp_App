@@ -312,34 +312,46 @@ function RequestSendInfo({route}){
         const day = newdate.getUTCDate();
         const maindate = year + "-" + month + "-" +  day
 
-        console.log(countryName, stateName,landmark)
+        console.log(countryName, stateName,landmark, addressfield,
+            
+            helpdate,
+            helptime,
+            cityName,
+            description,
+            vehiclerequest,
+            frequency,
+            helpsize,
+            interest,
+            interest,
+            )
 
-        if(!addressfield|| !countryName || !helpdate || !helptime ||
+        if(
+            !addressfield|| !countryName || !helpdate || !helptime ||
             !stateName || !cityName || !landmark || !description 
             || !vehiclerequest || !frequency || !helpsize || !interest
         )
         {
-            Alert.alert("Invalid Inputs", "Check Values and try again")
+            Alert.alert("Invalid Inputs", "Fill in the filled correctly to continue")
         }else{
             // const 
-            const requestData ={
-                'customer_id':authCtx.customerId,
-                'help_interest': interest,
-                'help_location':addressfield,
-                'help_country': countryName,
-                'help_state':stateName,
-                'help_lga':cityName,
-                'help_landmark':landmark,
-                'help_size':helpsize,
-                'vehicle_req':vehiclerequest,
-                'help_desc':description,
-                'category_id':catId,
-                'sub_category_id':subcatId,
-                'help_date':maindate,
-                "help_time": helptime,
-                "help_frequency": frequency,
-                "customer_budget": ""
-             }
+            // const requestData ={
+            //     'customer_id':authCtx.customerId,
+            //     'help_interest': interest,
+            //     'help_location':addressfield,
+            //     'help_country': countryName,
+            //     'help_state':stateName,
+            //     'help_lga':cityName,
+            //     'help_landmark':landmark,
+            //     'help_size':helpsize,
+            //     'vehicle_req':vehiclerequest,
+            //     'help_desc':description,
+            //     'category_id':catId,
+            //     'sub_category_id':subcatId,
+            //     'help_date':maindate,
+            //     "help_time": helptime,
+            //     "help_frequency": frequency,
+            //     "customer_budget": ""
+            //  }
             setIsLoading(true)
             const url = 'http://phixotech.com/igoepp/public/api/auth/hrequest/store'
             try {
@@ -360,7 +372,6 @@ function RequestSendInfo({route}){
                 "help_time": helptime,
                 'help_date':maindate,
                 "help_frequency": frequency,
-                "customer_budget": ""
             },
         {
             headers: {
@@ -368,15 +379,11 @@ function RequestSendInfo({route}){
                 Authorization: `Bearer ${authCtx.token}`
             }
         })
-
-            console.log(response)
-            setCountryName(),setStateName(),setCityName(),setHelpDate(), setHelpTime(), setState(), setCountry(), setCity()
-            setAddressField(),setInterest(),setLandmark(),setDescription(),setVehicleRequest(),setCountryData(), setStateData(), setCityData()
-            setFrequency(),setHelpSize(), setDate(), setTime(), setShowDatePicker(), setShowTimePicker()
+            navigation.navigate('Welcome')
 
         }catch(error){
             // Alert
-            console.log(error.response.data)
+            console.log(error)
         }
 // console.log(requestData)
             // console.log(response)

@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Image, Pressable, Alert, ScrollView } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import { StyleSheet, Text, TouchableOpacity, View, Image, Pressable, Alert, ScrollView, TextInput } from "react-native";
+// import { TextInput } from "react-native-gesture-handler";
 import { Paystack, paystackProps } from "react-native-paystack-webview";
 import Input from "../components/Auth/Input";
 import { AuthContext } from "../store/auth-context";

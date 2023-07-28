@@ -12,6 +12,8 @@ function CancelRequest({route, navigation}){
     const authCtx = useContext(AuthContext)
     const id = route.params.id;
     const [reason, setReason] = useState('')
+    const [IsLoading, setIsLoading] = useState(true)
+
 
     function updateInputValueHandler(inputType, enteredValue) {
         switch(inputType){
@@ -22,8 +24,15 @@ function CancelRequest({route, navigation}){
     }
     const SubmitHandle = async () => {
         console.log(reason)
-        const response = await CancelRequests(id, authCtx.token, reason)
-        console.log(response)
+        setIsLoading(true)
+        try {
+            const response = await CancelRequests(id, authCtx.token, reason)
+            console.log(response)
+            navigation.goBack()
+        } catch (error) {
+            console.log(error)
+        }
+        setIsLoading(false)
     }
   
     const [fontloaded] =  useFonts({
@@ -35,7 +44,7 @@ function CancelRequest({route, navigation}){
       
       })
       
-      if(!fontloaded){
+      if(!fontloaded || IsLoading){
         return <LoadingOverlay message={"..."}/>
       }
 
@@ -98,7 +107,7 @@ const styles = StyleSheet.create({
         fontFamily: 'poppinsMedium'
     },
     container:{
-        marginHorizontal: 10
+        marginHorizontal: 20
     },
     button:{
         marginTop: 20

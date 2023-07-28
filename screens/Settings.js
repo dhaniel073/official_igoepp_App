@@ -24,9 +24,10 @@ const Settings = () => {
   return <LoadingOverlay/>
   }
   return (
-    <View style={{ flex:1, marginTop:"30%", marginHorizontal: 20, }}>
-      <SafeAreaView style={{ flexDirection: 'row', marginTop: 20, justifyContent:'flex-start', marginLeft: -10 }}>
-        <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
+    
+    <View style={{ flex:1, marginTop:"20%", marginHorizontal: 20, }}>
+      <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
+      <SafeAreaView style={{marginTop: 20, justifyContent:'center'}}>
         <Title style={{ fontFamily: 'poppinsBold', fontSize: 28, marginLeft:60  }}>Settings</Title>
       </SafeAreaView>
 
@@ -36,7 +37,6 @@ const Settings = () => {
               <View style={{ flexDirection: 'row',   paddingBottom: 20 }}>
                   <Ionicons name='person-outline' size={30}/>
                   <Text style={styles.textStyle}>Account</Text>
-                    <Image style={{ width:10, height:18, alignContent: 'flex-end', top: 5, left: 176 }} source={require("../assets/vectors/arrow_head.png")}/>
               </View>
           </TouchableOpacity>
 
@@ -45,7 +45,6 @@ const Settings = () => {
               <View style={{ flexDirection: 'row',   paddingBottom: 15, marginTop: 15 }}>
                   <Ionicons name='notifications-outline' size={30}/>
                   <Text style={styles.textStyle}>Notification</Text>
-                    <Image style={{ width:10, height:18, alignContent: 'flex-end', top: 5, left: 147 }} source={require("../assets/vectors/arrow_head.png")}/>
               </View>
           </TouchableOpacity>
 
@@ -54,7 +53,6 @@ const Settings = () => {
               <View style={{ flexDirection: 'row',   paddingBottom: 15, marginTop: 15 }}>
                   <Ionicons name='help' size={30}/>
                   <Text style={styles.textStyle}>Help And Support</Text>
-                    <Image style={{ width:10, height:18, alignContent: 'flex-end', top: 5, left: 90 }} source={require("../assets/vectors/arrow_head.png")}/>
               </View>
           </TouchableOpacity>
 
@@ -63,16 +61,15 @@ const Settings = () => {
               <View style={{ flexDirection: 'row',  paddingBottom: 15, marginTop: 15 }}>
                   <Ionicons name='chatbox-ellipses-outline' size={30}/>
                   <Text style={styles.textStyle}>About</Text>
-                    <Image style={{ width:10, height:18, alignContent: 'flex-end', top: 5, left: 193 }} source={require("../assets/vectors/arrow_head.png")}/>
               </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{ alignItems: 'flex-start', borderBottomWidth:1,}} onPress={() => navigation.navigate('TermsAndConditions')}>
+          <TouchableOpacity style={{ alignItems: '', justifyContent:'space-between', borderBottomWidth:1, width: '100%'}} onPress={() => navigation.navigate('TermsAndConditions')}>
               <View style={{ flexDirection: 'row',  paddingBottom: 15, marginTop: 15 }}>
                   <Ionicons name='cloud-outline' size={30}/>
                   <Text style={styles.textStyle}>Terms And Condition</Text>
-                    <Image style={{ width:10, height:18, alignContent: 'flex-end', top: 5, left: 53 }} source={require("../assets/vectors/arrow_head.png")}/>
               </View>
+                  <Image style={{ width:10, height:18, alignContent: 'flex-end', top: 5, left: 53 }} source={require("../assets/vectors/arrow_head.png")}/>
           </TouchableOpacity>
 
       </View>
