@@ -29,7 +29,8 @@ function SignupScreen() {
       authCtx.customerEmail(response.email)
     } catch (error) {
       console.log(error.response.data.email)
-      Alert.alert("Error Signing you In", error.response.data.email)
+      const show = error.response.data.email
+      Alert.alert("Error Signing you In", )
     }
     setIsAuthenticating(false);
 
@@ -54,7 +55,7 @@ export default SignupScreen;
 
 const styles = StyleSheet.create({
   Title:{
-    marginTop: 40,
+    marginTop: 20,
     fontSize: 30,
     fontWeight: 'bold',
     color: Color.lightgreen

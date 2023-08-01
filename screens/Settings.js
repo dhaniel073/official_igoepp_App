@@ -25,10 +25,10 @@ const Settings = () => {
   }
   return (
 
-    <View style={{ flex:1, marginTop:"20%", marginHorizontal: 20, }}>
+    <View style={{ flex:1, marginTop:"20%", marginHorizontal: 10, }}>
       <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
       <SafeAreaView style={{marginTop: 20, justifyContent:'center'}}>
-        <Title style={{ fontFamily: 'poppinsBold', fontSize: 28, marginLeft:60  }}>Settings</Title>
+        <Title style={{ fontFamily: 'poppinsBold', fontSize: 25, textAlign: 'center'  }}>Settings</Title>
       </SafeAreaView>
 
 
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   textStyle:{
     fontFamily: 'poppinsMedium',
-    fontSize: 18,
+    fontSize: 15,
     marginLeft: 10
   }
 })

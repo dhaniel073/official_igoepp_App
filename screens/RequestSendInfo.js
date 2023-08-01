@@ -297,7 +297,7 @@ function RequestSendInfo({route}){
     }
 
     const confirmIOSTime = () => {
-        setHelpTime(time.toTimeString())
+        setHelpTime(time.toLocaleTimeString())
         toggleTimePicker()
     }
     

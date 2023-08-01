@@ -97,7 +97,7 @@ function imageCheck(){
 //   marginLeft:8 
 // }
   return (
-    <ScrollView style={styles.rootContainer}
+    <View style={styles.rootContainer}
     scrollEnabled={false}
     showsVerticalScrollIndicator={false}
 
@@ -286,7 +286,7 @@ function imageCheck(){
            
 
             {/*Requests Payment   panel */}
-            <SafeAreaView>
+            <View>
             <Pressable style={({pressed}) => [styles.feedback, pressed &&  styles.pressed]} onPress={() => navigation.navigate("FeedBack")}>
               <Text style={styles.feedbackText}>FeedBack</Text>
             </Pressable>
@@ -321,13 +321,13 @@ function imageCheck(){
             </Pressable>
             
             
-            </SafeAreaView>
+            </View>
 
             <View style={styles.emptyView}></View>
           
         </ScrollView>
 
-    </ScrollView>
+    </View>
   );
 }
 
@@ -681,7 +681,7 @@ const styles = StyleSheet.create({
   },
   walletBalance:{
     marginTop: 3,
-    fontSize: 30,
+    fontSize: 25,
     color: 'white',
     // fontWeight: 'bold',
     fontFamily: 'montserratBold',

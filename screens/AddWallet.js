@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 30,
     },
     amount:{
-      fontSize: FontSize.size_15xl,
+      fontSize: 25,
       fontFamily:'montserratBold',
       // fontWeight: 'bold',
       color: Color.white,

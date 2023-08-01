@@ -77,7 +77,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
         )}
       </View>
       <View style={styles.buttons}>
-        <Button onPress={switchAuthModeHandler} style={{ marginLeft: "35%", marginRight: "35%" }} >
+        <Button onPress={switchAuthModeHandler} style={{ marginLeft: "30%", marginRight: "30%" }} >
           {isLogin ? 'Sign Up' : 'Back'}
         </Button>
         {/*<FlatButton onPress={switchAuthModeHandler}>

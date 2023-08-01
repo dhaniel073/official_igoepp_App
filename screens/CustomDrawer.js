@@ -77,7 +77,7 @@ const CustomDrawer = (props) => {
                     <Text style={{ color:'#fff', fontSize: 18, fontFamily:'poppinsMedium'}}>{fetchedMessage.first_name} {fetchedMessage.last_name}</Text>
                     
                     <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ color:'#fff', fontFamily:'poppinsRegular', marginRight: 5}}>{fetchedMessage.email}</Text>
+                    <Text style={{ color:'#fff', fontFamily:'poppinsRegular', marginRight: 5, fontSize: 12 }}>{fetchedMessage.email}</Text>
                     <Ionicons name="mail" size={18} color="#fff"/>
                     </View>
 

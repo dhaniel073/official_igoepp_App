@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     fontFamily: 'poppinsRegular',
     // borderRadius: 4,
-    fontSize: 18,
+    fontSize: 15,
   },
   inputInvalid: {
     backgroundColor: Colors.error100,

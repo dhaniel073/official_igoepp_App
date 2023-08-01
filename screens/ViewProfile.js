@@ -1,4 +1,4 @@
-import { Image, ImageBackground, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ImageBackground,Share, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Color, FontSize } from "../components/ui/GlobalStyles";
 import { customerInfocheck } from "../util/auth";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
@@ -10,9 +10,10 @@ import { useNavigation } from "@react-navigation/native";
 import GoBack from "../components/ui/GoBack";
 import { Avatar, Caption, Title, TouchableRipple } from "react-native-paper";
 import {Ionicons} from "@expo/vector-icons";
+// import * as Sharing from 'expo-sharing';
 
 
-function ViewProfile({route}){
+function ViewProfile ({route}){
     const [data, setData] = useState('')
     const [isLoading, setIsLoading] = useState(true)
     const [refreshing, setRefreshing] = useState(false);
@@ -111,6 +112,31 @@ function ViewProfile({route}){
     'poppinsBold': require("../assets/font/Poppins_bold.ttf")
   
   })
+
+  const myCustomerShare = async () => {
+    const shareOptions = {
+        message: 'This is a test message',
+    }
+
+    try{
+        // const share = await Sharing.isAvailableAsync(shareOptions)
+        const share = await Share.share({
+            message: ('Igoepp Official mobile app')
+        })
+        if(share.action === Share.sharedAction){
+            if(share.activityType){
+                console.log('Share with activity type of: ', share.activityType)
+            }else{
+                console.log('shared')
+            }
+        }else if(share.action === Share.dismissedAction){
+            console.log('dismissed')
+        }
+        console.log(share)
+    }catch(error){
+        console.log(error.message)
+    }
+  }
   
   if(!fontloaded || isLoading){
     return <LoadingOverlay/>
@@ -166,8 +192,8 @@ function ViewProfile({route}){
                 <View style={styles.inforBoxWrapper}>
                     <View style={[styles.infoBox, {borderRightColor: "#dddddd", borderRightWidth: 1}]}>
                         <View style={{ flexDirection:'row' }}>
-                            <Image source={require("../assets/vectors/group2.png")} style={{ width:18, height:18, marginTop: 9 }}/>
-                            <Title>{fetchedMessage.wallet_balance.toLocaleString()}</Title>
+                            <Image source={require("../assets/vectors/group2.png")} style={{ width:18, height:18, marginRight: 3, top: 3 }}/>
+                            <Text style={{ fontSize: 16 }}>{fetchedMessage.wallet_balance.toLocaleString()}</Text>
                         </View>
                         <Caption>Wallet balance</Caption>
                     </View>
@@ -194,7 +220,7 @@ function ViewProfile({route}){
                         </View>
                     </TouchableRipple>
 
-                    <TouchableRipple onPress={() => {}}>
+                    <TouchableRipple onPress={myCustomerShare }>
                         <View style={styles.menuItem}>
                             <Ionicons name="share-outline" size={25} color={Color.limegreen}/>
                             <Text style={styles.menuItemText}>Tell Your Friends</Text>

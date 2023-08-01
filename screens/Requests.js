@@ -186,7 +186,9 @@ const Requests = () => {
           :
           <View>
               <Text style={{ fontFamily: 'poppinsBold', color: Color.tomato }}>Accepted</Text>
-              <TouchableOpacity style={{  marginLeft: 20, marginTop:4 }} onPress={() => navigation.navigate('Chat')}>
+              <TouchableOpacity style={{  marginLeft: 20, marginTop:4 }} onPress={() => navigation.navigate('Chat', {
+
+              })}>
               {/*  <AntDesign name="wechat" size={34} color={Color.limegreen} />*/}
                 <Ionicons name="chatbubbles" size={34} color={Color.limegreen} />
               </TouchableOpacity>

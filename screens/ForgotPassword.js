@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         marginTop: 30, 
         marginBottom: 50,
         // marginHorizontal: 50,
-        fontSize: 30,
+        fontSize: 25,
         // fontWeight: 'bold',
         color: Color.lightgreen,
         fontFamily: 'poppinsMedium'

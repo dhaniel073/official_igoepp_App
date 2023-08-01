@@ -12,6 +12,7 @@ import { Color, FontSize } from "../components/ui/GlobalStyles";
 import { PayStackAuth, WalletCheckBalance } from "../util/auth";
 import { useFonts } from "expo-font";
 import GoBack from "../components/ui/GoBack";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 function PayStackScreen(){    
     const paystackWebViewRef = useRef(); 
@@ -90,10 +91,11 @@ function PayStackScreen(){
 
 
             <View style={styles.amountInputholder}>
-            <Image
+           {/* <Image
             style={styles.nairaIcon}
             source={require("../assets/vectors/group2.png")}
-            />
+    />*/}
+             <MaterialCommunityIcons name="currency-ngn" size={40} color={Color.darkolivegreen_100} />
             <TextInput
                 style={[styles.input, styles.inputstyle, ]}
                 // autoCapitalize={false}
@@ -166,7 +168,7 @@ const styles = StyleSheet.create({
     inputstyle:{
         // minWidth: "50%",
         paddingTop: 3,
-        fontSize: FontSize.size_41xl,
+        fontSize: FontSize.size_17xl,
         fontWeight: "600",
         // fontWeight: 'bold'
         fontFamily: 'poppinsSemiBold',
