@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useReducer, useState } from 'react';
 
-import { StyleSheet, Text, View, Pressable, FlatList, ScrollView, SafeAreaView,  } from 'react-native';
+import { StyleSheet, Text, View, Pressable, FlatList, ScrollView, SafeAreaView, TouchableOpacity,  } from 'react-native';
 import { AuthContext, CustomerContext } from '../store/auth-context';
 import { Color, FontSize } from '../components/ui/GlobalStyles';
 import { Image } from 'expo-image';
@@ -14,6 +14,7 @@ import { useFonts } from 'expo-font';
 function WelcomeScreen({route}) {
   const [fetchedMessage, setFetchedMesssage] = useState('');
   const [isLoading, setIsLoading] = useState(false)
+  const [reducerValue, forceUpdate] = useReducer(x => x+1, 0)
 
 
   const navigation = useNavigation()
@@ -25,33 +26,47 @@ function WelcomeScreen({route}) {
 
   //check customer info
   useEffect(() => {
-    setTimeout(async () => {
-    try{
-      await customerInfocheck(customerId,token)
-      .then((res) => {
-        // console.log(res.data.data)
-        setFetchedMesssage(res.data.data)
-      })  
-    }catch(error){
-      console.log(error.response)
-    }
-    },3000)
-  
-},[customerId, token])
-
+    setIsLoading(true)
+    navigation.addListener('state', async() => {
+        await customerInfocheck(customerId,token)
+        .then((res) => {
+          // console.log(res.data.data)
+          setFetchedMesssage(res.data.data)
+        }).catch((error) => {
+            console.log(error)
+        })
+    })
+    setIsLoading(false)
+},[])
 
 
 //wallet balance check
 useEffect(() => {
-  setTimeout(async () => {
-    const response = await  WalletBalance(authCtx.customerId, authCtx.token )
-    // console.log(response.data)
-    const check = response.data.wallet_balance.toLocaleString()
-    authCtx.customerwalletbalance(check)
-  }, 3000)
-    // console.log(response.data.wallet_balance.toLocaleString())
+  setIsLoading(true)
+  navigation.addListener('state', async() => {
+    await  WalletBalance(authCtx.customerId, authCtx.token )
+      .then((res) => {
+        // console.log(res.data.data)
+        const check = res.data.wallet_balance.toLocaleString()
+        authCtx.customerwalletbalance(check)
+      }).catch((error) => {
+          console.log(error)
+      })
+  })
+  setIsLoading(false)
+},[])
+
+
+// useEffect(() => {
+//   setTimeout(async () => {
+//     const response = await  WalletBalance(authCtx.customerId, authCtx.token )
+//     // console.log(response.data)
+//     const check = response.data.wallet_balance.toLocaleString()
+//     authCtx.customerwalletbalance(check)
+//   }, 3000)
+//     // console.log(response.data.wallet_balance.toLocaleString())
   
-}, [])
+// }, [])
 
 //session id check
 useEffect(() => {
@@ -112,9 +127,9 @@ function imageCheck(){
         </View>
 
         <View>
-          <Pressable>
+          <TouchableOpacity onPress={() => {navigation.navigate('Notification')}}>
             <Image  transition={500} style={styles.notificationIcon} source={require('../assets/vectors/group-517.png')}/>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -654,7 +669,7 @@ const styles = StyleSheet.create({
     height: 35
   },
   nairaSign:{
-    marginTop: 10,
+    marginTop: 6,
     width: 23,
     height: 23,
     position: 'absolute',

@@ -26,25 +26,39 @@ function ViewProfile ({route}){
     const [fetcheddata, setFetcheddata] = useState('')
     const authCtx = useContext(AuthContext)
 
-  
     useEffect(() => {
-  
-      async function UserInfo(){
         setIsLoading(true)
-        try{
-          await customerInfocheck(authCtx.customerId, authCtx.token)
-          .then((res) => {
-            console.log(res.data.data)
-            setFetchedMesssage(res.data.data)
-            // setFetcheddata(data)
-          })  
-        }catch(error){
-          console.log(error.response)
-        }
+        navigation.addListener( 'state', async() => {
+            await customerInfocheck(authCtx.customerId, authCtx.token)
+            .then((res) => {
+              // console.log(res.data.data)
+              setFetchedMesssage(res.data.data)
+            }).catch((error) => {
+                console.log(error)
+            })
+        })
         setIsLoading(false)
-      }
-      UserInfo()
-    },[]) 
+        
+    },[authCtx.customerId, authCtx.token])
+  
+    // useEffect(() => {
+  
+    //   async function UserInfo(){
+    //     setIsLoading(true)
+    //     try{
+    //       await customerInfocheck(authCtx.customerId, authCtx.token)
+    //       .then((res) => {
+    //         console.log(res.data.data)
+    //         setFetchedMesssage(res.data.data)
+    //         // setFetcheddata(data)
+    //       })  
+    //     }catch(error){
+    //       console.log(error.response)
+    //     }
+    //     setIsLoading(false)
+    //   }
+    //   UserInfo()
+    // },[]) 
   
     const Country = fetchedMessage.Country
     const State = fetchedMessage.State
@@ -193,7 +207,7 @@ function ViewProfile ({route}){
                     <View style={[styles.infoBox, {borderRightColor: "#dddddd", borderRightWidth: 1}]}>
                         <View style={{ flexDirection:'row' }}>
                             <Image source={require("../assets/vectors/group2.png")} style={{ width:18, height:18, marginRight: 3, top: 3 }}/>
-                            <Text style={{ fontSize: 16 }}>{fetchedMessage.wallet_balance.toLocaleString()}</Text>
+                            <Text style={{ fontSize: 16 }}>{fetchedMessage.wallet_balance}</Text>
                         </View>
                         <Caption>Wallet balance</Caption>
                     </View>

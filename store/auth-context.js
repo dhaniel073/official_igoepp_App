@@ -12,6 +12,7 @@ export const AuthContext = createContext({
   walletBal: '',
   sessionId: '',
   request: '',
+  cart:'',
   isAuthenticated: false,
   authenticate: (token) => {},
   customerEmail: (email) => {},
@@ -19,6 +20,8 @@ export const AuthContext = createContext({
   customerwalletbalance: (walletBal) => {},
   customerRequestsMade: (request) => {},
   customerSessionId: (sessionId) => {},
+  customerCart: (cart) => {},
+
   logout: () => {},
 
 });
@@ -32,6 +35,7 @@ function AuthContextProvider({ children }) {
   const [walletBal, setWalletBal] = useState();
   const [request, setRequest] = useState();
   const [sessionId, setSessionId] = useState();
+  const [cart, setCart] = useState();
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   if(isLoggingOut){
@@ -61,8 +65,14 @@ function AuthContextProvider({ children }) {
 
   function customerSessionId(sessionId){
     const setSesId = sessionId === null ? "" : sessionId
-    setSessionId(sessionId)
-    AsyncStorage.setItem('sessionId', sessionId)
+    setSessionId(setSesId)
+    AsyncStorage.setItem('sessionId', setSesId)
+  }
+
+  function customerCart(cart){
+    const cartlength = cart === null ? 0 : cart
+    setCart(cartlength)
+    AsyncStorage.setItem('cartlength', JSON.stringify(cart))
   }
 
   function customerwalletbalance(walletBal){
@@ -81,12 +91,14 @@ function AuthContextProvider({ children }) {
     setWalletBal(null)
     setSessionId(null)
     setRequest(null)
+    setCart(null)
     AsyncStorage.removeItem('token')
     AsyncStorage.removeItem('customerdetails')
     AsyncStorage.removeItem('email')
     AsyncStorage.removeItem('walletdetails')
     AsyncStorage.removeItem('request')
     AsyncStorage.removeItem('sessionId')
+    AsyncStorage.removeItem('cartlength')
     setIsLoggingOut(false)
   }
 
@@ -96,6 +108,7 @@ function AuthContextProvider({ children }) {
     email: email,
     walletBal: walletBal,
     sessionId: sessionId,
+    cart: cart,
     request: request,
     isAuthenticated: !!authToken,
     authenticate: authenticate,
@@ -104,6 +117,7 @@ function AuthContextProvider({ children }) {
     customerRequestsMade: customerRequestsMade,
     customerwalletbalance: customerwalletbalance,
     customerSessionId: customerSessionId,
+    customerCart: customerCart,
     logout: logout,
   };
 

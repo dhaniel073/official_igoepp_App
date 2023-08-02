@@ -40,6 +40,15 @@ function SubCategory({route}){
   }, [setFetchedCategory, setIsFetching])
 
 
+  const NoSubCategoryNote = () => {
+    return (
+        <View style={{ justifyContent:'center', alignItems:'center', marginTop: '70%' }}>
+            <Text style={{ fontSize: FontSize.size_sm, color: 'grey', fontFamily: 'poppinsSemiBold' }}>No Sub-Category Found</Text>
+        </View>
+    )
+}
+
+
   const [fontloaded] =  useFonts({
     'poppinsRegular': require("../assets/font/Poppins/Poppins-Regular.ttf"),
     'montserratBold': require("../assets/font/Montserrat_bold.ttf"),
@@ -49,7 +58,7 @@ function SubCategory({route}){
   
   })
   
-  if(!fontloaded){
+  if(!fontloaded || isFetching){
     return <LoadingOverlay message={"..."}/>
   }
   
@@ -64,7 +73,7 @@ function SubCategory({route}){
     </View>
 
     <Text style={styles.requestHelptext}>Sub-Category</Text>
-    {isFetching ? <LoadingOverlay/> :
+    {fetchedcategory.length === 0 ? <NoSubCategoryNote/> :
         <FlatList
         // style={styles.flatlists}
         showsVerticalScrollIndicator={false}

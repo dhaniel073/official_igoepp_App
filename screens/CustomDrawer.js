@@ -8,6 +8,7 @@ import {Ionicons} from '@expo/vector-icons'
 import { AuthContext } from "../store/auth-context";
 import { customerInfocheck } from "../util/auth";
 import { useNavigation } from "@react-navigation/native";
+import { Switch } from "react-native-paper";
 
 const CustomDrawer = (props) => {
     const authCtx = useContext(AuthContext)
@@ -19,22 +20,34 @@ const CustomDrawer = (props) => {
     const token = authCtx.token
     const customerId = authCtx.customerId
 
+
     useEffect(() => {
-      setTimeout( async () => {
-        setIsLoading(true)
-        try{
+      navigation.addListener('state', async() => {
           await customerInfocheck(customerId,token)
           .then((res) => {
             // console.log(res.data.data)
             setFetchedMesssage(res.data.data)
-            setFetcheddata(data)
-          })  
-        }catch(error){
-          console.log(error.response)
-        }
-        setIsLoading(false)
-      }, 3000)
-},[customerId, token]) 
+          }).catch((error) => {
+              console.log(error)
+          })
+      })
+  },[])
+//     useEffect(() => {
+//       setTimeout( async () => {
+//         setIsLoading(true)
+//         try{
+//           await customerInfocheck(customerId,token)
+//           .then((res) => {
+//             // console.log(res.data.data)
+//             setFetchedMesssage(res.data.data)
+//             setFetcheddata(data)
+//           })  
+//         }catch(error){
+//           console.log(error.response)
+//         }
+//         setIsLoading(false)
+//       }, 3000)
+// },[customerId, token]) 
       
           function imageCheck(){
             if(fetchedMessage.picture === null){
@@ -89,9 +102,10 @@ const CustomDrawer = (props) => {
 
 
             </DrawerContentScrollView>
+            
             <View style={{ padding:20, borderTopWidth:1, borderTopColor: '#ccc' }}>
                 <TouchableOpacity onPress={authCtx.logout} style={{ paddingVertical: 15 }}>
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row'}}>
                         <Ionicons name="exit" size={22} color={Color.darkolivegreen_100}/>
                         <Text style={{ fontSize: 15, fontFamily: 'poppinsSemiBold', marginLeft: 5, color: Color.darkolivegreen_100 }}>Sign Out</Text>
                     </View>

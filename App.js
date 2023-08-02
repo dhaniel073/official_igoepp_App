@@ -1,5 +1,5 @@
   import { useContext, useEffect, useState } from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer, useNavigation, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -59,6 +59,8 @@ import RequestDrawer from './screens/RequestDrawer';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ChatScreen from './screens/ChatScreen';
 import DisputeScreen from './screens/DisputeScreen';
+import NotifictionSettings from './screens/NotifictionSettings';
+import ViewCartItems from './screens/ViewCartItems';
 
 const Stack = createNativeStackNavigator();
 
@@ -160,7 +162,7 @@ function DrawerNavigation(){
   }
   
   return (
-    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} />} screenOptions={{  
+    <Drawer.Navigator  theme={DarkTheme} drawerContent={props => <CustomDrawer {...props} />} screenOptions={{  
         // headerTintColor: 'black',
         // headerShown: false,
         sceneContainerStyle: {backgroundColor: '#fff'},
@@ -214,12 +216,12 @@ function DrawerNavigation(){
 
 
       <Drawer.Screen
-      name="RequestDrawer"
-      component={RequestDrawer}
+      name="Requests"
+      component={Requests}
       options={{ 
         title: "Requests",
         headerTintColor: Color.darkolivegreen_100,
-        // headerShown: false,
+        headerShown: false,
         drawerIcon: ({color, size}) => <Ionicons name="chatbox-ellipses" color={color} size={size}/>
        }}
       />
@@ -228,7 +230,7 @@ function DrawerNavigation(){
       name="MarketPlace"
       component={MarketPlace}
       options={{ 
-        // headerShown: false,
+        headerShown: false,
         headerShadowVisible: false,
         headerTintColor: Color.darkolivegreen_100,
         title: "Market Place",
@@ -261,7 +263,8 @@ function AuthenticatedStack() {
   
   return (
     <Stack.Navigator
-      screenOptions={{
+      theme={DarkTheme}
+        screenOptions={{
         headerTintColor: Color.darkolivegreen_100,
         contentStyle: {backgroundColor: '#fff'},
         headerStyle:{
@@ -375,7 +378,9 @@ function AuthenticatedStack() {
         title: '' ,
         headerShadowVisible: false,
         headerRight: ({color, size}) => (
-          <MaterialCommunityIcons name="note-edit" size={24} color={Color.limegreen} onPress={({...props}) => navigation.navigate('Profile', {...props})}/>
+          <MaterialCommunityIcons name="note-edit" size={24} color={Color.limegreen} onPress={({route}) => navigation.navigate('Profile', {
+            route
+          })}/>
           )
         }}
         />
@@ -445,6 +450,11 @@ function AuthenticatedStack() {
       />
       
       
+      <Stack.Screen
+      name='NotificationSettings'
+      component={NotifictionSettings}
+      options={{ headerShown: false }}
+      />
       
       <Stack.Screen
       name="TermsAndConditions"
@@ -459,6 +469,14 @@ function AuthenticatedStack() {
       <Stack.Screen
       name="DisputeScreen"
       component={DisputeScreen}
+      options={{ 
+        headerShown: false,
+       }}
+      />
+
+      <Stack.Screen
+      name="ViewCartItems"
+      component={ViewCartItems}
       options={{ 
         headerShown: false,
        }}
@@ -498,6 +516,8 @@ function Root() {
       const storedWalletBalance = await AsyncStorage.getItem('walletdetails')
       const storedRequestsMade = await AsyncStorage.getItem('request')
       const storedSessionId = await AsyncStorage.getItem('sessionId')
+      const storedCartLength = await AsyncStorage.getItem('cartlength')
+
 
 
       console.log(storedRequestsMade)
@@ -509,6 +529,7 @@ function Root() {
         authCtx.customerwalletbalance(storedWalletBalance)
         authCtx.customerRequestsMade(storedRequestsMade)
         authCtx.customerSessionId(storedSessionId)
+        authCtx.customerCart(storedCartLength)
       }
 
       // if (storedToken) {

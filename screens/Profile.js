@@ -14,15 +14,13 @@ import Animated from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import Button3 from "../components/ui/Button3";
 import axios from "axios";
-import { androidCameraPermission } from "../util/Permissions";
-import GoBack from "../components/ui/GoBack";
 import {Ionicons} from '@expo/vector-icons'
 // import useTheme from "@react-navigation/native";
 import { useTheme } from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import * as React from 'react';
-import { BottomPopups } from "../components/ui/BottomPopups";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
 const data = [
     { label: 'Male ', value: 'M' },
@@ -44,7 +42,7 @@ const option = {
 
 
 
-function Profile(){
+function Profile({route, props}){
   const navigation = useNavigation()
   // const [value, setValue] = useState(null);
   const authCtx = useContext(AuthContext)
@@ -78,6 +76,12 @@ function Profile(){
 
   const {colors} = useTheme()
 
+
+  const sheetRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(true);
+
+  const snapPoints = ["40%"]
+
   const choosePhotoFromLibrary = async() => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -91,28 +95,51 @@ function Profile(){
     }
   }
 
+  const RenderHeader = () => {
+    return (
+      <View style={styles.header}>
+            <View style={styles.panelHeader}>
+                <View style={styles.panelHandle}></View>
+            </View>
+      </View>
+    )
+  }
 
-  useEffect(() => {
+  const RenderInner = () => {
+    return (
+      <View style={styles.panel}>
+        <View>
+          <Text style={styles.panelTitle}>Upload Photo</Text>
+          <Text  style={styles.panelSubtitile}>Choose From Library</Text>
+          <Text>Cancel</Text>
+        </View>
+      </View>
+    )
+  }
+
+  // useEffect(() => {
   
-    async function UserInfo(){
-      setIsLoading(true)
-      try{
-        await customerInfocheck(authCtx.customerId, authCtx.token)
-        .then((res) => {
-          console.log(res.data.data)
-          setFetchedMesssage(res.data.data)
-          // setFetcheddata(data)
-        })  
-      }catch(error){
-        console.log(error.response)
-      }
-      setIsLoading(false)
-    }
-    UserInfo()
-  },[]) 
+  //   async function UserInfo(){
+  //     setIsLoading(true)
+  //     try{
+  //       await customerInfocheck(authCtx.customerId, authCtx.token)
+  //       .then((res) => {
+  //         console.log(res.data.data)
+  //         setFetchedMesssage(res.data.data)
+  //         // setFetcheddata(data)
+  //       })  
+  //     }catch(error){
+  //       console.log(error.response)
+  //     }
+  //     setIsLoading(false)
+  //   }
+  //   UserInfo()
+  // },[]) 
 
 
 
+  // console.log(route.params)
+  // console.log(props)
   useEffect(() => {
 
     var config = {
@@ -272,8 +299,8 @@ const handleCity = (countryCode, stateCode) => {
   
 
     return (
-      <GestureHandlerRootView style={{ flex:1 }}>
-      <View style={styles.container}>
+      <GestureHandlerRootView style={{ flex:1}}>
+      <View style={[styles.container]}>
           <View style={{ margin: 20 }}>
               <View style={{ alignItems: 'center' }}>
                   <TouchableOpacity onPress={choosePhotoFromLibrary}>
@@ -281,7 +308,6 @@ const handleCity = (countryCode, stateCode) => {
                         height: 100,
                         width: 100,
                         borderRadius: 15,
-                        
                         justifyContent: 'center',
                         alignItems: 'center'
                      }}>
@@ -483,6 +509,12 @@ const handleCity = (countryCode, stateCode) => {
 export default Profile;
 
 const styles = StyleSheet.create({
+  containerBocttomSheet: {
+    flex: 1,
+    padding: 24,
+    justifyContent: 'center',
+    backgroundColor: 'grey',
+  },
   selectedTextStyle: {
     fontSize: 16,
   },

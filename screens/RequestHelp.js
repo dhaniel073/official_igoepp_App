@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, Pressable, ScrollView, FlatList, Button, SafeAreaView, Alert } from "react-native";
+import { Text, StyleSheet, View, Pressable,RefreshControl, ScrollView, FlatList, Button, SafeAreaView, Alert } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { FontSize, Color, FontFamily, Border } from "../components/ui/GlobalStyles";
@@ -18,7 +18,7 @@ const RequestHelp = () => {
   const [fetchedcategory, setFetchedCategory] = useState('')
   const [fetchedName, setFetchedName] = useState('')
   const [isFetching, setIsFetching] = useState(true)
-
+  
   
   useEffect(() => {
     async function fetchCategorydata(){

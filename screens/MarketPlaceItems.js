@@ -48,7 +48,7 @@ const MarketPlaceItems = ({route}) => {
   const NoItemNote = () => {
     return (
         <View style={{ justifyContent:'center', alignItems:'center', marginTop: '70%' }}>
-            <Text style={{ fontSize: FontSize.size_sm, color: 'grey', fontFamily: 'poppinsSemiBold' }}>No Item To Available</Text>
+            <Text style={{ fontSize: FontSize.size_sm, color: 'grey', fontFamily: 'poppinsSemiBold' }}>No Items Available</Text>
         </View>
     )
 }
@@ -87,11 +87,16 @@ const MarketPlaceItems = ({route}) => {
         renderItem={({item}) => 
             <View style={styles.container}  >
             <Pressable style={({pressed}) => [styles.pressables, pressed && styles.pressed]} onPress={() => navigation.navigate("ProceedMarketItem", {
-                marketItemId: item.id,
-                marketItemName: item.name,
-                marketItemDesc: item.description,
-                marketItemimage: item.picture,
-                catId: item.cat_id,
+                productId: item.id,
+                productItemName: item.name,
+                productItemDesc: item.description,
+                productItemimage: item.picture,
+                catId: item.product_category_id,
+                price: item.price,
+                shippingCost: item.shipping_cost,
+                supplierId: item.supplier_id,
+                available: item.available
+
             })}>
             <Image
             style={styles.image2}

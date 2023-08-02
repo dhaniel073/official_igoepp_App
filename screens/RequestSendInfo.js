@@ -379,7 +379,7 @@ function RequestSendInfo({route}){
                 Authorization: `Bearer ${authCtx.token}`
             }
         })
-            navigation.navigate('Welcome')
+            navigation.navigate('Requests')
 
         }catch(error){
             // Alert

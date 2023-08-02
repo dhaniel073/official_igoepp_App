@@ -1,5 +1,5 @@
 import {useContext, useEffect, useRef, useState} from "react";
-import { Text, StyleSheet, View, Pressable, Image, FlatList, ScrollView, SafeAreaView, Platform, Alert, TouchableOpacity, Dimensions, TextInput } from "react-native";
+import { Text, StyleSheet, View, Pressable, Image, FlatList,RefreshControl, ScrollView, SafeAreaView, Platform, Alert, TouchableOpacity, Dimensions, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Color, Border, FontSize, FontFamily } from "../components/ui/GlobalStyles";
 import { AuthContext } from "../store/auth-context";
@@ -15,6 +15,8 @@ import {Ionicons} from '@expo/vector-icons'
 import GoBack from "../components/ui/GoBack";
 import Modal from "react-native-modal";
 import { CancelRequests } from "../util/auth";
+import { Feather } from '@expo/vector-icons';
+import call from "react-native-phone-call";
 
 
 const WIDTH = Dimensions.get('window').width
@@ -29,11 +31,24 @@ const Requests = () => {
   const [isFetching, setIsFetching] = useState(true)
   const [isCancelModalVisible, setCancelModalVisible] = useState(false);
   const [reason, setReason] = useState('')
+  const [helper_phone, setHelper_Phone] = useState('')
   const isInitialMount = useRef(true);
+  const [refresh, setRefresh] = useState(false)
 
   const token = authCtx.token
   const customerId = authCtx.customerId
 
+
+  const pullMe = () => {
+    setRefresh(true)
+    setTimeout(async() => {
+      const response = await ShowFetchedRequests(customerId, token)
+      // console.log(response)
+      setFetchedRequest(response)
+      authCtx.customerRequestsMade(JSON.stringify(fetchedRequest.length))
+      setRefresh(false)
+    }, 4000)
+  }
 
   useEffect(() => {
        // Your useEffect code here to be run on update
@@ -51,8 +66,40 @@ const Requests = () => {
   }, [customerId, token])
 
 
- 
+  const HelperDetails = async(id) => {
+    console.log(id)
+    // assigned_helper
+    const url = `http://phixotech.com/igoepp/public/api/auth/helper/${id}`
+    await axios.get(url, {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${authCtx.token}`
+      }
+    }).then((res) => {
+      // console.log(res.data.data.phone)
+      const args = {
+        number: (res.data.data.phone), // String value with the number to call
+        prompt: false, // Optional boolean property. Determines if the user should be prompted prior to the call 
+        skipCanOpen: true // Skip the canOpenURL check
+      }
 
+      call(args).catch(console.error)
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
+
+  const MakeCall = () => {
+      // const args = {
+      //   // number: helper_phone.toString(),
+      //   number: "2348103902560",
+      //   prompt: true
+      // };
+     
+      setHelper_Phone(null)
+  }
+ 
+console.log(helper_phone)
   const toggleCancelModal = (id) => {
 
     if(id === 'cancel'){
@@ -61,19 +108,19 @@ const Requests = () => {
     }
     let sendId = id
     setId(sendId)
-    console.log(id)
+    // console.log(id)
     setCancelModalVisible(!isCancelModalVisible)
     
   }
 
   const CancelHandlerSubmit = async () => {
-    console.log(reason)
-    console.log(Id)
+    // console.log(reason)
+    // console.log(Id)
     setIsFetching(true)
     try {
         setFetchedRequest(true)
         const response = await CancelRequests(Id, authCtx.token, reason)
-        console.log(response)
+        // console.log(response)
         setReason(null)
         navigation.goBack()
         setIsFetching(false)
@@ -114,7 +161,7 @@ const Requests = () => {
       // }
   
       // const check = fetchedRequest.length
-      console.log(authCtx.sessionId)
+      console.log(authCtx.customerId)
 
 
 
@@ -162,7 +209,7 @@ const Requests = () => {
 
 
     // request with status of  
-    const ButtonConfig3 = (name,id,count, status) => {
+    const ButtonConfig3 = (name,id,count, status, helperId) => {
       return(
         <View style={{ flexDirection: 'row', justifyContent:'space-between', width: '100%' }}>
           <Text style={styles.requestName}>{name}</Text>
@@ -181,17 +228,27 @@ const Requests = () => {
           : 
           status === 'X' ?
           <View>
-              <Text style={{ fontFamily: 'poppinsBold', color: Color.tomato }}>Cancled</Text>
+              <Text style={{ fontFamily: 'poppinsBold', color: Color.tomato }}>Cancelled</Text>
           </View>
           :
           <View>
               <Text style={{ fontFamily: 'poppinsBold', color: Color.tomato }}>Accepted</Text>
-              <TouchableOpacity style={{  marginLeft: 20, marginTop:4 }} onPress={() => navigation.navigate('Chat', {
 
+             <View style={{ flexDirection: 'row' }}>
+
+              <TouchableOpacity style={{ marginTop:8 }} onPress={()=> {HelperDetails(helperId)}}>
+              {/*  <AntDesign name="wechat" size={34} color={Color.limegreen} />*/}
+              <Feather name="phone-call" size={24} color={Color.limegreen} />
+
+              </TouchableOpacity>
+
+              <TouchableOpacity style={{ marginLeft: 8, }} onPress={() => navigation.navigate('Chat', {
               })}>
               {/*  <AntDesign name="wechat" size={34} color={Color.limegreen} />*/}
                 <Ionicons name="chatbubbles" size={34} color={Color.limegreen} />
               </TouchableOpacity>
+             </View>
+
           </View>
         }
         </View>
@@ -232,13 +289,19 @@ style={styles.button2}>Bid ({item.bid_count === 0 ? "0" : item.bid_count})</Butt
             style={styles.flatlists}
             data={fetchedRequest}
             showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={refresh}
+                onRefresh={() => {pullMe()}}
+              />
+            }
             keyExtractor={(item) => item.id}
             renderItem={({item}) => 
               <View style={styles.container}>
                   <Text style={styles.requestDate}>{item.created_at}</Text>
                     <Pressable style={styles.pressables}>
                     
-                    <SafeAreaView>{ButtonConfig3(item.cat_name,item.id, item.bid_count, item.help_status)}</SafeAreaView>
+                    <SafeAreaView>{ButtonConfig3(item.cat_name,item.id, item.bid_count, item.help_status, item.assigned_helper)}</SafeAreaView>
 
                       {item.help_status === 'N' ? 
                       <SafeAreaView>{ButtonsConfig2(item.id)}</SafeAreaView>

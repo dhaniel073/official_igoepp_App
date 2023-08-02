@@ -8,7 +8,7 @@ function MakePayment(){
     const navigation = useNavigation()
     return (
         <View style={styles.mainContainer}>
-        <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
+            <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
 
             <Text style={styles.makepaymenttext}>Make Payments</Text>
         </View>

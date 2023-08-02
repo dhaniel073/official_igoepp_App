@@ -5,7 +5,7 @@ import { useFonts } from 'expo-font';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import { useNavigation } from '@react-navigation/native';
 import { Title } from 'react-native-paper';
-import {Ionicons} from '@expo/vector-icons'
+import {Ionicons, EvilIcons} from '@expo/vector-icons'
 import { Image } from 'expo-image';
 
 
@@ -41,7 +41,7 @@ const Settings = () => {
           </TouchableOpacity>
 
 
-          <TouchableOpacity style={{ alignItems: 'flex-start', borderBottomWidth:1,}} onPress={() => navigation.navigate("Notification")}>
+          <TouchableOpacity style={{ alignItems: 'flex-start', borderBottomWidth:1,}} onPress={() => navigation.navigate("NotificationSettings")}>
               <View style={{ flexDirection: 'row',   paddingBottom: 15, marginTop: 15 }}>
                   <Ionicons name='notifications-outline' size={30}/>
                   <Text style={styles.textStyle}>Notification</Text>
@@ -67,9 +67,8 @@ const Settings = () => {
           <TouchableOpacity style={{ alignItems: '', justifyContent:'space-between', borderBottomWidth:1, width: '100%'}} onPress={() => navigation.navigate('TermsAndConditions')}>
               <View style={{ flexDirection: 'row',  paddingBottom: 15, marginTop: 15 }}>
                   <Ionicons name='cloud-outline' size={30}/>
-                  <Text style={styles.textStyle}>Terms And Condition</Text>
+                    <Text style={styles.textStyle}>Terms And Condition</Text>
               </View>
-                  <Image style={{ width:10, height:18, alignContent: 'flex-end', top: 5, left: 53 }} source={require("../assets/vectors/arrow_head.png")}/>
           </TouchableOpacity>
 
       </View>
@@ -86,6 +85,7 @@ const styles = StyleSheet.create({
   textStyle:{
     fontFamily: 'poppinsMedium',
     fontSize: 15,
-    marginLeft: 10
+    marginLeft: 10,
+    top: 5
   }
 })
