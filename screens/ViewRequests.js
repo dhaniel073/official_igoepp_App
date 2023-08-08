@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, ScrollView, SafeAreaView, Pressable, Image } from "react-native";
+import { View, Text, FlatList, StyleSheet, ScrollView, SafeAreaView, Pressable, Image, Platform } from "react-native";
 import { ShowFetchedRequestsById } from "../util/auth";
 import { AuthContext } from "../store/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
@@ -24,7 +24,7 @@ function ViewRequests({route}){
             try {
                 setIsFetching(true)
                 const response = await ShowFetchedRequestsById(requestid, authCtx.token)
-                console.log(response)
+                // console.log(response)
                 setFetchedData(response)
                 setIsFetching(false)
             } catch (error) {
@@ -137,7 +137,7 @@ function ViewRequests({route}){
 
                                     <View style={styles.nameContainer}>
                                         <Text style={styles.labelText}>Status: </Text>
-                                        <Text style={styles.textValue}> {item.help_status ===  'A' ? 'Accepted' : item.help_status === 'X' ? 'Canceled' : 'Pending'}</Text>
+                                        <Text style={styles.textValue}> {item.help_status ===  'A' ? 'Accepted' : item.help_status === 'X' ? 'Cancelled' : 'Pending'}</Text>
                                     </View>
                                     
                                     <View style={styles.nameContainer}>
@@ -145,15 +145,15 @@ function ViewRequests({route}){
                                         <Text style={styles.textValue}> {item.help_time}</Text>
                                     </View>
 
-                                    <View style={styles.nameContainer}>
+                                   {/* <View style={styles.nameContainer}>
                                         <Text style={styles.labelText}>Payment Status: </Text>
                                         <Text style={styles.textValue}> {item.payment_status}</Text>
                                     </View>
 
                                     <View style={styles.nameContainer}>
-                                        <Text style={styles.labelText}>Prof of payment id:</Text>
+                                        <Text style={styles.labelText}>Proof of payment id:</Text>
                                         <Text style={styles.textValue}> {item.proof_id}</Text>
-                                    </View>
+</View>*/}
                                 </View>
                             }
                         />
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     },
     flatlists:{
         flex: 1,
-        marginTop: 20,
+        marginTop:20,
         marginBottom: 20,
     },
     mainContainer:{
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         // justifyContent: 'center',
         marginHorizontal: 10,
-        marginTop: 70
+        marginTop:"15%"
     },
     nameContainer:{
         flexDirection: 'row',

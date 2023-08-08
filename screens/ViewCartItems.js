@@ -10,6 +10,8 @@ import { Pressable } from 'react-native'
 import { TouchableOpacity } from 'react-native'
 import { Platform } from 'react-native'
 import { Alert } from 'react-native'
+import { Entypo, MaterialIcons, AntDesign } from '@expo/vector-icons';
+
 
 const ViewCartItems = ({navigation}) => {
     const authCtx = useContext(AuthContext)
@@ -27,7 +29,7 @@ const ViewCartItems = ({navigation}) => {
                     Authorization: `Bearer ${authCtx.token}`
                 }
             }).then((res) => {
-                console.log(res.data.data)
+                // console.log(res.data.data)
                 setCartItems(res.data.data)
             }).catch((error) => {
                 console.log(error)
@@ -49,7 +51,7 @@ const ViewCartItems = ({navigation}) => {
                 Authorization: `Bearer ${authCtx.token}`
             }
         }).then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             navigation.goBack()
         }).catch((error) => {
             console.log(error)
@@ -70,15 +72,13 @@ const ViewCartItems = ({navigation}) => {
             }
         ])
     }
-
-    const ViewItemInCart = () => {
-
-    } 
-
     const NoCartItemNote = () => {
         return (
             <View style={{ justifyContent:'center', alignItems:'center', marginTop: '70%' }}>
-                <Text style={{ fontSize: FontSize.size_sm, color: 'grey', fontFamily: 'poppinsSemiBold' }}>No Bids Made On Request</Text>
+                <Text style={{ fontSize:16, color: 'grey', fontFamily: 'poppinsSemiBold' }}>No item found</Text>
+                <TouchableOpacity onPress={()=> navigation.navigate('MarketPlace')}>
+                    <Text style={{  fontSize: FontSize.size_sm, color:Color.limegreen, fontFamily: 'poppinsSemiBold'  }}>Purchase Item</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -102,7 +102,16 @@ const ViewCartItems = ({navigation}) => {
         <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
         <Text style={styles.requestHelptext}>Cart</Text>
 
+          
         {cartitems.length === 0 ? <NoCartItemNote/> :
+        <View>
+            <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={{ marginLeft:'60%', padding:5, borderRadius: 3, width: 130, borderColor:Color.limegreen, backgroundColor: Color.limegreen,  }}>
+                <View style={{ paddingLeft: 15, paddingRight: 15, flexDirection:'row' }}>
+                    <Entypo name="shopping-cart" size={24}  color="white" />
+                    <Text style={{ fontFamily: 'poppinsBold', color: 'white', left: 3}}>Checkout</Text>
+                </View>
+            </TouchableOpacity>
+
             <FlatList
                 data={cartitems}
                 keyExtractor={(item)=> item.id}
@@ -120,13 +129,13 @@ const ViewCartItems = ({navigation}) => {
                     <Text style={{ fontFamily: 'poppinsSemiBold', fontSize: 18, color:Color.tomato }}>Total: NGN {item.sub_total_amount}</Text>
                     <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity onPress={() => [DeletItemFromCart(item.id)]} style={{ margin:10, padding:5, borderRadius: 3, borderWidth: 1, borderColor:Color.firebrick_100, backgroundColor: '#fff' }}>
-                    <View style={{ paddingLeft: 20, paddingRight: 20 }}>
+                    <View style={{ paddingLeft: Platform.OS === 'android' ? 10 : 20, paddingRight: 20 }}>
                         <Text style={{ fontFamily: 'poppinsSemiBold', color:Color.firebrick_100 }}>Remove Item</Text>
                     </View>
                     </TouchableOpacity>
             
                     <TouchableOpacity onPress={() => []} style={{ margin:10, padding:5, borderRadius: 3, borderWidth: 1, borderColor:Color.limegreen, backgroundColor: Color.limegreen,  }}>
-                        <View style={{ paddingLeft: 20, paddingRight: 20 }}>
+                        <View style={{ paddingLeft: 10, paddingRight: Platform.OS === 'android' ? 15 : 20 }}>
                             <Text style={{ fontFamily: 'poppinsSemiBold', color: 'white' }}>View Request</Text>
                         </View>
                     </TouchableOpacity>
@@ -135,7 +144,9 @@ const ViewCartItems = ({navigation}) => {
             </View>
             }
             />
+            </View>
         }
+
     </View>
   )
 }
@@ -153,14 +164,14 @@ const styles = StyleSheet.create({
         // padding: 5,
         flex: 1,
         // justifyContent:'space-between',
-        marginTop: 20
+        // marginTop: 40
     
     },
     pressables:{
         // backgroundColor: Color.skyblue,
         // borderRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'flex-start',
+        // justifyContent: 'center',
+        // alignItems: 'flex-start',
         elevation: 4,
         shadowColor: 'black',
         shadowOpacity: 0.25,
@@ -170,8 +181,8 @@ const styles = StyleSheet.create({
         overflow: Platform.OS === 'andriod' ? 'hidden' : 'visible',
         backgroundColor: Color.mintcream,
         margin: 8,
-        height: 155,
-        padding: 10
+        height: 170,
+        padding: Platform.OS === 'andriod' ? 15 : 10
         
       },
     requestDate:{

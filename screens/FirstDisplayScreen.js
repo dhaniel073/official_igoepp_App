@@ -8,6 +8,7 @@ import { useFonts } from "expo-font";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { Color, FontSize } from "../components/ui/GlobalStyles";
 import Button4 from "../components/ui/Button4";
+import { TouchableOpacity } from "react-native";
 
 
 
@@ -27,21 +28,21 @@ function FirstDisplayScreen({navigation}){
   }
 
   const Down = ({...props}) => (
-     <Pressable {...props} style={({pressed}) => [styles.press, pressed && styles.pressed]}>
+     <TouchableOpacity {...props} style={[styles.press]}>
        <Text style={styles.presstext}>Done</Text>
-      </Pressable>
+      </TouchableOpacity>
     )
 
     const Next = ({...props}) => (
-      <Pressable {...props} style={({pressed}) => [styles.press, pressed && styles.pressed]}>
+      <TouchableOpacity {...props} style={[styles.press]}>
         <Text style={styles.presstext}>Next</Text>
-       </Pressable>
+       </TouchableOpacity>
      )
 
      const Skip = ({...props}) => (
-      <Pressable {...props} style={({pressed}) => [styles.skip, pressed && styles.pressed]}>
+      <TouchableOpacity {...props} style={[styles.skip]}>
         <Text style={styles.presstext}>Skip</Text>
-       </Pressable>
+       </TouchableOpacity>
      )
 
     return (

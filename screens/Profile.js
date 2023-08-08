@@ -299,7 +299,7 @@ const handleCity = (countryCode, stateCode) => {
   
 
     return (
-      <GestureHandlerRootView style={{ flex:1}}>
+      <ScrollView style={{ flex:1}}>
       <View style={[styles.container]}>
           <View style={{ margin: 20 }}>
               <View style={{ alignItems: 'center' }}>
@@ -366,7 +366,6 @@ const handleCity = (countryCode, stateCode) => {
                       value={last_name}
                       // autoCapitalize={true}
                       style={[styles.textInput, 
-                       { color: colors.text}
                       ]}
                   />      
               </View>
@@ -382,7 +381,6 @@ const handleCity = (countryCode, stateCode) => {
                       value={phone}
                       keyboardType="number-pad"
                       style={[styles.textInput, 
-                       { color: colors.text}
                       ]}
                   />      
               </View>
@@ -490,7 +488,7 @@ const handleCity = (countryCode, stateCode) => {
                   setCity(item.value);
                   setCityName(item.label)
                   setIsCityFocus(false);
-      }}
+              }}
       
     />
             </View>
@@ -501,7 +499,7 @@ const handleCity = (countryCode, stateCode) => {
 
       </View>
 
-      </GestureHandlerRootView>
+      </ScrollView>
 
     )
 }

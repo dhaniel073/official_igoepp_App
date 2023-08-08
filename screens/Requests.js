@@ -28,7 +28,7 @@ const Requests = () => {
   const authCtx = useContext(AuthContext)
   const [fetchedRequest, setFetchedRequest] = useState('')
   const [Id, setId] = useState('');
-  const [isFetching, setIsFetching] = useState(true)
+  const [isFetching, setIsFetching] = useState(false)
   const [isCancelModalVisible, setCancelModalVisible] = useState(false);
   const [reason, setReason] = useState('')
   const [helper_phone, setHelper_Phone] = useState('')
@@ -43,27 +43,31 @@ const Requests = () => {
     setRefresh(true)
     setTimeout(async() => {
       const response = await ShowFetchedRequests(customerId, token)
-      // console.log(response)
-      setFetchedRequest(response)
-      authCtx.customerRequestsMade(JSON.stringify(fetchedRequest.length))
+      // console.log(response.data)
+      setFetchedRequest(response.data)
+      // authCtx.customerRequestsMade(fetchedRequest.length)
       setRefresh(false)
     }, 4000)
   }
 
+  console.log(authCtx.request)
   useEffect(() => {
        // Your useEffect code here to be run on update
-       const fetchRequests = async() => {
+       navigation.addListener('state', async() => {
         setIsFetching(true)
         const response = await ShowFetchedRequests(customerId, token)
-        // console.log(response)
-        setFetchedRequest(response)
-        authCtx.customerRequestsMade(JSON.stringify(fetchedRequest.length))
+        const requestLength = fetchedRequest.length.toString()
+        // console.log(requestLength)
+        authCtx.customerRequestsMade(requestLength)
+        // console.log(response.data)
+        setFetchedRequest(response.data)
         setIsFetching(false)
   
-      }
-      fetchRequests()
+      }, [])
   
-  }, [customerId, token])
+  }, [])
+
+
 
 
   const HelperDetails = async(id) => {
@@ -161,7 +165,7 @@ console.log(helper_phone)
       // }
   
       // const check = fetchedRequest.length
-      console.log(authCtx.customerId)
+      console.log(authCtx.request)
 
 
 
@@ -221,8 +225,8 @@ console.log(helper_phone)
             bid_id: id,
           })}>
             <Image style={{width: 40, height:40, borderRadius:20, borderColor: 'red', borderWidth: 1, marginRight:28}}  source={require("../assets/vectors/gavel_5741343.png")}/>
-            <View style={{ backgroundColor: Color.tomato, position: 'absolute', top: -10, left: 40, borderRadius: 25, width:20,   }}>
-              <Text style={{ fontSize: 12, top:1, color: Color.white, fontFamily:'poppinsBold', textAlign:'center'}}>{count}</Text>
+            <View style={{ backgroundColor: Color.tomato, position: 'absolute', top: -10, left: 38, borderRadius: 25, width:Platform.OS === 'ios' ? 16 : 20, height: 20  }}>
+              <Text style={{ fontSize: 13,  color: Color.white, fontFamily:'poppinsBold', textAlign:'center'}}>{count}</Text>
             </View>
           </TouchableOpacity>
           : 
@@ -419,7 +423,7 @@ const styles = StyleSheet.create({
   mainContainer:{
     flex: 1,
     marginHorizontal: 8,
-   marginTop: "18%"
+   marginTop: "15%"
   },
   flatlists:{
     marginBottom: 20

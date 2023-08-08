@@ -201,7 +201,7 @@ async function fetchedData(customerId, token){
         }
       )
         // console.log(response)
-        return response.data;
+        return response;
     } catch(error){
       console.log(error)
       Alert.alert("Error", error.response.data.message)
@@ -278,8 +278,7 @@ async function bidrequests(bid_id, token){
 }
 
 async function sendrequest(token){
-  console.log(token)
-
+  // console.log(token)
   try{
     const response = await axios.post(url, {
       headers:{
@@ -324,7 +323,9 @@ async function sessionId(email, token){
  try {
   const response = await axios.post(url, {
     username: email,
-    application: 'webapp'
+    application: 'mobileapp'
+    // application: 'webapp'
+
   },
   {
     headers: {
@@ -335,7 +336,7 @@ async function sessionId(email, token){
   )
   return response;
  } catch (error) {
-  console.log(error.response)
+  console.log(error.response.message)
  }
 }
 

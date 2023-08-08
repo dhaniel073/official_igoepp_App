@@ -8,6 +8,7 @@ import { AuthContext } from "../store/auth-context";
 import { useFonts } from "expo-font";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import {Ionicons} from '@expo/vector-icons'
+import GoBack from "../components/ui/GoBack";
 
 
 const AddWallet = ({route}) => {
@@ -36,18 +37,7 @@ const AddWallet = ({route}) => {
   return (
     <View style={styles.container}>
 
-    <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed]}
-        onPress={() => navigation.goBack()}
-    >
-        <Text style={styles.back}>Back</Text>
-        
-        <Image
-          style={[styles.vectorIcon, styles.iconLayout]}
-          contentFit="cover"
-          source={require("../assets/vectors/vector30.png")}
-        />
-       
-      </Pressable>
+    <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
 
       <View style={styles.subContainer}>
 
@@ -71,7 +61,7 @@ const AddWallet = ({route}) => {
 
 
           <View style={styles.shadowProps} >
-            <Pressable  style={({pressed}) => [styles.fundwallet, pressed && styles.pressed]}
+            <TouchableOpacity  style={styles.fundwallet}
             onPress={()=> navigation.navigate('PayStack')}
             >
                 <Image
@@ -79,11 +69,11 @@ const AddWallet = ({route}) => {
                 source={require("../assets/vectors/vector33.png")}
               />
                     <Text style={styles.text1}>Fund With Card</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.shadowProps} >
-            <Pressable  style={({pressed}) => [styles.fundwallet, pressed && styles.pressed]}
+            <TouchableOpacity  style={[styles.fundwallet]}
               onPress={() => navigation.navigate("Transfer")}
             >
                     <Image
@@ -91,7 +81,7 @@ const AddWallet = ({route}) => {
                     source={require("../assets/vectors/vector33.png")}
                   />
                     <Text style={styles.text1}>Fund With Transfer</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
 
           {/*<View style={styles.shadowProps}>
@@ -140,7 +130,9 @@ const styles = StyleSheet.create({
     //   overflow: Platform.OS === 'andriod' ? 'hidden' : 'visible',
     //   },
     subContainer:{
-        marginTop: 50
+        marginTop: 50,
+        marginHorizontal: 30,
+
     },
     subContainer2:{
       marginLeft: 10,
@@ -159,14 +151,16 @@ const styles = StyleSheet.create({
   },
     container:{
         marginTop: '15%',
-        marginHorizontal: 30,
+        marginHorizontal: 5,
+
     },
     amount:{
       fontSize: 25,
       fontFamily:'montserratBold',
       // fontWeight: 'bold',
       color: Color.white,
-      marginLeft: 7
+      marginLeft: 7,
+      marginTop:8
     },
     walletbalanceText:{
       marginTop: 10,

@@ -33,9 +33,9 @@ const data = [
   ];
 
   const sizeofhelp = [
-    { label: 'Small', value: 'small' },
-    { label: 'Medium', value: 'medium' },
-    { label: 'Large', value: 'large' },
+    { label: 'Small', value: 'Small' },
+    { label: 'Medium', value: 'Medium' },
+    { label: 'Large', value: 'Large' },
    
   ];
 
@@ -53,7 +53,7 @@ const data = [
   const interestfield = [
     { label: 'Request for help now', value: 'Request for help now' },
     { label: 'Request for help later', value: 'Request for help later' },
-    { label: ' Browse through the system', value: 'Browse through the system' },
+    // { label: ' Browse through the system', value: 'Browse through the system' },
   ]
 
 
@@ -162,7 +162,7 @@ function RequestSendInfo({route}){
 
         axios(config)
         .then(function (response) {
-            console.log(JSON.stringify(response.data))
+            // console.log(JSON.stringify(response.data))
             var count = Object.keys(response.data.data).length;
             let stateArray = []
             for (var i = 0; i < count; i++){
@@ -195,7 +195,7 @@ function RequestSendInfo({route}){
 
         axios(config)
         .then(function (response) {
-            console.log(JSON.stringify(response.data))
+            // console.log(JSON.stringify(response.data))
             var count = Object.keys(response.data.data).length;
             let cityArray = []
             for (var i = 0; i < count; i++){
@@ -285,11 +285,19 @@ function RequestSendInfo({route}){
             if(type == 'set'){
                 const currentTime = selectdTime;
                 // const setTime = selectdTime.getHours(). + 
-                setDate(currentTime)
-
+                const hour = time.getHours()
+                const minute = time.getMinutes()
+                const setRealTime = hour + ":" + minute
+                console.log(hour + ":" + minute) 
+                setTime(currentTime)
                 if(Platform.OS === 'android'){
                     toggleTimePicker();
-                    setHelpTime(currentTime.toLocaleTimeString())
+                    // setHelpTime(setRealTime.toLocaleTimeString())
+                    var timeset =time.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })
+                    setHelpTime(timeset)
                 }
             }else{
                 toggleTimePicker()
@@ -297,7 +305,20 @@ function RequestSendInfo({route}){
     }
 
     const confirmIOSTime = () => {
-        setHelpTime(time.toLocaleTimeString())
+        const newtime = time
+        const hour = newtime.getHours()
+        const minute = newtime.getMinutes()
+        console.log(hour + ":" + minute) 
+        const setRealTime = hour + ":" + minute
+        console.log(setRealTime)
+        // setHelpTime(setRealTime.toLocaleTimeString)
+        var timeset = time.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          })
+        
+
+        setHelpTime(timeset)
         toggleTimePicker()
     }
     
@@ -333,29 +354,10 @@ function RequestSendInfo({route}){
         {
             Alert.alert("Invalid Inputs", "Fill in the filled correctly to continue")
         }else{
-            // const 
-            // const requestData ={
-            //     'customer_id':authCtx.customerId,
-            //     'help_interest': interest,
-            //     'help_location':addressfield,
-            //     'help_country': countryName,
-            //     'help_state':stateName,
-            //     'help_lga':cityName,
-            //     'help_landmark':landmark,
-            //     'help_size':helpsize,
-            //     'vehicle_req':vehiclerequest,
-            //     'help_desc':description,
-            //     'category_id':catId,
-            //     'sub_category_id':subcatId,
-            //     'help_date':maindate,
-            //     "help_time": helptime,
-            //     "help_frequency": frequency,
-            //     "customer_budget": ""
-            //  }
             setIsLoading(true)
             const url = 'http://phixotech.com/igoepp/public/api/auth/hrequest/store'
-            try {
-                const response = await axios.post(url, 
+                
+            await axios.post(url, 
             {
                 'customer_id':authCtx.customerId,
                 'help_interest': interest,
@@ -378,15 +380,12 @@ function RequestSendInfo({route}){
                 Accept: 'application/json',
                 Authorization: `Bearer ${authCtx.token}`
             }
-        })
-            navigation.navigate('Requests')
-
-        }catch(error){
-            // Alert
+        }).then((res)=> {
+            // console.log(res)
+            navigation.navigate('Welcome')
+        }).catch((error) => {
             console.log(error)
-        }
-// console.log(requestData)
-            // console.log(response)
+        })
             setIsLoading(false)
     }}
     const [fontloaded] =  useFonts({
@@ -405,14 +404,14 @@ function RequestSendInfo({route}){
         <View style={styles.mainContainer} 
       showsVerticalScrollIndicator={false}>
   
-      <GoBack onPress={() => navigation.goBack()}>Back</GoBack>
+      <GoBack style={{marginHorizontal: 5}} onPress={() => navigation.goBack()}>Back</GoBack>
       
         <ScrollView style={styles.container} 
         showsVerticalScrollIndicator={false}
         
         >
             
-            <Text style={styles.enterinformation}> Enter Information</Text>
+            <Text style={styles.enterinformation}> Make Request</Text>
             <View style={styles.inputContainer}>
 
             {/*location*/}
@@ -545,7 +544,7 @@ function RequestSendInfo({route}){
 
                 <TextInput
                     style={[styles.date, {fontFamily: 'poppinsRegular'}]}
-                    placeholder="Sat Aug 21 2004"
+                    placeholder="Select date..."
                     value={helpdate}
                     onChangeText={updateInputValueHandler.bind(this, 'date')}
                     placeholderTextColor={"#11182744"}
@@ -691,7 +690,7 @@ function RequestSendInfo({route}){
 
                 <TextInput
                     style={[styles.date, {fontFamily: 'poppinsRegular'}]}
-                    placeholder="18:23:55"
+                    placeholder="Select time..."
                     value={helptime}
                     onChangeText={updateInputValueHandler.bind(this, 'time')}
                     placeholderTextColor={"#11182744"}
@@ -703,7 +702,7 @@ function RequestSendInfo({route}){
 
               
            
-            <Text style={[styles.label, styles.labelInvalid]}>Help Interest</Text>
+            <Text style={[styles.label, styles.labelInvalid]}>Request Period</Text>
             <Dropdown
             style={[styles.dropdown, isInterestFocus && { borderColor: 'blue' }]}
             placeholderStyle={[styles.placeholderStyle,{fontFamily: 'poppinsRegular'}]}
@@ -715,7 +714,7 @@ function RequestSendInfo({route}){
             maxHeight={300}
             labelField="label"
             valueField="value"
-            placeholder={!isInterestFocus ? 'Select Help Interest' : '...'}
+            placeholder={!isInterestFocus ? 'Select Period' : '...'}
             searchPlaceholder="Search..."
             value={interest}
             onFocus={() => setIsInterestFocus(true)}

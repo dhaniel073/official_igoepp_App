@@ -131,28 +131,31 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         />*/}
 
         {!isLogin && (
-     
-                <Dropdown
-                  style={[styles.dropdown, isSexFocus && { borderColor: 'blue' }]}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
-                  iconStyle={styles.iconStyle}
-                  data={sex}
-                  search
-                  maxHeight={300}
-                  labelField="label"
-                  valueField="value"
-                  placeholder={!isSexFocus ? 'Select Gender' : '...'}
-                  searchPlaceholder="Search..."
-                  value={enteredGender}
-                  onFocus={() => setSexFocus(true)}
-                  onBlur={() => setSexFocus(false)}
-                  onChange={item => {
-                      setEnteredGender(item.value);
-                      setSexFocus(false);
-                  }}
-                />
+                <View style={{ borderBottomColor:Color.darkslategray_300, borderBottomWidth:1}}>
+                  <Dropdown
+                    style={[styles.dropdown, isSexFocus && { borderColor: 'blue' }]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={sex}
+                    search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={!isSexFocus ? 'Select Gender' : '...'}
+                    searchPlaceholder="Search..."
+                    value={enteredGender}
+                    onFocus={() => setSexFocus(true)}
+                    onBlur={() => setSexFocus(false)}
+                    onChange={item => {
+                        setEnteredGender(item.value);
+                        setSexFocus(false);
+                    }}
+                  />
+                  <View style={{ marginBottom:10 }}/>
+                </View>
+
         )}
 
         {!isLogin && (
@@ -162,6 +165,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
             value={enteredPhone}
             keyboardType="numeric"
             isInvalid={phoneIsInvalid}
+            maxLength={11}
 
           />
         )}

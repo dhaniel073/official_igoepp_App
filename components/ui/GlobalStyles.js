@@ -63,6 +63,7 @@ export const FontFamily = {
     silver: "#bdbdbd",
     firebrick_100: "#bb2222",
     grey: "#d5dde0",
+    darkolivegreen_200: "#013220"
   };
   /* border radiuses */
   export const Border = {

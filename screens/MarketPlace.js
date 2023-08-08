@@ -48,7 +48,7 @@ function MarketPlace(){
       setIsFetching(true)
       await axios.get(url)
       .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         setFetchedCategory(res.data.data)
         setIsFetching(false)
       }).catch((error) => {
@@ -72,9 +72,9 @@ useEffect(() => {
         }
       }).then((res)=> {
         // console.log(res.data.data)
-        const length = res.data.data.length
+        const length = res.data.data.length.toString()
         authCtx.customerCart(length)
-        console.log(length)
+        // console.log(length)
       }).catch((error) => {
         console.log(error)
       })
@@ -120,8 +120,8 @@ if(!fontloaded){
             <TouchableOpacity style={{ marginRight: 10 }} onPress={() => navigation.navigate('ViewCartItems')}>
               <View style={{ flexDirection:'row' }}>
                 <AntDesign name="shoppingcart" size={30} color={Color.darkolivegreen_100} />
-                <View style={{ backgroundColor: Color.tomato, position: 'absolute', top: -10, left: 20, borderRadius: 25, width:20,   }}>
-                  <Text style={{ fontSize: 12, top:1, color: Color.white, fontFamily:'poppinsBold', textAlign:'center'}}>{authCtx.cart}</Text>
+                <View style={{ backgroundColor: Color.tomato, position: 'absolute', top: -10, left: 20, borderRadius: 30, width:14,   }}>
+                  <Text style={{ fontSize: 8,  color: Color.white, fontFamily:'poppinsBold', textAlign:'center'}}>{authCtx === "" ? 0 : authCtx.cart}</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -135,13 +135,15 @@ if(!fontloaded){
                 data={fetchedcategory}
                 keyExtractor={(item) => item.id}
                 renderItem={({item}) => 
+                
                     <View style={styles.container}  >
-                    <Pressable style={({pressed}) => [styles.pressables, pressed && styles.pressed]} onPress={() => navigation.navigate("marketPlaceItems", {
+                    <TouchableOpacity style={[styles.pressables]} onPress={() => navigation.navigate("marketPlaceItems", {
                         categoryId: item.id,
                         // categoryName: item.cat_name,
                         // categoryDesc: item.cat_desc,
                         first_name: fetchedName.first_name
                     })}>
+
                     <Image
                     style={styles.image2}
                     source={{ uri:`https://phixotech.com/igoepp/public/category/${item.image}`  }}
@@ -151,7 +153,7 @@ if(!fontloaded){
                         <Text style={styles.item}>
                         {item.cat_name}
                         </Text>
-                    </Pressable>
+                    </TouchableOpacity>
                     </View>
                     }
                 numColumns={2}
@@ -199,9 +201,6 @@ const styles = StyleSheet.create({
         fontSize: FontSize.size_mid,
         fontFamily: 'poppinsRegular',
         marginTop: 0
-      },
-      pressed:{
-        opacity: 0.75
       },
       item: {
         padding: 10,

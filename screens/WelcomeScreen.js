@@ -10,6 +10,7 @@ import LoadingOverlay from '../components/ui/LoadingOverlay';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SessionIDCheck, WalletBalance, customerInfocheck, showVerifiedCustomer } from '../util/auth';
 import { useFonts } from 'expo-font';
+import {MaterialIcons} from '@expo/vector-icons'
 
 function WelcomeScreen({route}) {
   const [fetchedMessage, setFetchedMesssage] = useState('');
@@ -57,27 +58,21 @@ useEffect(() => {
 },[])
 
 
-// useEffect(() => {
-//   setTimeout(async () => {
-//     const response = await  WalletBalance(authCtx.customerId, authCtx.token )
-//     // console.log(response.data)
-//     const check = response.data.wallet_balance.toLocaleString()
-//     authCtx.customerwalletbalance(check)
-//   }, 3000)
-//     // console.log(response.data.wallet_balance.toLocaleString())
-  
-// }, [])
-
 //session id check
 useEffect(() => {
   async function SessionId(){
   const response = await SessionIDCheck(authCtx.email, authCtx.token)
   // console.log(response.data)
-  authCtx.customerSessionId(response.data.login_session_id)
+    if(response.data.login_session_id === null){
+      authCtx.customerSessionId("empty")
+    }else{
+      authCtx.customerSessionId(response.data.login_session_id )
+    }
   }
   SessionId()
 },[])
 
+// console.log(authCtx.sessionId)
 
 
 // console.log(authCtx.sessionId)
@@ -120,9 +115,9 @@ function imageCheck(){
       <View style={styles.exitIcon}>
 
         <View style={{ flexDirection: 'row' }}>
-          <Pressable onPress={() => navigation.openDrawer()}>
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
             {imageCheck()}
-          </Pressable>
+          </TouchableOpacity>
           <Text style={{ fontSize:15, fontFamily: 'poppinsSemiBold', marginLeft: 8, marginTop: 8, color: Color.limegreen }}>Hi {fetchedMessage.first_name}</Text>
         </View>
 
@@ -147,8 +142,7 @@ function imageCheck(){
           {/*for wallet balance and the add sign */}
           <View style={styles.walletContainer3}>
             <Text style={styles.walletText}>Balance</Text>
-            <Pressable
-              style={({pressed}) => [pressed && styles.pressed]}
+            <TouchableOpacity
               onPress={() => navigation.navigate("AddToWallet", {
                 walletBalance: authCtx.walletBal
               })}
@@ -158,7 +152,7 @@ function imageCheck(){
             source={require("../assets/vectors/vector58.png")}
             transition={500}
             />
-            </Pressable>
+            </TouchableOpacity>
 
           </View>
 
@@ -177,7 +171,7 @@ function imageCheck(){
             
         <View>
             {/*Make Payment   panel */}
-            <Pressable style={({pressed}) => [styles.makePaymentPanel, pressed && styles.pressed]}
+            <TouchableOpacity style={[styles.makePaymentPanel]}
             onPress={() => navigation.navigate("MakePayment")}
             >
               <Image 
@@ -217,10 +211,10 @@ function imageCheck(){
               />
             
                 <Text style={styles.makePaymentText}>Make Payment</Text>
-            </Pressable>
+            </TouchableOpacity>
 
             {/*Request for help  panel */}
-            <Pressable style={ ({pressed}) => [styles.requestHelpPanel, pressed && styles.pressed ]}
+            <TouchableOpacity style={[styles.requestHelpPanel]}
             onPress={() => navigation.navigate('RequestHelp')}
             >
               <Image
@@ -230,15 +224,15 @@ function imageCheck(){
 
               />
               <Text style={styles.requestText}>Request Help</Text>
-            </Pressable>
+            </TouchableOpacity>
 
         </View>
           
         <View style={styles.subContainer3}>
             {/*service History  panel */}
             
-            <Pressable style={({pressed}) => [styles.serviceHistoryPanel, pressed && styles.pressed]}
-            onPress={() => navigation.navigate("Drawer Service")}
+            <TouchableOpacity style={[styles.serviceHistoryPanel]}
+            onPress={() => navigation.navigate("Service")}
             >
               <Image
               style={styles.servicehistoryIcon}
@@ -264,11 +258,11 @@ function imageCheck(){
 
               />
               <Text style={styles.servicehistoryText}>Service History</Text>
-            </Pressable>
+            </TouchableOpacity>
             
 
             {/*Market Place   panel */}
-            <Pressable style={({pressed}) => [styles.marketplacePanel, pressed && styles.pressed]}
+            <TouchableOpacity style={[styles.marketplacePanel]}
             onPress={() => navigation.navigate('MarketPlace')}
             >
               
@@ -294,7 +288,7 @@ function imageCheck(){
 
                 <Text  style={styles.marketPlaceText}>Market Place</Text>
 
-            </Pressable>
+            </TouchableOpacity>
             </View>
 
             
@@ -302,11 +296,13 @@ function imageCheck(){
 
             {/*Requests Payment   panel */}
             <View>
-            <Pressable style={({pressed}) => [styles.feedback, pressed &&  styles.pressed]} onPress={() => navigation.navigate("FeedBack")}>
+            
+            <TouchableOpacity style={[styles.feedback]} onPress={() => navigation.navigate("FeedBack")}>
+              <MaterialIcons style={{ paddingLeft: 10, paddingTop:10 }} name="feedback" size={40} color={Color.white} />
               <Text style={styles.feedbackText}>FeedBack</Text>
-            </Pressable>
+            </TouchableOpacity>
 
-            <Pressable style={({pressed}) => [styles.requestPanel, pressed && styles.pressed]}
+            <TouchableOpacity style={[styles.requestPanel]}
             onPress={() => navigation.navigate("Requests")}
             >
                 
@@ -333,7 +329,7 @@ function imageCheck(){
             </View>
 
                 <Text style={styles.requestsText}>Requests</Text>
-            </Pressable>
+            </TouchableOpacity>
             
             
             </View>
@@ -384,7 +380,7 @@ const styles = StyleSheet.create({
   },
   feedbackText:{
     color: 'white',
-    padding: 10,
+    paddingLeft: 10,
     fontFamily: 'poppinsRegular',
     fontSize: 15
   },

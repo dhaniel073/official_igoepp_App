@@ -1,4 +1,4 @@
-import { Alert, Dimensions, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Dimensions, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useState } from 'react'
 import GoBack from '../components/ui/GoBack'
 import { Image } from 'expo-image'
@@ -53,7 +53,6 @@ const ProceedMarketItem = ({route,navigation}) => {
     }
 
     const HandleSubmitCartItem = async () => {
-
         if(available !== 'Y'){
             Alert.alert('Item is out of stock', 'Please Try again Later', [
                 {
@@ -66,7 +65,7 @@ const ProceedMarketItem = ({route,navigation}) => {
             Alert.alert('Empty Field', 'Quantity cannot be empty,Enter quantity needed for supply')
             setQuantity(null)
         }else{
-            set
+            setIsLoading(true)  
             const url = 'http://phixotech.com/igoepp/public/api/auth/cart/store'
             await  axios.post(url, {
             
@@ -100,7 +99,7 @@ const ProceedMarketItem = ({route,navigation}) => {
             })
             console.log(productId,quantity,supplierId, authCtx.customerId)
         }
-
+        setIsLoading(false)
        
     }
 
@@ -166,7 +165,7 @@ const ProceedMarketItem = ({route,navigation}) => {
                                 onChangeText={setQuantity}
                                 maxLength={2}
                                 value={quantity}
-                                style={{ fontSize: 18, borderWidth: 1, borderColor: Color.firebrick_100, padding:10, borderRadius:10 }}
+                                style={styles.inputqty}
                             />
                         </SafeAreaView>
                         </View>
@@ -199,6 +198,17 @@ const ProceedMarketItem = ({route,navigation}) => {
 export default ProceedMarketItem
 
 const styles = StyleSheet.create({
+    inputqty:{
+        fontSize: 18, 
+        borderWidth: 1, 
+        borderColor: Color.firebrick_100, 
+        padding:10, 
+        borderRadius:10,
+        marginLeft: Platform.OS === 'ios' ? 25 : 0,
+        marginRight: Platform.OS === 'ios' ? 25 : 0,
+        marginTop: Platform.OS === 'ios' ? 15 : 0,
+
+    },
     panelBottomTitle: {
         fontSize: 17,
         fontWeight: 'bold',

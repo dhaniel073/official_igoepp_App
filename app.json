@@ -15,16 +15,23 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "c"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/vectors/whatsapp-image-20201211-at-642-1.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.dhanieldcoder.igoepp"
     },
     "web": {
       "favicon": "./assets/vectors/whatsapp-image-20201211-at-642-1.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d848bf89-fc4a-4e90-9e7d-c326a0c1ac68"
+      }
     }
   }
 }

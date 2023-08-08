@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../store/auth-context";
 import axios from "axios";
 import GoBack from "../components/ui/GoBack";
+import { TouchableOpacity } from "react-native";
 
 function SubCategory({route}){
     
@@ -81,7 +82,7 @@ function SubCategory({route}){
         keyExtractor={(item) => item.id}
         renderItem={({item}) => 
             <View style={styles.container}  >
-              <Pressable style={({pressed}) => [styles.pressables, pressed && styles.pressed]} onPress={() => navigation.navigate("ProceedCategory", {
+              <TouchableOpacity style={[styles.pressables]} onPress={() => navigation.navigate("ProceedCategory", {
                 subcategoryId: item.id,
                 subcategoryName: item.sub_cat_name,
                 subcategoryDesc: item.sub_cat_desc,
@@ -97,7 +98,7 @@ function SubCategory({route}){
                 <Text style={styles.item}>
                   {item.sub_cat_name}
                 </Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
             }
         numColumns={2}

@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font';
 import { useCallback } from 'react';
 import AppLoading from 'expo-app-loading';
 import LoadingOverlay from './LoadingOverlay';
+import { TouchableOpacity } from 'react-native';
 
 function FlatButton({ children, onPress }) {
   const [fontloaded] =  useFonts({
@@ -18,14 +19,14 @@ function FlatButton({ children, onPress }) {
     return <LoadingOverlay/>;
   }
   return (
-    <Pressable
-      style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+    <TouchableOpacity
+      style={[styles.button]}
       onPress={onPress}
     >
       <View>
         <Text style={styles.buttonText}>{children}</Text>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 }
 

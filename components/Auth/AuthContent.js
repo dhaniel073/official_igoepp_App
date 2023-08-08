@@ -40,12 +40,11 @@ function AuthContent({ isLogin, onAuthenticate }) {
     password = password.trim();
 
     const emailIsValid = email.includes('@');
-    const passwordIsValid = password.length > 4;
-    const genderIsValid = gender.length === 1;
+    const passwordIsValid = password.length > 7;
     const passwordsAreEqual = password === confirmPassword;
     if (
       !emailIsValid ||
-      !passwordIsValid || 
+      !passwordIsValid ||
       (!isLogin && (!passwordsAreEqual))
     ) {
       Alert.alert('Invalid input', 'Please check your entered credentials.');
@@ -63,7 +62,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
 
   return (
     <View style={styles.authContent}>
-      <Image style={{ width:70, height:70, marginLeft: "39%" }} source={require("../../assets/vectors/whatsapp-image-20201211-at-642-1.png")}/>
+      <Image style={{ width:70, height:70, marginLeft: "39%"}} source={require("../../assets/vectors/whatsapp-image-20201211-at-642-1.png")}/>
       <AuthForm
         isLogin={isLogin}
         onSubmit={submitHandler}
@@ -96,7 +95,7 @@ export default AuthContent;
 const styles = StyleSheet.create({
   authContent: {
     // marginTop: 20,
-    marginHorizontal: 25,
+    marginHorizontal: 20,
     padding: 16,
     borderRadius: 8,
   },

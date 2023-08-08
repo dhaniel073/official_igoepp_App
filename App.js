@@ -9,17 +9,12 @@ import {Ionicons} from '@expo/vector-icons'
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
-import { Colors } from './constants/styles';
 import AuthContextProvider, { AuthContainer, AuthContainerProvider, AuthContext } from './store/auth-context';
-// import IconButton from './components/ui/IconButton';
 import LoadingOverlay from './components/ui/LoadingOverlay';
-// import Welcome1 from './screens/WelcomeScreen1';
 import AddWallet from './screens/AddWallet';
 import NotificationScreen from './screens/NotificationScreen';
-import FundWallet from './screens/FundWallet';
 import RequestHelp from './screens/RequestHelp';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-// import DrawerScreen from './screens/DrawerScreen';
 import { Color } from './components/ui/GlobalStyles';
 import MarketPlace from './screens/MarketPlace';
 import TermsAndCondition from './screens/TermsAndCondition';
@@ -27,12 +22,9 @@ import Requests from './screens/Requests';
 import axios from 'axios';
 import { Text, StyleSheet, View, Image, Pressable, Modal, Alert } from 'react-native';
 import ServiceHistory from './screens/ServiceHistory';
-import { sin } from 'react-native-reanimated';
-// import PayStack from './screens/PayStack';
 import PayStackScreen from './screens/PayStack';
 import ForgotPassword from './screens/ForgotPassword';
 import FirstDisplayScreen from './screens/FirstDisplayScreen';
-// import ViewHelper from './screens/ProceedCategory';
 import MakePayment from './screens/MakePayment';
 import RequestHelpQuestionaries from './screens/RequestHelpQuestionaries';
 import Payments from './screens/Payments';
@@ -41,26 +33,23 @@ import ViewProfile from './screens/ViewProfile';
 import ImageViewer from './screens/ImageViewer';
 import SubCategory from './screens/SubCategory';
 import ProceedCategory from './screens/ProceedCategory';
-import { customerInfocheck } from './util/auth';
 import { useFonts } from 'expo-font';
 import ViewRequests from './screens/ViewRequests';
 import RequestSendInfo from './screens/RequestSendInfo';
 import FeedBack from './screens/FeedBack';
 import BidScreen from './screens/BidScreen';
 import CancelRequest from './screens/CancleRequest';
-// import { Modal } from 'antd';
-import DrawerContent from './screens/DrawerContent';
 import CustomDrawer from './screens/CustomDrawer';
 import Transfer from './screens/Transfer';
 import Settings from './screens/Settings';
 import MarketPlaceItems from './screens/MarketPlaceItems';
 import ProceedMarketItem from './screens/ProceedMarketItem';
-import RequestDrawer from './screens/RequestDrawer';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ChatScreen from './screens/ChatScreen';
 import DisputeScreen from './screens/DisputeScreen';
 import NotifictionSettings from './screens/NotifictionSettings';
 import ViewCartItems from './screens/ViewCartItems';
+import CheckOutScreen from './screens/CheckOutScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -192,7 +181,7 @@ function DrawerNavigation(){
       />
 
       <Drawer.Screen
-      name="Drawer Payment"
+      name="Payment"
       component={Payments}
       options={{ 
         headerTintColor: Color.darkolivegreen_100,
@@ -204,7 +193,7 @@ function DrawerNavigation(){
       />
 
       <Drawer.Screen
-      name="Drawer Service"
+      name="Service"
       component={ServiceHistory}
       options={{ 
         headerTintColor: Color.darkolivegreen_100,
@@ -302,14 +291,6 @@ function AuthenticatedStack() {
 
       />
 
-      <Stack.Screen
-      name='FundWallet'
-      component={FundWallet}
-      options={{ 
-        headerShown: false,
-       }}
-
-      />
 
       {/*Request Help*/}
       <Stack.Screen
@@ -480,6 +461,15 @@ function AuthenticatedStack() {
       options={{ 
         headerShown: false,
        }}
+      />
+
+       <Stack.Screen
+       name="Checkout"
+       component={CheckOutScreen}
+       options={{ 
+         headerShown: false,
+        }}
+       
       />
 
       

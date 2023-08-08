@@ -1,5 +1,5 @@
 import { useFonts } from "expo-font";
-import { Image, Pressable, StyleSheet, Text } from "react-native";
+import { Image, Pressable, StyleSheet, Text, TouchableOpacity } from "react-native";
 import LoadingOverlay from "./LoadingOverlay";
 import { Color, FontSize } from "./GlobalStyles";
 import { AntDesign } from '@expo/vector-icons';
@@ -16,18 +16,13 @@ function GoBack({onPress, children, style}){
     return <LoadingOverlay/>
   }
     return (
-    <Pressable style={ ({pressed}) => [styles.backParent, pressed && styles.pressed, style]}
+    <TouchableOpacity style={[styles.backParent,style]}
         onPress={onPress}
-    >{/*
-        <Image
-          style={styles.image}
-          contentFit="cover"
-          source={require("../../assets/vectors/vector30.png")}
-    />*/}
+    >
         <AntDesign name="arrowleft" size={24} color={Color.darkolivegreen_100} />
         <Text style={styles.back}>{children}</Text>
 
-      </Pressable>
+      </TouchableOpacity>
     )
 }
 

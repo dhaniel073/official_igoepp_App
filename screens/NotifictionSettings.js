@@ -1,38 +1,190 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import { SafeAreaView, StyleSheet, Switch, Text, View } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
 import { Color, FontSize } from '../components/ui/GlobalStyles'
 import GoBack from '../components/ui/GoBack'
 import LoadingOverlay from '../components/ui/LoadingOverlay'
 import {useFonts} from 'expo-font'
-import CustomSwitch from './CustomSwitch'
+import CustomSwitch from '../components/ui/CustomSwitch'
+import axios from 'axios'
+import { AuthContext } from '../store/auth-context'
 
 const NotifictionSettings = ({navigation}) => {
-    const [email, setEmail] = useState()
-    const [sms, setSMS] = useState()
-    const [popups, setPopups] = useState()
+    const authCtx = useContext(AuthContext)
+    // const [email, setEmail] = useState()
+    // const [sms, setSMS] = useState()
+    // const [popups, setPopups] = useState()
 
-    const [emailtype, setEmailType] = useState('')
-    const [smstype, setSMSType] = useState('')
-    const [popupstype, setPopupsType] = useState('')
+    const [isEmailEnabled, setIsEmailEnabled] = useState('')
+    const [isSmsEnabled, setIsSMSEnabled] = useState('')
+    const [isPopupEnabled, setIsPopupEnabled] = useState('')
+
+    // const [emailtype, setEmailType] = useState('')
+    // const [smstype, setSMSType] = useState('')
+    // const [popupstype, setPopupsType] = useState('')
 
     // console.log(popups, email, sms)
 
     const [isFetching, setIsFetching] = useState()
+    
+
+    const [emailtext, setEmailText] = useState()
+    const [smstext, setSMSText] = useState()
+    const [popuptext, setPopupText] = useState()
 
 
-    const NotificationSetup = () => {
 
-        if(email === 'true'){
-            console.log('e')
-        }else if(sms === 'true'){
-            setSMSType('S')
-        }else if(popups === 'true'){
-            setPopupsType('P')
+    const toggleEmailSwitch = async() => {
+        if(isEmailEnabled){
+            setEmailText('Inactive')
+        } else{
+            setEmailText('Active')
         }
 
-        console.log(emailtype,smstype,popupstype)
+        if(isEmailEnabled === false){
+            // call the set customer alert
+            const emailtype = 'E'
+            const url =  'http://phixotech.com/igoepp/public/api/auth/customer/custalertsetups'
+            await axios.post(url, {
+                "customer_id": authCtx.customerId,
+                "event_type": 'EA',
+                "alert_type": emailtype,
+            }, {
+                headers:{
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${authCtx.token}`
+                }
+            }).then((res)=>{
+                console.log(res.data)
+            }).catch((error) => {
+                console.log(error)
+            })
+        }else{
+            // call the remove customer alert
+            const emailtype = 'E'
+            const url = 'http://phixotech.com/igoepp/public/api/auth/customer/removecustalertsetups'
+            await axios.post(url, {
+                "customer_id": authCtx.customerId,
+                "event_type": 'EA',
+                "alert_type": emailtype,
+            }, {
+                headers:{
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${authCtx.token}`
+                }
+            }).then((res)=>{
+                console.log(res.data)
+            }).catch((error) => {
+                console.log(error)
+            })
+            
+        }
+
+        setIsEmailEnabled(previousState => !previousState)
     }
 
+    const toggleSMSSwitch = async() => {
+        if(isSmsEnabled){
+            setSMSText('Inactive')
+        } else{
+            setSMSText('Active')
+        }
+
+        if(isSmsEnabled === false){
+            // call the set customer alert
+            const smstype = 'S'
+            const url =  'http://phixotech.com/igoepp/public/api/auth/customer/custalertsetups'
+            await axios.post(url, {
+                "customer_id": authCtx.customerId,
+                "event_type": 'EA',
+                "alert_type": smstype,
+            }, {
+                headers:{
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${authCtx.token}`
+                }
+            }).then((res)=>{
+                console.log(res.data)
+            }).catch((error) => {
+                console.log(error.data)
+            })
+            // console.log('S')
+        }else{
+            // call the remove customer alert
+            const smstype = 'S'
+            const url = 'http://phixotech.com/igoepp/public/api/auth/customer/removecustalertsetups'
+            console.log(smstype)
+            await axios.post(url, {
+                "customer_id": authCtx.customerId,
+                "event_type": 'EA',
+                "alert_type": smstype,
+            }, {
+                headers:{
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${authCtx.token}`
+                }
+            }).then((res)=>{
+                console.log(res.data)
+            }).catch((error) => {
+                console.log(error.data)
+            })
+        }
+
+        setIsSMSEnabled(previousState => !previousState)
+    }
+
+    const togglePopupSwitch = async () => {
+        if(isPopupEnabled){
+            setPopupText('Inactive')
+        } else{
+            setPopupText('Active')
+        }
+
+        if(isPopupEnabled === false){
+            // call the set customer alert
+            const popuptype = 'P'
+            console.log(popuptype)
+            const url =  'http://phixotech.com/igoepp/public/api/auth/customer/custalertsetups'
+            await axios.post(url, {
+                "customer_id": authCtx.customerId,
+                "event_type": 'EA',
+                "alert_type": popuptype,
+            }, {
+                headers:{
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${authCtx.token}`
+                }
+            }).then((res)=>{
+                console.log(res.data)
+            }).catch((error) => {
+                console.log(error.data)
+            })
+        }else{
+            // call the remove customer alert
+            const popuptype = 'P'
+            console.log(popuptype)
+            const url = 'http://phixotech.com/igoepp/public/api/auth/customer/removecustalertsetups'
+            await axios.post(url, {
+                "customer_id": authCtx.customerId,
+                "event_type": 'EA',
+                "alert_type": popuptype,
+            }, {
+                headers:{
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${authCtx.token}`
+                }
+            }).then((res)=>{
+                console.log(res.data)
+            }).catch((error) => {
+                console.log(error.data)
+            })
+        }
+        // console.log(isPopupEnabled)
+        setIsPopupEnabled(previousState => !previousState)
+    }
+
+
+
+    
 
     const [fontloaded] =  useFonts({
         'poppinsRegular': require("../assets/font/Poppins/Poppins-Regular.ttf"),
@@ -57,17 +209,41 @@ const NotifictionSettings = ({navigation}) => {
 
         <View style={{ flexDirection: 'row', marginTop: '20%', justifyContent:'space-between' }}>
             <Text style={styles.text}>Email</Text>
-            <CustomSwitch onPress={() => {NotificationSetup()}} isEnabled={email} toggleSwitch={setEmail}/>
+
+            <Text>{emailtext}</Text>
+            <Switch
+                trackColor={{ false: 'grey', true: 'green' }}
+                thumbColor={'white'}
+                ios_backgroundColor={'white'}
+                onValueChange={toggleEmailSwitch}
+                value={isEmailEnabled}
+            />
         </View>
 
         <View style={{ flexDirection: 'row', marginTop: '20%', justifyContent:'space-between' }}>
             <Text style={styles.text}>SMS</Text>
-            <CustomSwitch isEnabled={sms} toggleSwitch={setSMS}/>
+
+            <Text>{smstext}</Text>
+            <Switch
+                trackColor={{ false: 'grey', true: 'green' }}
+                thumbColor={'white'}
+                ios_backgroundColor={'white'}
+                onValueChange={toggleSMSSwitch}
+                value={isSmsEnabled}
+            />
         </View>
 
         <View style={{ flexDirection: 'row', marginTop: '20%', justifyContent:'space-between' }}>
             <Text style={styles.text}>Pop Ups</Text>
-            <CustomSwitch isEnabled={popups} toggleSwitch={setPopups}/>
+
+            <Text>{popuptext}</Text>
+            <Switch
+                trackColor={{ false: 'grey', true: 'green' }}
+                thumbColor={'white'}
+                ios_backgroundColor={'white'}
+                onValueChange={togglePopupSwitch}
+                value={isPopupEnabled}
+            />
         </View>
 
       </View>

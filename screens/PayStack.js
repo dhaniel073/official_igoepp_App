@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Image, Pressable, Alert, ScrollView, TextInput } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image, Pressable, Alert, ScrollView, TextInput, SafeAreaView, Platform } from "react-native";
 // import { TextInput } from "react-native-gesture-handler";
 import { Paystack, paystackProps } from "react-native-paystack-webview";
 import Input from "../components/Auth/Input";
@@ -82,9 +82,9 @@ function PayStackScreen(){
 
     return(
 
-        <ScrollView >
+        <ScrollView style={{ flex:1, marginTop: "15%", marginHorizontal:5 }}>
 
-            <GoBack style={{ marginTop: "15%" }} onPress={() => navigation.goBack()}>Back</GoBack>
+            <GoBack  onPress={() => navigation.goBack()}>Back</GoBack>
 
             <View style={styles.container}>
             <Text style={styles.text}>How Much would you like to fund with</Text>
@@ -125,9 +125,9 @@ function PayStackScreen(){
                 
                 />
     
-                <Pressable  onPress={()=> [!InputAmount ? check() : paystackWebViewRef.current.startTransaction()]} style={({pressed}) => [styles.extrastyle, pressed && styles.pressed]}>
+                <TouchableOpacity  onPress={()=> [!InputAmount ? check() : paystackWebViewRef.current.startTransaction()]} style={[styles.extrastyle]}>
                     <Text style={styles.extrastyletext}>Continue</Text>
-                </Pressable>
+                </TouchableOpacity>
             
                 </View>
         </ScrollView>
@@ -161,18 +161,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginHorizontal: 20,
         // marginLeft: "20%",
-        marginTop: "10%",
-        height: "100%",
+        marginTop: "20%",
+        // height: "100%",
         marginBottom: 20, 
     },
     inputstyle:{
         // minWidth: "50%",
-        paddingTop: 3,
+        paddingTop: Platform.OS === 'android' ? 10 : 0,
         fontSize: FontSize.size_17xl,
         fontWeight: "600",
         // fontWeight: 'bold'
         fontFamily: 'poppinsSemiBold',
-        color: Color.darkolivegreen_100
+        color: Color.darkolivegreen_100,
     },
     extrastyle:{
         marginTop: "50%",

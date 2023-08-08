@@ -1,3 +1,4 @@
+import { TouchableOpacity } from "react-native";
 import { Image, StyleSheet, View, Pressable, Text } from "react-native";
 
 function ImageViewer({route, navigation}){
@@ -15,9 +16,9 @@ function ImageViewer({route, navigation}){
     }
     return (
         <View style={styles.container}>
-            <Pressable style={({pressed}) => [styles.backParent,pressed && styles.pressed]} onPress={() => navigation.goBack()}>
+            <TouchableOpacity style={styles.backParent} onPress={() => navigation.goBack()}>
                 <Image style={styles.image2} source={require("../assets/vectors/vector59.png")}/>
-            </Pressable>
+            </TouchableOpacity>
                 {check()}
         </View>
     )

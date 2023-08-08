@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
         marginTop: 10
       },
     mainContainer:{
-        marginTop: "18%" 
+        marginTop: "15%" 
     },
     enterinformation:{
         color: Color.darkolivegreen_100,

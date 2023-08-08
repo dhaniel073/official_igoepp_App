@@ -21,8 +21,8 @@ const HEIGHT_MODAL = 200
 
 
 const data = [
-    { label: 'Cash ', value: 'c' },
-    { label: 'Wallet ', value: 'w' },
+    { label: 'Cash ', value: 'C' },
+    { label: 'Wallet ', value: 'W' },
   
   ];
 

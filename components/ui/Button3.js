@@ -1,15 +1,16 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Color } from "./GlobalStyles";
+import { TouchableOpacity } from "react-native";
 
 function Button3({children, style, onPress}){
     return (
-    <Pressable
-      style={({ pressed }) => [styles.button, pressed && styles.pressed, style]}
+    <TouchableOpacity
+      style={[styles.button,style]}
       onPress={onPress} >
       <View>
         <Text style={styles.buttonText}>{children}</Text>
       </View>
-    </Pressable>
+    </TouchableOpacity>
     )
 }
 

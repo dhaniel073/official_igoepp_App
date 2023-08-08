@@ -11,6 +11,7 @@ import { Color } from '../components/ui/GlobalStyles';
 function SignupScreen() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const authCtx = useContext(AuthContext);
+  const [errorMsg, setErrorMsg] = useState('')
 
   async function signupHandler({ email, password, gender, phone, firstname, lastname }) {
         
@@ -29,8 +30,8 @@ function SignupScreen() {
       authCtx.customerEmail(response.email)
     } catch (error) {
       console.log(error.response.data.email)
-      const show = error.response.data.email
-      Alert.alert("Error Signing you In", )
+      setErrorMsg(error.response.data.email)
+      Alert.alert("Error Signing you In", "The email is taken try again later")
     }
     setIsAuthenticating(false);
 
@@ -55,7 +56,7 @@ export default SignupScreen;
 
 const styles = StyleSheet.create({
   Title:{
-    marginTop: 20,
+    marginTop: 30,
     fontSize: 30,
     fontWeight: 'bold',
     color: Color.lightgreen

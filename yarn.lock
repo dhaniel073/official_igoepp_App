@@ -1788,6 +1788,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@notifee/react-native@5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@notifee/react-native/-/react-native-5.3.0.tgz#79d20e2d9d383d45de3efd12f616606ac7a31229"
+  integrity sha512-P8uj/Ar4sAJ9sq+1W6qklQ2yw66GBTYD3qgKXoD6sJihoCVbniQ2A8xMYIPG1Y/To/DcbPouc9lsNm2XrxQQXA==
+
 "@npmcli/fs@^1.0.0":
   version "1.1.1"
   resolved "https://registry.npmjs.org/@npmcli/fs/-/fs-1.1.1.tgz"
@@ -2056,7 +2061,7 @@
   resolved "https://registry.npmjs.org/@react-navigation/elements/-/elements-1.3.18.tgz"
   integrity sha512-/0hwnJkrr415yP0Hf4PjUKgGyfshrvNUKFXN85Mrt1gY49hy9IwxZgrrxlh0THXkPeq8q4VWw44eHDfAcQf20Q==
 
-"@react-navigation/native-stack@^6.9.13":
+"@react-navigation/native-stack@^6.9.1", "@react-navigation/native-stack@^6.9.13":
   version "6.9.13"
   resolved "https://registry.npmjs.org/@react-navigation/native-stack/-/native-stack-6.9.13.tgz"
   integrity sha512-ejlepMrvFneewL+XlXHHhn+6y3lwvavM4/R7XwBV0XJxCymujexK+7Vkg7UcvJ1lx4CRhOcyBSNfGmdNIHREyQ==
@@ -2064,7 +2069,7 @@
     "@react-navigation/elements" "^1.3.18"
     warn-once "^0.1.0"
 
-"@react-navigation/native@^6.1.7":
+"@react-navigation/native@^6.0.13", "@react-navigation/native@^6.1.7":
   version "6.1.7"
   resolved "https://registry.npmjs.org/@react-navigation/native/-/native-6.1.7.tgz"
   integrity sha512-W6E3+AtTombMucCRo6q7vPmluq8hSjS+IxfazJ/SokOe7ChJX7eLvvralIsJkjFj3iWV1KgOSnHxa6hdiFasBw==
@@ -2250,6 +2255,34 @@
   version "1.1.0"
   resolved "https://registry.npmjs.org/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz"
   integrity sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==
+
+"@zegocloud/react-native-callkeep@4.3.9":
+  version "4.3.9"
+  resolved "https://registry.yarnpkg.com/@zegocloud/react-native-callkeep/-/react-native-callkeep-4.3.9.tgz#0ba20ca8db6fc798d899854f341ded7f65889dd1"
+  integrity sha512-bJuXEmDWss8gZDlka7iPxoTBxYEnDeT2cBCoVVOGbUPAj3CbycziY190P+ZQn1wyD3nMkmQZN0/fTJ2iVotOSw==
+
+"@zegocloud/zego-uikit-prebuilt-call-rn@^4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@zegocloud/zego-uikit-prebuilt-call-rn/-/zego-uikit-prebuilt-call-rn-4.2.1.tgz#cede1aef185445f4f361e75809818cd5acf8cb2a"
+  integrity sha512-NpQEjWHYtAneEWv+uAXwlKF9xyLwbgXkrxmTJdcqeYberGCKd3T1+R69GZqYEPBFF430DGOyeeEX32A5izRuYA==
+  dependencies:
+    "@notifee/react-native" "5.3.0"
+    "@react-navigation/native" "^6.0.13"
+    "@react-navigation/native-stack" "^6.9.1"
+    "@zegocloud/react-native-callkeep" "4.3.9"
+    react-native-safe-area-context "^4.4.1"
+    react-native-screens "^3.18.2"
+    react-native-sound "^0.11.2"
+
+"@zegocloud/zego-uikit-rn@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@zegocloud/zego-uikit-rn/-/zego-uikit-rn-2.2.0.tgz#a3f816fb40b97b49efdecdcafc55484caad98378"
+  integrity sha512-mdlYwEIqImQKSZ/fF1Ll1uBSFWkgAN5Jc+wpTiPHXOELMbILiiyQTldUozmLhhlhuOtxYVuagu0+IUtAevkRsA==
+  dependencies:
+    react-delegate-component "^1.0.0"
+    zego-express-engine-reactnative "^3.2.0"
+    zego-zim-react-native "2.9.0"
+    zego-zpns-react-native "2.4.0"
 
 abort-controller@^3.0.0:
   version "3.0.0"
@@ -3410,6 +3443,11 @@ expo-constants@~14.4.2:
     "@expo/config" "~8.1.0"
     uuid "^3.3.2"
 
+expo-doctor@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.npmjs.org/expo-doctor/-/expo-doctor-1.1.2.tgz"
+  integrity sha512-Wm7ARx18KgLDxFRxlFnaozeIWuJnJclCON/KhAKMBPFij2mKTBmENuxRSQT6QVEj4Bj1LkHCDXjR4/Hc/hlqYw==
+
 expo-file-system@~15.4.0, expo-file-system@~15.4.2:
   version "15.4.2"
   resolved "https://registry.npmjs.org/expo-file-system/-/expo-file-system-15.4.2.tgz"
@@ -4549,6 +4587,11 @@ lodash.debounce@^4.0.8:
   resolved "https://registry.npmjs.org/lodash.debounce/-/lodash.debounce-4.0.8.tgz"
   integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
 
+lodash.filter@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.npmjs.org/lodash.filter/-/lodash.filter-4.6.0.tgz"
+  integrity sha512-pXYUy7PR8BCLwX5mgJ/aNtyOvuJTdZAo9EQFUvMIYugqmJxnrYaANvTbgndOzHSCSR0wnlBBfRXJL5SbWxo3FQ==
+
 lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz"
@@ -5594,7 +5637,7 @@ prompts@^2.3.2, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@*, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.7.x:
+prop-types@*, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.7.x:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -5688,6 +5731,13 @@ rc@~1.2.7:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-delegate-component@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-delegate-component/-/react-delegate-component-1.0.0.tgz#c17f9e15afbea4e1d83553bf960f17c8835aaf52"
+  integrity sha512-xdpNHPoiBQF0Ob4z5EqQUEK2sBjy0ooXe9xqsLlaA19l5dUASu3mIkfXMdBmMLCSfByPa0NluEN6BUDaI5EnlQ==
+  dependencies:
+    prop-types "^15.6.0"
 
 react-devtools-core@^4.27.2:
   version "4.28.0"
@@ -5838,6 +5888,19 @@ react-native-safe-area-context@4.6.3:
   resolved "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-4.6.3.tgz"
   integrity sha512-3CeZM9HFXkuqiU9HqhOQp1yxhXw6q99axPWrT+VJkITd67gnPSU03+U27Xk2/cr9XrLUnakM07kj7H0hdPnFiQ==
 
+react-native-safe-area-context@^4.4.1:
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-4.7.1.tgz#b7be2d68dee909717cfa439bb5c7966042d231e8"
+  integrity sha512-X2pJG2ttmAbiGlItWedvDkZg1T1ikmEDiz+7HsiIwAIm2UbFqlhqn+B1JF53mSxPzdNaDcCQVHRNPvj8oFu6Yg==
+
+react-native-screens@^3.18.2:
+  version "3.24.0"
+  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-3.24.0.tgz#3d40199f9e2594c8d6e9f065772ebb842ecf53f4"
+  integrity sha512-ncAxY6Fja1eDwxMWsWG1S2lDWbE45f8XtdpKkY+Ovwg52iEov7uWx302PsvBkPpK9dGV4u6f2ZRoZGZYBvSbbA==
+  dependencies:
+    react-freeze "^1.0.0"
+    warn-once "^0.1.0"
+
 react-native-screens@~3.22.0:
   version "3.22.1"
   resolved "https://registry.npmjs.org/react-native-screens/-/react-native-screens-3.22.1.tgz"
@@ -5845,6 +5908,11 @@ react-native-screens@~3.22.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-sound@^0.11.2:
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/react-native-sound/-/react-native-sound-0.11.2.tgz#e542dc5b9e16ab4b3ac7e6eaddb1fc8d98da9038"
+  integrity sha512-LmGc8lgOK3qecYMVQpyHvww/C+wgT6sWeMpVbOe4NCRGC2yKd4fo4U0KBUo9PO7AqKESO3I/2GZg1/C0+bwiiA==
 
 react-native-typing-animation@0.1.7:
   version "0.1.7"
@@ -5903,7 +5971,7 @@ react-native@0.72.3:
 
 react-push-notification@^1.5.3:
   version "1.5.3"
-  resolved "https://registry.yarnpkg.com/react-push-notification/-/react-push-notification-1.5.3.tgz#dc3eafc2c399b012576e3abb69d22d17589a2cee"
+  resolved "https://registry.npmjs.org/react-push-notification/-/react-push-notification-1.5.3.tgz"
   integrity sha512-0RVt28G1bJFXq9VeBK4fSLMGuwSqktCw8pHI/3yIMZDNqoB1D5K70LGJAWbbUvTZWrStZKM4VJKXg62MpYQfuw==
 
 react-refresh@^0.4.0:
@@ -7165,3 +7233,18 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+zego-express-engine-reactnative@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/zego-express-engine-reactnative/-/zego-express-engine-reactnative-3.2.0.tgz#e4098a7ff0434110e9363e231d896f4bb0eec900"
+  integrity sha512-UkAw+PdFesNg2NiXZxifhG2KP67RGPE1QYj5jo8wXp3gswM5axeyIqKuqJeBxhkKdPPGei8jQ5MFmTXrVaRm5Q==
+
+zego-zim-react-native@2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/zego-zim-react-native/-/zego-zim-react-native-2.9.0.tgz#45653823e05e46de628b6196fc9785f3021697ae"
+  integrity sha512-6C1o7hYwOBMHt/vIP8sC813uTmk/4h72xTSHStK40Wqv91srPQGCDclxm6ZfbGfWvybV0CE8DTyhG/3vlqxGHg==
+
+zego-zpns-react-native@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/zego-zpns-react-native/-/zego-zpns-react-native-2.4.0.tgz#d92666cde63480d25f49f5e7acb0b1c8d40adfa8"
+  integrity sha512-F0t6Kq8+nAe4LVTTRWg/NoXkMHLcKrm967jaPSpSHXTttSVwkr/YWu7yPs+IaaJz8GOR4S8z7sfT1jKrIF3hNQ==

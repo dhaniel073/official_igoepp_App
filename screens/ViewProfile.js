@@ -5,11 +5,11 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { AuthContext } from "../store/auth-context";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { useFonts } from "expo-font";
-import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import GoBack from "../components/ui/GoBack";
 import { Avatar, Caption, Title, TouchableRipple } from "react-native-paper";
 import {Ionicons} from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
 // import * as Sharing from 'expo-sharing';
 
 
@@ -27,8 +27,8 @@ function ViewProfile ({route}){
     const authCtx = useContext(AuthContext)
 
     useEffect(() => {
-        setIsLoading(true)
         navigation.addListener( 'state', async() => {
+            setIsLoading(true)
             await customerInfocheck(authCtx.customerId, authCtx.token)
             .then((res) => {
               // console.log(res.data.data)
@@ -36,8 +36,8 @@ function ViewProfile ({route}){
             }).catch((error) => {
                 console.log(error)
             })
+            setIsLoading(false)
         })
-        setIsLoading(false)
         
     },[authCtx.customerId, authCtx.token])
   
@@ -89,20 +89,20 @@ function ViewProfile ({route}){
     function imageCheck(){
         if(fetchedMessage.picture === null){
             return (
-                <Pressable style={({pressed}) => [pressed && styles.pressed]} onPress={() => (navigation.navigate('ImageViewer', {
+                <TouchableOpacity onPress={() => (navigation.navigate('ImageViewer', {
                     image: fetchedMessage.picture,
                 }
                 ))}>
                     <Image style={{ width: 80, height: 80, borderWidth:1, borderColor: Color.darkolivegreen_100, borderRadius: 50 }} source={require("../assets/vectors/person.png")}/>
-                </Pressable>
+                </TouchableOpacity>
             )
         }else{
             return (
-                <Pressable style={({pressed}) => [pressed && styles.pressed]} onPress={() => (navigation.navigate('ImageViewer', {
+                <TouchableOpacity  onPress={() => (navigation.navigate('ImageViewer', {
                     image: fetchedMessage.picture }))}
                 >
                     <Image style={{ width: 80, height: 80, borderWidth:1, borderColor: Color.darkolivegreen_100, borderRadius: 50 }} size={80} source={{ uri: `https://phixotech.com/igoepp/public/customers/${fetchedMessage.picture}`}}/>
-                </Pressable>
+                </TouchableOpacity>
                 )
         }
     }
@@ -130,6 +130,7 @@ function ViewProfile ({route}){
   const myCustomerShare = async () => {
     const shareOptions = {
         message: 'This is a test message',
+        
     }
 
     try{
@@ -148,7 +149,7 @@ function ViewProfile ({route}){
         }
         console.log(share)
     }catch(error){
-        console.log(error.message)
+        console.log(error)
     }
   }
   
@@ -157,7 +158,7 @@ function ViewProfile ({route}){
   }
 
 
-
+//   console.log(authCtx.request)
 
 
 
@@ -181,7 +182,7 @@ function ViewProfile ({route}){
                 <View style={styles.userInfoSection}>
                     <View style={styles.row}>
                         <Ionicons name="location" color="#777777" size={20}/>
-                        <Text style=    {{ color: '#777777', marginLeft: 20 }}>{COUNTRY_STATE_CITY}</Text>
+                        <Text style=    {{ color: '#777777', marginLeft: 20 }}>{fetchedMessage.Country} {fetchedMessage.State} {fetchedMessage.lga}</Text>
                         
 
                     </View>
@@ -206,8 +207,8 @@ function ViewProfile ({route}){
                 <View style={styles.inforBoxWrapper}>
                     <View style={[styles.infoBox, {borderRightColor: "#dddddd", borderRightWidth: 1}]}>
                         <View style={{ flexDirection:'row' }}>
-                            <Image source={require("../assets/vectors/group2.png")} style={{ width:18, height:18, marginRight: 3, top: 3 }}/>
-                            <Text style={{ fontSize: 16 }}>{fetchedMessage.wallet_balance}</Text>
+                            <Image source={require("../assets/vectors/group2.png")} style={{ width:18, height:18, marginRight: 3, top: 8 }}/>
+                            <Title>{fetchedMessage.wallet_balance === null ? 0 : fetchedMessage.wallet_balance}</Title>
                         </View>
                         <Caption>Wallet balance</Caption>
                     </View>
@@ -227,7 +228,7 @@ function ViewProfile ({route}){
                         </View>
                     </TouchableRipple>
 
-                    <TouchableRipple onPress={() => {}}>
+                    <TouchableRipple onPress={() => navigation.navigate('Payment')}>
                         <View style={styles.menuItem}>
                             <Ionicons name="card-outline" size={25} color={Color.limegreen}/>
                             <Text style={styles.menuItemText}>Payments</Text>

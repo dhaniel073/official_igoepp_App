@@ -10,6 +10,7 @@ import { useFonts } from "expo-font";
 import { customerInfocheck } from "../util/auth";
 import { AuthContext } from "../store/auth-context";
 import GoBack from "../components/ui/GoBack";
+import { TouchableOpacity } from "react-native";
 
 
 const RequestHelp = () => {
@@ -90,7 +91,7 @@ if(!fontloaded){
         keyExtractor={(item) => item.id}
         renderItem={({item}) => 
             <View style={styles.container}  >
-              <Pressable style={({pressed}) => [styles.pressables, pressed && styles.pressed]} onPress={() => navigation.navigate("SubCategory", {
+              <TouchableOpacity style={[styles.pressables]} onPress={() => navigation.navigate("SubCategory", {
                 categoryId: item.id,
                 // categoryName: item.cat_name,
                 // categoryDesc: item.cat_desc,
@@ -105,7 +106,7 @@ if(!fontloaded){
                 <Text style={styles.item}>
                   {item.cat_name}
                 </Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
             }
         numColumns={2}
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
   mainContainer:{
     flex: 1,
     marginHorizontal: 8,
-    marginTop: "18%"
+    marginTop: "15%"
   },
   requestHelptext:{
     color: Color.darkolivegreen_100,

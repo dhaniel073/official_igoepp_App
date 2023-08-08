@@ -44,42 +44,49 @@ function AuthContextProvider({ children }) {
 
 
   function authenticate(token) {
+    // console.log(token + " accestoken")
     setAuthToken(token);
     AsyncStorage.setItem('token', token);
   }
 
   function customeridauthenticate(Id){
+    // console.log(Id + " customerId")
     setCusomerId(Id)
     AsyncStorage.setItem('customerdetails', Id)
   }
 
   function customerEmail(email){
+    // console.log(email + " email")
     setEmail(email)
     AsyncStorage.setItem('email', email)
   }
 
   function customerRequestsMade(request){
-    setRequest( request)
+    console.log(request + " number of request")
+    setRequest(request)
     AsyncStorage.setItem('request', request)
   }
 
   function customerSessionId(sessionId){
-    const setSesId = sessionId === null ? "" : sessionId
+    // console.log(sessionId + " sessionId")
+    const setSesId = sessionId === null ? "null" : sessionId
     setSessionId(setSesId)
     AsyncStorage.setItem('sessionId', setSesId)
   }
 
   function customerCart(cart){
-    const cartlength = cart === null ? 0 : cart
-    setCart(cartlength)
-    AsyncStorage.setItem('cartlength', JSON.stringify(cart))
+    // console.log(cart + " cart number")
+    const setCartNumb = cart === null ? 0 : cart
+    setCart(setCartNumb)
+    AsyncStorage.setItem('cartlength', setCartNumb)
   }
 
-  function customerwalletbalance(walletBal){
-    const setWalletbal = (walletBal === null ? "" : walletBal) 
-    console.log(setWalletbal)
-    setWalletBal(setWalletbal)
-    AsyncStorage.setItem('walletdetails', setWalletbal)
+  function customerwalletbalance(walletBals){
+    // console.log(walletBals + " wallet balance")
+    const setWalletbals = (walletBals === null ? 0.00: walletBals) 
+    console.log(setWalletbals)
+    setWalletBal(setWalletbals)
+    AsyncStorage.setItem('walletdetails', walletBals)
   }
 
 

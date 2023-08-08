@@ -33,7 +33,7 @@ const MarketPlaceItems = ({route}) => {
                     Authorization: `Bearer ${authCtx.token}`
                 }
             })
-            console.log(response.data)
+            // console.log(response.data)
             setFetchedCategory(response.data)
             setIsFetching(false)
         }catch(error){
@@ -86,7 +86,7 @@ const MarketPlaceItems = ({route}) => {
         keyExtractor={(item) => item.id}
         renderItem={({item}) => 
             <View style={styles.container}  >
-            <Pressable style={({pressed}) => [styles.pressables, pressed && styles.pressed]} onPress={() => navigation.navigate("ProceedMarketItem", {
+            <TouchableOpacity style={[styles.pressables]} onPress={() => navigation.navigate("ProceedMarketItem", {
                 productId: item.id,
                 productItemName: item.name,
                 productItemDesc: item.description,
@@ -107,7 +107,7 @@ const MarketPlaceItems = ({route}) => {
                 <Text style={styles.item}>
                 {item.name}
                 </Text>
-            </Pressable>
+            </TouchableOpacity>
             </View>
             }
         numColumns={2}
